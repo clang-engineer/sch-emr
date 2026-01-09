@@ -1,0 +1,58 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "schemr",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-kotlin",
+        "version": "1.16.0"
+      }
+    ],
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "react",
+    "clientPackageManager": "npm",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": 1767937513238,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "devServerPort": 9060,
+    "dtoSuffix": "DTO",
+    "enableGradleEnterprise": false,
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": false,
+    "enableTranslation": false,
+    "entitySuffix": "",
+    "jhiPrefix": "jhi",
+    "jhipsterVersion": "7.9.3",
+    "languages": ["en", "fr"],
+    "messageBroker": false,
+    "microfrontend": false,
+    "microfrontends": [],
+    "nativeLanguage": "en",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-kotlin",
+        "version": "1.16.0"
+      }
+    ],
+    "packageName": "com.planitsquare.schemr",
+    "pages": [],
+    "prodDatabaseType": "postgresql",
+    "reactive": false,
+    "rememberMeKey": "c29588d68afefaa280120c2e7cdfb47922a5456f7fd75f1f811dc6bb1ccf8e18700e43a0aac3320e90b59cb69e6692683ae7",
+    "searchEngine": false,
+    "serverPort": "8080",
+    "serverSideOptions": [],
+    "serviceDiscoveryType": "no",
+    "skipCheckLengthOfIdentifier": false,
+    "skipClient": false,
+    "skipFakeData": false,
+    "skipUserManagement": false,
+    "testFrameworks": [],
+    "websocket": false,
+    "withAdminUi": false
+  }
+}
