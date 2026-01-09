@@ -28,7 +28,7 @@ import javax.validation.constraints.Size
  * A user.
  */
 @Entity
-@Table(name = "jhi_user")
+@Table(name = "tbl_user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 class User(
 
@@ -89,7 +89,7 @@ class User(
 
     @ManyToMany
     @JoinTable(
-        name = "jhi_user_authority",
+        name = "tbl_user_authority",
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "authority_name", referencedColumnName = "name")]
     )

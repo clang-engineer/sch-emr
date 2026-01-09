@@ -5,7 +5,7 @@ import java.time.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "jhi_date_time_wrapper")
+@Table(name = "tbl_date_time_wrapper")
 class DateTimeWrapper(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

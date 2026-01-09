@@ -169,7 +169,7 @@ class HibernateTimeZoneIT {
     }
 
     private fun generateSqlRequest(fieldName: String, id: Long): String =
-        format("SELECT %s FROM jhi_date_time_wrapper where id=%d", fieldName, id)
+        format("SELECT %s FROM tbl_date_time_wrapper where id=%d", fieldName, id)
 
     private fun assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(
         sqlRowSet: SqlRowSet,

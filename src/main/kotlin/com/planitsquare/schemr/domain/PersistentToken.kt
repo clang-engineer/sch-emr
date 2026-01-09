@@ -19,7 +19,7 @@ import javax.validation.constraints.Size
  * @see com.planitsquare.schemr.security.PersistentTokenRememberMeServices
  */
 @Entity
-@Table(name = "jhi_persistent_token")
+@Table(name = "tbl_persistent_token")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 class PersistentToken @JvmOverloads constructor(
     @Id
