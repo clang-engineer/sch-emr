@@ -14,6 +14,7 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
+import { ScrollToTop } from './modules/tailadmin/components/common/ScrollToTop';
 
 const loading = <div>loading ...</div>;
 
@@ -24,6 +25,11 @@ const Account = Loadable({
 
 const Admin = Loadable({
   loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
+  loading: () => loading,
+});
+
+const EmrViewer = Loadable({
+  loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/emr-viewer'),
   loading: () => loading,
 });
 
@@ -58,6 +64,7 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        <Route path="emr-viewer" element={<EmrViewer />}></Route>
         <Route
           path="*"
           element={

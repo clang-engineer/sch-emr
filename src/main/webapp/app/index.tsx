@@ -9,6 +9,8 @@ import { clearAuthentication } from 'app/shared/reducers/authentication';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AppComponent from 'app/app';
 import { loadIcons } from 'app/config/icon-loader';
+import { ThemeProvider } from './modules/tailadmin/context/ThemeContext';
+import { AppWrapper } from './modules/tailadmin/components/common/PageMeta';
 
 const store = getStore();
 
@@ -22,13 +24,17 @@ const root = createRoot(rootEl);
 
 const render = Component =>
   root.render(
-    <ErrorBoundary>
-      <Provider store={store}>
-        <div>
-          <Component />
-        </div>
-      </Provider>
-    </ErrorBoundary>
+    <ThemeProvider>
+      <AppWrapper>
+        <ErrorBoundary>
+          <Provider store={store}>
+            <div>
+              <Component />
+            </div>
+          </Provider>
+        </ErrorBoundary>
+      </AppWrapper>
+    </ThemeProvider>
   );
 
 render(AppComponent);
