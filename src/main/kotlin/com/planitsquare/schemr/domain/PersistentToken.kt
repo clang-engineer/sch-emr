@@ -37,7 +37,6 @@ class PersistentToken @JvmOverloads constructor(
     @Column(name = "ip_address", length = 39)
     var ipAddress: String? = null,
 
-    @Column(name = "user_agent")
     userAgent: String? = null,
 
     @JsonIgnore
