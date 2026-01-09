@@ -14,7 +14,6 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
-import { ScrollToTop } from './modules/tailadmin/components/common/ScrollToTop';
 import MainLayout from './shared/layout/main-layout';
 
 const loading = <div>loading ...</div>;
