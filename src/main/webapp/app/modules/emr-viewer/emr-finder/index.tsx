@@ -86,11 +86,21 @@ interface ResizableSectionProps {
   children: React.ReactNode;
   height: number;
   isLast?: boolean;
+  isFirst?: boolean;
   onResize?: (delta: number) => void;
   headerContent?: React.ReactNode;
 }
 
-const ResizableSection: React.FC<ResizableSectionProps> = ({ title, color, children, height, isLast = false, onResize, headerContent }) => {
+const ResizableSection: React.FC<ResizableSectionProps> = ({
+  title,
+  color,
+  children,
+  height,
+  isLast = false,
+  isFirst = false,
+  onResize,
+  headerContent,
+}) => {
   const [isDragging, setIsDragging] = React.useState(false);
   const startYRef = React.useRef<number>(0);
 
@@ -124,8 +134,8 @@ const ResizableSection: React.FC<ResizableSectionProps> = ({ title, color, child
   }, [isDragging, onResize]);
 
   return (
-    <Box sx={{ height: `${height}px`, display: 'flex', flexDirection: 'column' }}>
-      <Box ml={1.5} mt={0.5} mb={0} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box ml={1.5} mt={isFirst ? 1.5 : 0.5} mb={0} sx={{ height: `${height}px`, display: 'flex', flexDirection: 'column' }}>
         <Paper
           elevation={0}
           sx={{
@@ -190,17 +200,10 @@ const ResizableSection: React.FC<ResizableSectionProps> = ({ title, color, child
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            bgcolor: isDragging ? '#1976d2' : 'transparent',
+            bgcolor: isDragging ? '#90caf9' : 'transparent',
             transition: 'background-color 0.2s',
             '&:hover': {
               bgcolor: '#e3f2fd',
-            },
-            '& .drag-icon': {
-              opacity: 0,
-              transition: 'opacity 0.2s',
-            },
-            '&:hover .drag-icon': {
-              opacity: 1,
             },
           }}
         >
@@ -257,7 +260,8 @@ const RecordFinder = () => {
 
   React.useLayoutEffect(() => {
     const TOP_PADDING = 4; // pt: 0.5 = 4px
-    const availableHeight = window.innerHeight - 48 - TOP_PADDING; // 48(header) + 4(top padding)
+    const BOTTOM_PADDING = 0; // pb: 0 = 0px
+    const availableHeight = window.innerHeight - 48 - TOP_PADDING - BOTTOM_PADDING; // 48(header) + paddings
     setContainerHeight(availableHeight);
 
     // Measure actual patient section height after render
@@ -266,10 +270,11 @@ const RecordFinder = () => {
         const actualHeight = patientSectionRef.current.offsetHeight;
         setPatientSectionHeight(actualHeight);
 
-        const RECORD_MARGIN_TOP = 4; // mt: 0.5 = 4px
+        const RECORD_MARGIN_TOP = 12; // mt: 1.5 = 12px (first section)
         const FORM_MARGIN_TOP = 4; // mt: 0.5 = 4px
         const RESIZER_HEIGHT = 12;
-        const remainingHeight = availableHeight - actualHeight - RECORD_MARGIN_TOP - FORM_MARGIN_TOP - RESIZER_HEIGHT;
+        const totalSpacing = RECORD_MARGIN_TOP + FORM_MARGIN_TOP + RESIZER_HEIGHT;
+        const remainingHeight = availableHeight - actualHeight - totalSpacing;
         setRecordHeight(Math.floor(remainingHeight * 0.45)); // 45% of remaining
       }
     };
@@ -283,7 +288,7 @@ const RecordFinder = () => {
   const remainingHeight = containerHeight - patientSectionHeight;
 
   // Calculate form height: total - patient - record - all margins - resizer
-  const RECORD_MARGIN_TOP = 4;
+  const RECORD_MARGIN_TOP = 12; // mt: 1.5 = 12px (first section)
   const FORM_MARGIN_TOP = 4;
   const RESIZER_HEIGHT = 12;
   const formHeight = containerHeight - patientSectionHeight - recordHeight - RECORD_MARGIN_TOP - FORM_MARGIN_TOP - RESIZER_HEIGHT;
@@ -301,7 +306,18 @@ const RecordFinder = () => {
   };
 
   return (
-    <Box sx={{ height: 'calc(100vh - 48px)', bgcolor: '#fafafa', pt: 0.5, px: 0.5, pb: 0, display: 'flex', flexDirection: 'column' }}>
+    <Box
+      sx={{
+        height: 'calc(100vh - 48px)',
+        bgcolor: '#fafafa',
+        pt: 0.5,
+        px: 0.5,
+        pb: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
       <AccordionSection
         ref={patientSectionRef}
         title="환자 정보"
@@ -319,6 +335,7 @@ const RecordFinder = () => {
             title="기록 목록"
             color="#0288d1"
             height={recordHeight}
+            isFirst
             onResize={handleRecordResize}
             headerContent={<RecordListHeader dateRange={dateRange} onDateRangeChange={setDateRange} onSearch={handleSearch} />}
           >
