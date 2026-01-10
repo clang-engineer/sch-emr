@@ -13,7 +13,7 @@ import settings from 'app/modules/account/settings/settings.reducer';
 import passwordReset from 'app/modules/account/password-reset/password-reset.reducer';
 import sessions from 'app/modules/account/sessions/sessions.reducer';
 import entitiesReducers from 'app/entities/reducers';
-import emrLayout from 'app/shared/layout/emr-layout/emr-layout.reducer';
+import emrLayout from 'app/modules/emr-viewer/emr-layout.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer: ReducersMapObject = {

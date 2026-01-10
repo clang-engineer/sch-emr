@@ -185,7 +185,7 @@ const ResizableSection: React.FC<ResizableSectionProps> = ({ title, color, child
         <Box
           onMouseDown={handleMouseDown}
           sx={{
-            height: '8px',
+            height: '12px',
             cursor: 'ns-resize',
             display: 'flex',
             alignItems: 'center',
@@ -194,6 +194,10 @@ const ResizableSection: React.FC<ResizableSectionProps> = ({ title, color, child
             transition: 'background-color 0.2s',
             '&:hover': {
               bgcolor: '#e3f2fd',
+            },
+            '& .drag-icon': {
+              opacity: 0,
+              transition: 'opacity 0.2s',
             },
             '&:hover .drag-icon': {
               opacity: 1,
@@ -209,11 +213,7 @@ const ResizableSection: React.FC<ResizableSectionProps> = ({ title, color, child
           {/*     transition: 'opacity 0.2s', */}
           {/*   }} */}
           {/* /> */}
-          <FontAwesomeIcon
-            icon={['fas', 'grip-lines']}
-            className="drag-icon"
-            style={{ fontSize: '1rem', color: '#90a4ae', opacity: 0, transition: 'opacity 0.2s' }}
-          />
+          <FontAwesomeIcon icon={['fas', 'grip-lines']} className="drag-icon" style={{ fontSize: '0.7rem', color: '#90a4ae' }} />
         </Box>
       )}
     </Box>
@@ -268,7 +268,7 @@ const RecordFinder = () => {
 
         const RECORD_MARGIN_TOP = 4; // mt: 0.5 = 4px
         const FORM_MARGIN_TOP = 4; // mt: 0.5 = 4px
-        const RESIZER_HEIGHT = 8;
+        const RESIZER_HEIGHT = 12;
         const remainingHeight = availableHeight - actualHeight - RECORD_MARGIN_TOP - FORM_MARGIN_TOP - RESIZER_HEIGHT;
         setRecordHeight(Math.floor(remainingHeight * 0.45)); // 45% of remaining
       }
@@ -285,7 +285,7 @@ const RecordFinder = () => {
   // Calculate form height: total - patient - record - all margins - resizer
   const RECORD_MARGIN_TOP = 4;
   const FORM_MARGIN_TOP = 4;
-  const RESIZER_HEIGHT = 8;
+  const RESIZER_HEIGHT = 12;
   const formHeight = containerHeight - patientSectionHeight - recordHeight - RECORD_MARGIN_TOP - FORM_MARGIN_TOP - RESIZER_HEIGHT;
 
   const handleRecordResize = (delta: number) => {

@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // project imports
 import { useAppDispatch } from 'app/config/store';
 import axios from 'axios';
-import { finderWidthNarrow } from 'app/shared/layout/emr-layout/constant';
+import { finderWidthNarrow } from 'app/modules/emr-viewer/constant';
 
 // initial state
 const initialState = {

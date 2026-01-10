@@ -1,7 +1,7 @@
 // material-ui
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
-import { drawerWidth } from 'app/shared/layout/emr-layout/constant';
+import { drawerWidth } from 'app/modules/emr-viewer/constant';
 
 // project import
 

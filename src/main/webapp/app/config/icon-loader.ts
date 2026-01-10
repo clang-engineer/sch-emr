@@ -47,6 +47,7 @@ import { faFolder } from '@fortawesome/pro-solid-svg-icons/faFolder';
 import { faFolderOpen } from '@fortawesome/pro-solid-svg-icons/faFolderOpen';
 import { faFileAlt } from '@fortawesome/pro-solid-svg-icons/faFileAlt';
 import { faChevronDown } from '@fortawesome/pro-solid-svg-icons/faChevronDown';
+import { faChevronUp } from '@fortawesome/pro-solid-svg-icons/faChevronUp';
 import { faChevronRight } from '@fortawesome/pro-solid-svg-icons/faChevronRight';
 import { faRightFromBracket } from '@fortawesome/pro-solid-svg-icons/faRightFromBracket';
 import { faBookMedical } from '@fortawesome/pro-solid-svg-icons/faBookMedical';
@@ -99,6 +100,7 @@ export const loadIcons = () => {
     faFolderOpen as any,
     faFileAlt as any,
     faChevronDown as any,
+    faChevronUp as any,
     faChevronRight as any,
     faRightFromBracket as any,
     faBookMedical as any

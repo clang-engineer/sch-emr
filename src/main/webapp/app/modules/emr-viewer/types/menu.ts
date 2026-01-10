@@ -2,7 +2,7 @@
 
 // ==============================|| MENU TYPES  ||============================== //
 
-import { NavItemType } from 'app/shared/layout/emr-layout/types/index';
+import { NavItemType } from 'app/modules/emr-viewer/types/index';
 
 export type MenuProps = {
   selectedItem: string[];
