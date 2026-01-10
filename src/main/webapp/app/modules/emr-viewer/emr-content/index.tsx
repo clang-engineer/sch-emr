@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Box, IconButton, Tooltip, Paper, Typography, Chip, Avatar } from '@mui/material';
 import { IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { finderWidthNarrow, finderWidthWide } from 'app/modules/emr-viewer/constant';
-import { openDrawer, setFinderWidth, setViewMode } from 'app/modules/emr-viewer/emr-layout.reducer';
+import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
+import { openDrawer, setFinderWidthAction, setViewModeAction } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // 환자 기록 카드 컴포넌트
@@ -162,66 +162,34 @@ const RecordViewer = () => {
   // 임시 데이터 (나중에 실제 데이터로 교체)
   const [records, setRecords] = React.useState<RecordCardProps['record'][]>([]);
 
-  const getNarrowTooltip = () => {
-    if (finderWidth !== finderWidthNarrow) return '기록지 목록 조회 화면을 좁게 표시합니다.';
-    if (finderWidth === finderWidthNarrow && drawerOpen) return '기록지 목록 조회 화면을 숨깁니다.';
-    return '기록지 목록 조회 화면을 더 이상 좁게 표시할 수 없습니다.';
-  };
+  const isCollapsed = finderWidth === finderWidthCollapsed;
 
-  const getWideTooltip = () => {
-    if (finderWidth === finderWidthNarrow && !drawerOpen) return '기록지 목록 조회 화면을 표시합니다.';
-    if (finderWidth === finderWidthNarrow && drawerOpen) return '기록지 목록 조회 화면을 넓게 표시합니다.';
-    return '기록지 목록 조회 화면을 더 이상 넓게 표시할 수 없습니다.';
-  };
-
-  const resizeToNarrow = () => {
-    if (finderWidth === finderWidthWide) setFinderWidth(finderWidthNarrow);
-    if (finderWidth === finderWidthNarrow && drawerOpen) dispatch(openDrawer(false));
-    setViewMode('double');
-  };
-
-  const resizeToWide = () => {
-    if (finderWidth === finderWidthNarrow && !drawerOpen) {
-      dispatch(openDrawer(true));
+  const toggleSidebar = () => {
+    if (isCollapsed) {
+      // 접힌 상태 → 펼친 상태
+      dispatch(setFinderWidthAction(finderWidthNarrow));
+      dispatch(setViewModeAction('single'));
+    } else {
+      // 펼친 상태 → 접힌 상태
+      dispatch(setFinderWidthAction(finderWidthCollapsed));
+      dispatch(setViewModeAction('double'));
     }
-
-    if (finderWidth === finderWidthNarrow && drawerOpen) {
-      setFinderWidth(finderWidthWide);
-    }
-
-    setViewMode('single');
   };
 
   const changeViewMode = (mode: string) => {
     dispatch(openDrawer(mode === 'single'));
-    setViewMode(mode);
+    dispatch(setViewModeAction(mode));
   };
 
   return (
     <Box display={'flex'} justifyContent={'center'}>
       <Box display={'flex'} width={'100%'} justifyContent={'space-between'}>
         {/* 사이드바 토글 버튼 */}
-        <Box
-          position={'fixed'}
-          top={68}
-          left={drawerOpen ? finderWidth + 68 : 68}
-          display={'flex'}
-          flexDirection={'column'}
-          sx={{ zIndex: 10 }}
-        >
-          <Tooltip title={getNarrowTooltip()} placement={'right'}>
-            <span>
-              <IconButton onClick={resizeToNarrow} disabled={!drawerOpen}>
-                <IconLayoutSidebarLeftCollapse />
-              </IconButton>
-            </span>
-          </Tooltip>
-          <Tooltip title={getWideTooltip()} placement={'right'}>
-            <span>
-              <IconButton onClick={resizeToWide} disabled={finderWidth === finderWidthWide}>
-                <IconLayoutSidebarLeftExpand />
-              </IconButton>
-            </span>
+        <Box position={'fixed'} top={68} left={finderWidth + 68} display={'flex'} flexDirection={'column'} sx={{ zIndex: 10 }}>
+          <Tooltip title={isCollapsed ? '기록지 목록 조회 화면을 펼칩니다.' : '기록지 목록 조회 화면을 접습니다.'} placement={'right'}>
+            <IconButton onClick={toggleSidebar}>
+              {isCollapsed ? <IconLayoutSidebarLeftExpand /> : <IconLayoutSidebarLeftCollapse />}
+            </IconButton>
           </Tooltip>
         </Box>
 

@@ -64,7 +64,7 @@ const emrLayout = createSlice({
 
 export default emrLayout.reducer;
 
-export const { activeItem, openDrawer, activeID } = emrLayout.actions;
+export const { activeItem, openDrawer, activeID, setFinderWidth: setFinderWidthAction, setViewMode: setViewModeAction } = emrLayout.actions;
 
 export const setAlert = (alert: string | null) => {
   const dispatch = useAppDispatch();
