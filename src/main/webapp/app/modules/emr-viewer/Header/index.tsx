@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <AppBar
       position="fixed"
-      // elevation={2}
+      elevation={0}
       sx={{
         bgcolor: 'background.paper',
         color: 'text.primary',

@@ -309,7 +309,6 @@ const RecordFinder = () => {
     <Box
       sx={{
         height: 'calc(100vh - 48px)',
-        bgcolor: '#fafafa',
         pt: 0.5,
         px: 0.5,
         pb: 0,
