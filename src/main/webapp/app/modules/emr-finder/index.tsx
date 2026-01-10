@@ -17,74 +17,68 @@ interface AccordionSectionProps {
   contentHeight?: number;
 }
 
-const AccordionSection: React.FC<AccordionSectionProps> = ({
-  title,
-  color,
-  children,
-  expanded,
-  onChange,
-  headerContent,
-  contentHeight,
-}) => {
-  return (
-    <Box ml={1.5} mt={0.5} mb={0} sx={{ display: 'flex', flexDirection: 'column' }}>
-      <Paper
-        elevation={0}
-        sx={{
-          border: '1px solid #e0e0e0',
-          borderRadius: '4px',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
-      >
-        <Box
-          onClick={onChange}
+const AccordionSection = React.forwardRef<HTMLDivElement, AccordionSectionProps>(
+  ({ title, color, children, expanded, onChange, headerContent, contentHeight }, ref) => {
+    return (
+      <Box ref={ref} ml={1.5} mt={0.5} mb={0} sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Paper
+          elevation={0}
           sx={{
-            bgcolor: '#f8f9fa',
-            borderBottom: expanded ? '2px solid #1976d2' : 'none',
-            px: 1.5,
-            py: 0.8,
+            border: '1px solid #e0e0e0',
+            borderRadius: '4px',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 0.8,
-            cursor: 'pointer',
-            '&:hover': {
-              bgcolor: '#f0f0f0',
-            },
+            flexDirection: 'column',
+            overflow: 'hidden',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-            <Box sx={{ width: 3, height: 14, bgcolor: color, borderRadius: '2px' }} />
-            <Typography
-              variant="body2"
-              fontWeight="600"
-              sx={{
-                fontSize: '0.8rem',
-                color: '#37474f',
-                letterSpacing: '0.3px',
-                textTransform: 'uppercase',
-              }}
-            >
-              {title}
-            </Typography>
-            <FontAwesomeIcon
-              icon={['fas', expanded ? 'chevron-up' : 'chevron-down']}
-              style={{ fontSize: '0.75rem', color: '#546e7a', marginLeft: '4px' }}
-            />
-          </Box>
-          {headerContent && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} onClick={e => e.stopPropagation()}>
-              {headerContent}
+          <Box
+            onClick={onChange}
+            sx={{
+              bgcolor: '#f8f9fa',
+              borderBottom: expanded ? '2px solid #1976d2' : 'none',
+              px: 1.5,
+              py: 0.8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 0.8,
+              cursor: 'pointer',
+              '&:hover': {
+                bgcolor: '#f0f0f0',
+              },
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+              <Box sx={{ width: 3, height: 14, bgcolor: color, borderRadius: '2px' }} />
+              <Typography
+                variant="body2"
+                fontWeight="600"
+                sx={{
+                  fontSize: '0.8rem',
+                  color: '#37474f',
+                  letterSpacing: '0.3px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {title}
+              </Typography>
+              <FontAwesomeIcon
+                icon={['fas', expanded ? 'chevron-up' : 'chevron-down']}
+                style={{ fontSize: '0.75rem', color: '#546e7a', marginLeft: '4px' }}
+              />
             </Box>
-          )}
-        </Box>
-        {expanded && <Box sx={{ p: 1.5, height: contentHeight ? `${contentHeight}px` : 'auto', overflow: 'auto' }}>{children}</Box>}
-      </Paper>
-    </Box>
-  );
-};
+            {headerContent && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} onClick={e => e.stopPropagation()}>
+                {headerContent}
+              </Box>
+            )}
+          </Box>
+          {expanded && <Box sx={{ p: 1.5, height: contentHeight ? `${contentHeight}px` : 'auto', overflow: 'auto' }}>{children}</Box>}
+        </Paper>
+      </Box>
+    );
+  }
+);
 
 interface ResizableSectionProps {
   title: string;
@@ -249,6 +243,9 @@ const RecordFinder = () => {
   const [patientExpanded, setPatientExpanded] = React.useState(true);
   const [containerHeight, setContainerHeight] = React.useState(window.innerHeight - 48);
   const [recordHeight, setRecordHeight] = React.useState(0);
+  const [patientSectionHeight, setPatientSectionHeight] = React.useState(0);
+
+  const patientSectionRef = React.useRef<HTMLDivElement>(null);
 
   const [dateRange, setDateRange] = React.useState([
     {
@@ -258,29 +255,38 @@ const RecordFinder = () => {
     },
   ]);
 
-  const PATIENT_HEADER_HEIGHT = 40; // Approximate header height (py: 0.8 * 2 + text + border)
-  const PATIENT_CONTENT_HEIGHT = 140; // Content box height (excluding padding)
-  const PATIENT_PADDING = 24; // p: 1.5 * 8 * 2 = 24px total padding
-  const PATIENT_TOTAL_HEIGHT = PATIENT_HEADER_HEIGHT + PATIENT_CONTENT_HEIGHT + PATIENT_PADDING + 6; // +6 for top margin (mt: 0.5 = 4px) + border
-  const patientSectionHeight = patientExpanded ? PATIENT_TOTAL_HEIGHT : PATIENT_HEADER_HEIGHT + 6;
-
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const TOP_PADDING = 4; // pt: 0.5 = 4px
     const availableHeight = window.innerHeight - 48 - TOP_PADDING; // 48(header) + 4(top padding)
     setContainerHeight(availableHeight);
 
-    const SECTION_TOP_MARGINS = 12; // 3 sections * mt(0.5 = 4px)
-    const RESIZER_HEIGHT = 8; // Only one resizer between record and form
-    const remainingHeight = availableHeight - patientSectionHeight - SECTION_TOP_MARGINS - RESIZER_HEIGHT;
-    setRecordHeight(Math.floor(remainingHeight * 0.45)); // 45% of remaining
-  }, [patientExpanded, PATIENT_TOTAL_HEIGHT]);
+    // Measure actual patient section height after render
+    const measureHeight = () => {
+      if (patientSectionRef.current) {
+        const actualHeight = patientSectionRef.current.offsetHeight;
+        setPatientSectionHeight(actualHeight);
+
+        const RECORD_MARGIN_TOP = 4; // mt: 0.5 = 4px
+        const FORM_MARGIN_TOP = 4; // mt: 0.5 = 4px
+        const RESIZER_HEIGHT = 8;
+        const remainingHeight = availableHeight - actualHeight - RECORD_MARGIN_TOP - FORM_MARGIN_TOP - RESIZER_HEIGHT;
+        setRecordHeight(Math.floor(remainingHeight * 0.45)); // 45% of remaining
+      }
+    };
+
+    measureHeight();
+    // Small delay to ensure DOM is fully rendered
+    const timeoutId = setTimeout(measureHeight, 0);
+    return () => clearTimeout(timeoutId);
+  }, [patientExpanded]);
 
   const remainingHeight = containerHeight - patientSectionHeight;
 
-  // Calculate form height: total - patient - record - resizer - margins
-  // Margins: record mt(4px) + form mt(4px) = 8px
-  // Resizer: 8px
-  const formHeight = containerHeight - patientSectionHeight - recordHeight - 8 - 8;
+  // Calculate form height: total - patient - record - all margins - resizer
+  const RECORD_MARGIN_TOP = 4;
+  const FORM_MARGIN_TOP = 4;
+  const RESIZER_HEIGHT = 8;
+  const formHeight = containerHeight - patientSectionHeight - recordHeight - RECORD_MARGIN_TOP - FORM_MARGIN_TOP - RESIZER_HEIGHT;
 
   const handleRecordResize = (delta: number) => {
     setRecordHeight(prev => Math.max(150, Math.min(prev + delta, remainingHeight - 150 - 16)));
@@ -294,34 +300,35 @@ const RecordFinder = () => {
     console.log('환자 검색:', patientId);
   };
 
-  if (recordHeight === 0) {
-    return null; // Wait for initial height calculation
-  }
-
   return (
     <Box sx={{ height: 'calc(100vh - 48px)', bgcolor: '#fafafa', pt: 0.5, px: 0.5, pb: 0, display: 'flex', flexDirection: 'column' }}>
       <AccordionSection
+        ref={patientSectionRef}
         title="환자 정보"
         color="#1976d2"
         expanded={patientExpanded}
         onChange={() => setPatientExpanded(prev => !prev)}
         headerContent={<PatientSearch onSearch={handlePatientSearch} />}
-        contentHeight={PATIENT_CONTENT_HEIGHT}
+        contentHeight={140}
       >
         <PatientInfo />
       </AccordionSection>
-      <ResizableSection
-        title="기록 목록"
-        color="#0288d1"
-        height={recordHeight}
-        onResize={handleRecordResize}
-        headerContent={<RecordListHeader dateRange={dateRange} onDateRangeChange={setDateRange} onSearch={handleSearch} />}
-      >
-        <RecordList />
-      </ResizableSection>
-      <ResizableSection title="서식 목록" color="#0097a7" height={formHeight} isLast>
-        <FormList />
-      </ResizableSection>
+      {recordHeight > 0 && (
+        <>
+          <ResizableSection
+            title="기록 목록"
+            color="#0288d1"
+            height={recordHeight}
+            onResize={handleRecordResize}
+            headerContent={<RecordListHeader dateRange={dateRange} onDateRangeChange={setDateRange} onSearch={handleSearch} />}
+          >
+            <RecordList />
+          </ResizableSection>
+          <ResizableSection title="서식 목록" color="#0097a7" height={formHeight} isLast>
+            <FormList />
+          </ResizableSection>
+        </>
+      )}
     </Box>
   );
 };
