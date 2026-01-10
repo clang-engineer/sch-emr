@@ -31,6 +31,11 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons/faUsersCog';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
+import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
+import { faFileMedical } from '@fortawesome/free-solid-svg-icons/faFileMedical';
+import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons/faCalendarAlt';
+import { faHospital } from '@fortawesome/free-solid-svg-icons/faHospital';
+import { faUserMd } from '@fortawesome/free-solid-svg-icons/faUserMd';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -88,6 +93,11 @@ export const loadIcons = () => {
     faUsers,
     faUsersCog,
     faWrench,
+    faFilter,
+    faFileMedical,
+    faCalendarAlt,
+    faHospital,
+    faUserMd,
     faHouseChimney as any,
     faMagnifyingGlass as any,
     faAddressCard as any,

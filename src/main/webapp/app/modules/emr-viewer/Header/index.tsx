@@ -59,7 +59,7 @@ const Header = () => {
                 color: 'text.primary',
               }}
             >
-              가명의무기록 뷰어
+              의무기록조회
             </Typography>
           )}
         </Box>
