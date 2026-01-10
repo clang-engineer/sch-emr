@@ -25,11 +25,12 @@ const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })<Main
   ...theme.typography.body1,
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,
-  padding: '20px 40px',
-  marginTop: '48px',
+  padding: '0 40px',
+  marginTop: '54px',
   height: 'calc(100vh - 48px)',
   overflowX: 'scroll',
   overflowY: 'scroll',
+  backgroundColor: '#f5f5f5',
   ...(!open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -65,14 +66,6 @@ const EmrViewer = () => {
   const { finderWidth } = useAppSelector(state => state.emrLayout);
   const { drawerOpen } = useAppSelector(state => state.emrLayout);
 
-  const header = () => {
-    return (
-      <Toolbar sx={{ height: '48px' }}>
-        <Header />
-      </Toolbar>
-    );
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar
@@ -82,7 +75,7 @@ const EmrViewer = () => {
         elevation={0}
         sx={{ background: theme.palette.background.default, ml: '48px', zIndex: 1 }}
       >
-        {header()}
+        <Header />
       </AppBar>
       <CssBaseline />
 
