@@ -11,47 +11,47 @@ interface AccordionSectionProps {
   title: string;
   color: string;
   children: React.ReactNode;
-  defaultExpanded?: boolean;
+  expanded: boolean;
+  onChange: () => void;
   headerContent?: React.ReactNode;
+  contentHeight?: number;
 }
 
-const AccordionSection: React.FC<AccordionSectionProps> = ({ title, color, children, defaultExpanded = true, headerContent }) => {
+const AccordionSection: React.FC<AccordionSectionProps> = ({
+  title,
+  color,
+  children,
+  expanded,
+  onChange,
+  headerContent,
+  contentHeight,
+}) => {
   return (
-    <Box ml={1.5} mt={0.5} mb={0.5}>
-      <Accordion
-        defaultExpanded={defaultExpanded}
+    <Box ml={1.5} mt={0.5} mb={0} sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Paper
         elevation={0}
         sx={{
           border: '1px solid #e0e0e0',
-          borderRadius: '4px !important',
-          '&:before': { display: 'none' },
-          '& .MuiAccordionSummary-root': {
-            minHeight: 'unset',
-            bgcolor: '#f8f9fa',
-            borderBottom: '2px solid #1976d2',
-            px: 1.5,
-            py: 0.8,
-          },
-          '& .MuiAccordionDetails-root': {
-            p: 1.5,
-          },
+          borderRadius: '4px',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
         }}
       >
-        <AccordionSummary
+        <Box
+          onClick={onChange}
           sx={{
-            minHeight: 'unset !important',
-            '&.Mui-expanded': {
-              minHeight: 'unset !important',
-            },
-            '& .MuiAccordionSummary-content': {
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 0.8,
-              my: '0 !important',
-              '&.Mui-expanded': {
-                my: '0 !important',
-              },
+            bgcolor: '#f8f9fa',
+            borderBottom: expanded ? '2px solid #1976d2' : 'none',
+            px: 1.5,
+            py: 0.8,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 0.8,
+            cursor: 'pointer',
+            '&:hover': {
+              bgcolor: '#f0f0f0',
             },
           }}
         >
@@ -69,15 +69,19 @@ const AccordionSection: React.FC<AccordionSectionProps> = ({ title, color, child
             >
               {title}
             </Typography>
+            <FontAwesomeIcon
+              icon={['fas', expanded ? 'chevron-up' : 'chevron-down']}
+              style={{ fontSize: '0.75rem', color: '#546e7a', marginLeft: '4px' }}
+            />
           </Box>
           {headerContent && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} onClick={e => e.stopPropagation()}>
               {headerContent}
             </Box>
           )}
-        </AccordionSummary>
-        <AccordionDetails>{children}</AccordionDetails>
-      </Accordion>
+        </Box>
+        {expanded && <Box sx={{ p: 1.5, height: contentHeight ? `${contentHeight}px` : 'auto', overflow: 'auto' }}>{children}</Box>}
+      </Paper>
     </Box>
   );
 };
@@ -127,7 +131,7 @@ const ResizableSection: React.FC<ResizableSectionProps> = ({ title, color, child
 
   return (
     <Box sx={{ height: `${height}px`, display: 'flex', flexDirection: 'column' }}>
-      <Box ml={1.5} mt={0.5} mb={0.5} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box ml={1.5} mt={0.5} mb={0} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Paper
           elevation={0}
           sx={{
@@ -242,8 +246,10 @@ const RecordFinder = () => {
   const [currentRid, setCurrentRid] = React.useState<string | null>(null);
   const theme = useTheme();
 
+  const [patientExpanded, setPatientExpanded] = React.useState(true);
   const [containerHeight, setContainerHeight] = React.useState(window.innerHeight - 48);
   const [recordHeight, setRecordHeight] = React.useState(0);
+
   const [dateRange, setDateRange] = React.useState([
     {
       startDate: new Date(),
@@ -252,17 +258,32 @@ const RecordFinder = () => {
     },
   ]);
 
-  React.useEffect(() => {
-    const availableHeight = window.innerHeight - 48 - 8; // 48(header) + 8(padding)
-    setContainerHeight(availableHeight);
-    setRecordHeight(Math.floor(availableHeight * 0.45)); // 45% for record list
-    // formHeight will be 55%
-  }, []);
+  const PATIENT_HEADER_HEIGHT = 40; // Approximate header height (py: 0.8 * 2 + text + border)
+  const PATIENT_CONTENT_HEIGHT = 140; // Content box height (excluding padding)
+  const PATIENT_PADDING = 24; // p: 1.5 * 8 * 2 = 24px total padding
+  const PATIENT_TOTAL_HEIGHT = PATIENT_HEADER_HEIGHT + PATIENT_CONTENT_HEIGHT + PATIENT_PADDING + 6; // +6 for top margin (mt: 0.5 = 4px) + border
+  const patientSectionHeight = patientExpanded ? PATIENT_TOTAL_HEIGHT : PATIENT_HEADER_HEIGHT + 6;
 
-  const formHeight = containerHeight - recordHeight - 16; // 16 for resizer
+  React.useEffect(() => {
+    const TOP_PADDING = 4; // pt: 0.5 = 4px
+    const availableHeight = window.innerHeight - 48 - TOP_PADDING; // 48(header) + 4(top padding)
+    setContainerHeight(availableHeight);
+
+    const SECTION_TOP_MARGINS = 12; // 3 sections * mt(0.5 = 4px)
+    const RESIZER_HEIGHT = 8; // Only one resizer between record and form
+    const remainingHeight = availableHeight - patientSectionHeight - SECTION_TOP_MARGINS - RESIZER_HEIGHT;
+    setRecordHeight(Math.floor(remainingHeight * 0.45)); // 45% of remaining
+  }, [patientExpanded, PATIENT_TOTAL_HEIGHT]);
+
+  const remainingHeight = containerHeight - patientSectionHeight;
+
+  // Calculate form height: total - patient - record - resizer - margins
+  // Margins: record mt(4px) + form mt(4px) = 8px
+  // Resizer: 8px
+  const formHeight = containerHeight - patientSectionHeight - recordHeight - 8 - 8;
 
   const handleRecordResize = (delta: number) => {
-    setRecordHeight(prev => Math.max(200, Math.min(prev + delta, containerHeight - 250)));
+    setRecordHeight(prev => Math.max(150, Math.min(prev + delta, remainingHeight - 150 - 16)));
   };
 
   const handleSearch = () => {
@@ -278,12 +299,14 @@ const RecordFinder = () => {
   }
 
   return (
-    <Box sx={{ height: 'calc(100vh - 48px)', bgcolor: '#fafafa', p: 0.5, display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: 'calc(100vh - 48px)', bgcolor: '#fafafa', pt: 0.5, px: 0.5, pb: 0, display: 'flex', flexDirection: 'column' }}>
       <AccordionSection
         title="환자 정보"
         color="#1976d2"
-        defaultExpanded={true}
+        expanded={patientExpanded}
+        onChange={() => setPatientExpanded(prev => !prev)}
         headerContent={<PatientSearch onSearch={handlePatientSearch} />}
+        contentHeight={PATIENT_CONTENT_HEIGHT}
       >
         <PatientInfo />
       </AccordionSection>
