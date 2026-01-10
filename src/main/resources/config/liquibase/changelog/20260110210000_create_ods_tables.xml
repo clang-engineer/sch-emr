@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Create ODS schema tables: tbl_patient, tbl_chart, tbl_record
+    -->
+
+    <!-- Create ODS schema -->
+    <changeSet id="20260110210000-0" author="developer">
+        <sql>CREATE SCHEMA IF NOT EXISTS ods</sql>
+    </changeSet>
+
+    <!-- Create tbl_patient -->
+    <changeSet id="20260110210000-1" author="developer">
+        <createTable tableName="tbl_patient" schemaName="ods">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_patient"/>
+            </column>
+            <column name="patient_number" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="patient_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="age" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resident_number" type="varchar(14)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="department" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Create tbl_chart -->
+    <changeSet id="20260110210000-2" author="developer">
+        <createTable tableName="tbl_chart" schemaName="ods">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_chart"/>
+            </column>
+            <column name="patient_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="chart_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="chart_time" type="time">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visit_type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="doctor_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="text"/>
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Create tbl_record -->
+    <changeSet id="20260110210000-3" author="developer">
+        <createTable tableName="tbl_record" schemaName="ods">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_record"/>
+            </column>
+            <column name="parent_id" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="patient_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="chart_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="record_data" type="text"/>
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Add foreign key constraints -->
+    <changeSet id="20260110210000-4" author="developer">
+        <addForeignKeyConstraint baseColumnNames="patient_id"
+                                 baseTableName="tbl_chart"
+                                 baseTableSchemaName="ods"
+                                 constraintName="fk_tbl_chart__patient_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tbl_patient"
+                                 referencedTableSchemaName="ods"/>
+
+        <addForeignKeyConstraint baseColumnNames="patient_id"
+                                 baseTableName="tbl_record"
+                                 baseTableSchemaName="ods"
+                                 constraintName="fk_tbl_record__patient_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tbl_patient"
+                                 referencedTableSchemaName="ods"/>
+
+        <addForeignKeyConstraint baseColumnNames="chart_id"
+                                 baseTableName="tbl_record"
+                                 baseTableSchemaName="ods"
+                                 constraintName="fk_tbl_record__chart_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tbl_chart"
+                                 referencedTableSchemaName="ods"/>
+    </changeSet>
+
+    <!-- Load sample data for tbl_patient -->
+    <changeSet id="20260110210000-5-data" author="developer" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/patient.csv"
+                  separator=";"
+                  tableName="tbl_patient"
+                  schemaName="ods"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="patient_number" type="string"/>
+            <column name="patient_name" type="string"/>
+            <column name="gender" type="string"/>
+            <column name="age" type="numeric"/>
+            <column name="resident_number" type="string"/>
+            <column name="department" type="string"/>
+        </loadData>
+    </changeSet>
+
+    <!-- Load sample data for tbl_chart -->
+    <changeSet id="20260110210000-6-data" author="developer" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/chart.csv"
+                  separator=";"
+                  tableName="tbl_chart"
+                  schemaName="ods"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="patient_id" type="numeric"/>
+            <column name="chart_date" type="date"/>
+            <column name="chart_time" type="time"/>
+            <column name="visit_type" type="string"/>
+            <column name="department" type="string"/>
+            <column name="doctor_name" type="string"/>
+            <column name="content" type="string"/>
+        </loadData>
+    </changeSet>
+
+    <!-- Load sample data for tbl_record -->
+    <changeSet id="20260110210000-7-data" author="developer" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/record.csv"
+                  separator=";"
+                  tableName="tbl_record"
+                  schemaName="ods"
+                  usePreparedStatements="true">
+            <column name="id" type="string"/>
+            <column name="parent_id" type="string"/>
+            <column name="patient_id" type="numeric"/>
+            <column name="chart_id" type="numeric"/>
+            <column name="name" type="string"/>
+            <column name="type" type="string"/>
+            <column name="record_data" type="string"/>
+        </loadData>
+    </changeSet>
+
+    <!-- Update empty parent_id to NULL -->
+    <changeSet id="20260110210000-7-fix" author="developer" context="faker">
+        <sql>UPDATE ods.tbl_record SET parent_id = NULL WHERE parent_id = ''</sql>
+    </changeSet>
+
+    <!-- Add self-referencing foreign key constraint after data load -->
+    <changeSet id="20260110210000-8" author="developer">
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="tbl_record"
+                                 baseTableSchemaName="ods"
+                                 constraintName="fk_tbl_record__parent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tbl_record"
+                                 referencedTableSchemaName="ods"/>
+    </changeSet>
+
+</databaseChangeLog>
