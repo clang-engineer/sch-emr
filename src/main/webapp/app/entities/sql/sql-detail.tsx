@@ -44,6 +44,22 @@ export const SqlDetail = () => {
             <span id="orderNo">Order No</span>
           </dt>
           <dd>{sqlEntity.orderNo}</dd>
+          <dt>
+            <span id="params">Parameters</span>
+          </dt>
+          <dd>
+            {sqlEntity.params && sqlEntity.params.length > 0 ? (
+              <ul>
+                {sqlEntity.params.map((param, i) => (
+                  <li key={i}>
+                    <strong>{param.name}</strong>: {param.type}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <span>No parameters</span>
+            )}
+          </dd>
         </dl>
         <Button tag={Link} to="/sql" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

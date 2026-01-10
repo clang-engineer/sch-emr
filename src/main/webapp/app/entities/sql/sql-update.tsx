@@ -8,7 +8,7 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { ISql } from 'app/shared/model/sql.model';
+import { ISql, ISqlParam, SqlParamType } from 'app/shared/model/sql.model';
 import { getEntity, updateEntity, createEntity, reset } from './sql.reducer';
 
 export const SqlUpdate = () => {
@@ -23,6 +23,14 @@ export const SqlUpdate = () => {
   const loading = useAppSelector(state => state.sql.loading);
   const updating = useAppSelector(state => state.sql.updating);
   const updateSuccess = useAppSelector(state => state.sql.updateSuccess);
+
+  const [params, setParams] = useState<ISqlParam[]>([]);
+
+  useEffect(() => {
+    if (sqlEntity.params) {
+      setParams(sqlEntity.params);
+    }
+  }, [sqlEntity]);
 
   const handleClose = () => {
     navigate('/sql' + location.search);
@@ -46,6 +54,7 @@ export const SqlUpdate = () => {
     const entity = {
       ...sqlEntity,
       ...values,
+      params,
     };
 
     if (isNew) {
@@ -53,6 +62,20 @@ export const SqlUpdate = () => {
     } else {
       dispatch(updateEntity(entity));
     }
+  };
+
+  const addParam = () => {
+    setParams([...params, { name: '', type: SqlParamType.STRING }]);
+  };
+
+  const removeParam = (index: number) => {
+    setParams(params.filter((_, i) => i !== index));
+  };
+
+  const updateParam = (index: number, field: keyof ISqlParam, value: any) => {
+    const newParams = [...params];
+    newParams[index] = { ...newParams[index], [field]: value };
+    setParams(newParams);
   };
 
   const defaultValues = () =>
@@ -121,6 +144,37 @@ export const SqlUpdate = () => {
                   validate: v => isNumber(v) || 'This field should be a number.',
                 }}
               />
+              <div className="mb-3">
+                <label className="form-label">Parameters</label>
+                {params.map((param, index) => (
+                  <div key={index} className="d-flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Parameter name"
+                      value={param.name || ''}
+                      onChange={e => updateParam(index, 'name', e.target.value)}
+                    />
+                    <select
+                      className="form-select"
+                      value={param.type || SqlParamType.STRING}
+                      onChange={e => updateParam(index, 'type', e.target.value as SqlParamType)}
+                    >
+                      {Object.values(SqlParamType).map(type => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                    <Button color="danger" onClick={() => removeParam(index)}>
+                      <FontAwesomeIcon icon="trash" />
+                    </Button>
+                  </div>
+                ))}
+                <Button color="secondary" onClick={addParam}>
+                  <FontAwesomeIcon icon="plus" /> Add Parameter
+                </Button>
+              </div>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/sql" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
