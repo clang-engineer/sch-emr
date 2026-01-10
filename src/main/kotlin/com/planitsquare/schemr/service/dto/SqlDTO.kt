@@ -1,5 +1,6 @@
 package com.planitsquare.schemr.service.dto
 
+import com.planitsquare.schemr.domain.SqlParam
 import java.io.Serializable
 import java.util.Objects
 import javax.validation.constraints.*
@@ -23,7 +24,9 @@ data class SqlDTO(
     var activated: String? = null,
 
     @get: NotNull
-    var orderNo: Int? = null
+    var orderNo: Int? = null,
+
+    var params: MutableSet<SqlParam> = mutableSetOf()
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {

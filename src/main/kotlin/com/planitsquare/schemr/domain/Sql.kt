@@ -44,6 +44,10 @@ data class Sql(
     @Column(name = "order_no", nullable = false)
     var orderNo: Int? = null,
 
+    @ElementCollection
+    @CollectionTable(name = "tbl_sql_param", joinColumns = [JoinColumn(name = "sql_id")])
+    var params: MutableSet<SqlParam> = mutableSetOf(),
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 ) : Serializable {
 
@@ -66,6 +70,7 @@ data class Sql(
             ", description='" + description + "'" +
             ", activated='" + activated + "'" +
             ", orderNo=" + orderNo +
+            ", params=" + params +
             "}"
     }
 

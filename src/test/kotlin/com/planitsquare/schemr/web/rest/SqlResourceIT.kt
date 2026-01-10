@@ -2,6 +2,7 @@ package com.planitsquare.schemr.web.rest
 
 import com.planitsquare.schemr.IntegrationTest
 import com.planitsquare.schemr.domain.Sql
+import com.planitsquare.schemr.domain.SqlParam
 import com.planitsquare.schemr.repository.SqlRepository
 import com.planitsquare.schemr.service.mapper.SqlMapper
 import org.assertj.core.api.Assertions.assertThat
@@ -82,6 +83,8 @@ class SqlResourceIT {
         assertThat(testSql.description).isEqualTo(DEFAULT_DESCRIPTION)
         assertThat(testSql.activated).isEqualTo(DEFAULT_ACTIVATED)
         assertThat(testSql.orderNo).isEqualTo(DEFAULT_ORDER_NO)
+        assertThat(testSql.params).hasSize(2)
+        assertThat(testSql.params.map { it.name }).containsExactlyInAnyOrder("startDate", "endDate")
     }
 
     @Test
@@ -223,6 +226,8 @@ class SqlResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED))
             .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO))
+            .andExpect(jsonPath("$.params").isArray)
+            .andExpect(jsonPath("$.params").isNotEmpty)
     }
 
     @Test
@@ -609,6 +614,10 @@ class SqlResourceIT {
         updatedSql.description = UPDATED_DESCRIPTION
         updatedSql.activated = UPDATED_ACTIVATED
         updatedSql.orderNo = UPDATED_ORDER_NO
+        updatedSql.params.clear()
+        updatedSql.params.add(SqlParam(name = "userId", type = "INTEGER"))
+        updatedSql.params.add(SqlParam(name = "userName", type = "STRING"))
+        updatedSql.params.add(SqlParam(name = "isEnabled", type = "BOOLEAN"))
         val sqlDTO = sqlMapper.toDto(updatedSql)
 
         restSqlMockMvc.perform(
@@ -625,6 +634,8 @@ class SqlResourceIT {
         assertThat(testSql.description).isEqualTo(UPDATED_DESCRIPTION)
         assertThat(testSql.activated).isEqualTo(UPDATED_ACTIVATED)
         assertThat(testSql.orderNo).isEqualTo(UPDATED_ORDER_NO)
+        assertThat(testSql.params).hasSize(3)
+        assertThat(testSql.params.map { it.name }).containsExactlyInAnyOrder("userId", "userName", "isEnabled")
     }
 
     @Test
@@ -725,6 +736,8 @@ class SqlResourceIT {
         assertThat(testSql.description).isEqualTo(UPDATED_DESCRIPTION)
         assertThat(testSql.activated).isEqualTo(DEFAULT_ACTIVATED)
         assertThat(testSql.orderNo).isEqualTo(DEFAULT_ORDER_NO)
+        // Params are cleared when empty collection is sent in partial update
+        assertThat(testSql.params).isEmpty()
     }
 
     @Test
@@ -743,6 +756,9 @@ class SqlResourceIT {
             description = UPDATED_DESCRIPTION
             activated = UPDATED_ACTIVATED
             orderNo = UPDATED_ORDER_NO
+            params.add(SqlParam(name = "userId", type = "INTEGER"))
+            params.add(SqlParam(name = "userName", type = "STRING"))
+            params.add(SqlParam(name = "isEnabled", type = "BOOLEAN"))
         }
 
         restSqlMockMvc.perform(
@@ -760,6 +776,8 @@ class SqlResourceIT {
         assertThat(testSql.description).isEqualTo(UPDATED_DESCRIPTION)
         assertThat(testSql.activated).isEqualTo(UPDATED_ACTIVATED)
         assertThat(testSql.orderNo).isEqualTo(UPDATED_ORDER_NO)
+        assertThat(testSql.params).hasSize(3)
+        assertThat(testSql.params.map { it.name }).containsExactlyInAnyOrder("userId", "userName", "isEnabled")
     }
 
     @Throws(Exception::class)
@@ -887,6 +905,10 @@ class SqlResourceIT {
 
             )
 
+            // Add SqlParam test data
+            sql.params.add(SqlParam(name = "startDate", type = "DATE"))
+            sql.params.add(SqlParam(name = "endDate", type = "DATE"))
+
             return sql
         }
 
@@ -908,6 +930,11 @@ class SqlResourceIT {
                 orderNo = UPDATED_ORDER_NO
 
             )
+
+            // Add updated SqlParam test data
+            sql.params.add(SqlParam(name = "userId", type = "INTEGER"))
+            sql.params.add(SqlParam(name = "userName", type = "STRING"))
+            sql.params.add(SqlParam(name = "isEnabled", type = "BOOLEAN"))
 
             return sql
         }
