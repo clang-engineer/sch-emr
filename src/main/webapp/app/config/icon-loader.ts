@@ -34,6 +34,23 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 
+import { faGrid } from '@fortawesome/pro-solid-svg-icons/faGrid';
+import { faChartMixed } from '@fortawesome/pro-solid-svg-icons/faChartMixed';
+import { faCircleQuestion } from '@fortawesome/pro-solid-svg-icons/faCircleQuestion';
+import { faHouseChimney } from '@fortawesome/pro-solid-svg-icons/faHouseChimney';
+import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons/faMagnifyingGlass';
+import { faAddressCard } from '@fortawesome/pro-solid-svg-icons/faAddressCard';
+import { faGear } from '@fortawesome/pro-solid-svg-icons/faGear';
+import { faClipboardMedical } from '@fortawesome/pro-solid-svg-icons/faClipboardMedical';
+import { faGripLines } from '@fortawesome/pro-solid-svg-icons/faGripLines';
+import { faFolder } from '@fortawesome/pro-solid-svg-icons/faFolder';
+import { faFolderOpen } from '@fortawesome/pro-solid-svg-icons/faFolderOpen';
+import { faFileAlt } from '@fortawesome/pro-solid-svg-icons/faFileAlt';
+import { faChevronDown } from '@fortawesome/pro-solid-svg-icons/faChevronDown';
+import { faChevronRight } from '@fortawesome/pro-solid-svg-icons/faChevronRight';
+import { faRightFromBracket } from '@fortawesome/pro-solid-svg-icons/faRightFromBracket';
+import { faBookMedical } from '@fortawesome/pro-solid-svg-icons/faBookMedical';
+
 export const loadIcons = () => {
   library.add(
     faArrowLeft,
@@ -68,6 +85,22 @@ export const loadIcons = () => {
     faUserPlus,
     faUsers,
     faUsersCog,
-    faWrench
+    faWrench,
+    faHouseChimney as any,
+    faMagnifyingGlass as any,
+    faAddressCard as any,
+    faGear as any,
+    faClipboardMedical as any,
+    faGripLines as any,
+    faGrid as any,
+    faChartMixed as any,
+    faCircleQuestion as any,
+    faFolder as any,
+    faFolderOpen as any,
+    faFileAlt as any,
+    faChevronDown as any,
+    faChevronRight as any,
+    faRightFromBracket as any,
+    faBookMedical as any
   );
 };

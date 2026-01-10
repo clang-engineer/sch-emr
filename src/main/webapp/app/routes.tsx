@@ -15,6 +15,7 @@ import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 import MainLayout from './shared/layout/main-layout';
+import EmrLayout from './shared/layout/emr-layout';
 
 const loading = <div>loading ...</div>;
 
@@ -37,7 +38,9 @@ const AppRoutes = () => {
   return (
     <div className="view-routes">
       <ErrorBoundaryRoutes>
-        <Route path="emr-viewer" element={<EmrViewer />} />
+        <Route element={<EmrLayout />}>
+          <Route path="emr-viewer" element={<EmrViewer />} />
+        </Route>
         <Route element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
