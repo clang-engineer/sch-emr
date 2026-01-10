@@ -10,9 +10,14 @@
 
 spring:
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      auto-commit: false
+    meta:
+      type: com.zaxxer.hikari.HikariDataSource
+      hikari:
+        auto-commit: false
+    ods:
+      type: com.zaxxer.hikari.HikariDataSource
+      hikari:
+        auto-commit: false
   jpa:
     open-in-view: false
     hibernate:

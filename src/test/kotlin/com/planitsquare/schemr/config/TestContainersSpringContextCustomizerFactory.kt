@@ -40,9 +40,12 @@ class TestContainersSpringContextCustomizerFactory : ContextCustomizerFactory {
                         }
                     }
                     prodTestContainer?.let {
-                        testValues = testValues.and("spring.datasource.url=" + it.getTestContainer().jdbcUrl + "")
-                        testValues = testValues.and("spring.datasource.username=" + it.getTestContainer().username)
-                        testValues = testValues.and("spring.datasource.password=" + it.getTestContainer().password)
+                        testValues = testValues.and("spring.datasource.meta.url=" + it.getTestContainer().jdbcUrl + "")
+                        testValues = testValues.and("spring.datasource.meta.username=" + it.getTestContainer().username)
+                        testValues = testValues.and("spring.datasource.meta.password=" + it.getTestContainer().password)
+                        testValues = testValues.and("spring.datasource.ods.url=" + it.getTestContainer().jdbcUrl + "")
+                        testValues = testValues.and("spring.datasource.ods.username=" + it.getTestContainer().username)
+                        testValues = testValues.and("spring.datasource.ods.password=" + it.getTestContainer().password)
                     }
                 }
             }

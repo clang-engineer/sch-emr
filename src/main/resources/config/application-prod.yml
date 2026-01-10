@@ -32,13 +32,22 @@ spring:
     livereload:
       enabled: false
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/schemr
-    username: schemr
-    password:
-    hikari:
-      poolName: Hikari
-      auto-commit: false
+    meta:
+      type: com.zaxxer.hikari.HikariDataSource
+      url: jdbc:postgresql://localhost:5432/schemr
+      username: schemr
+      password:
+      hikari:
+        poolName: Hikari
+        auto-commit: false
+    ods:
+      type: com.zaxxer.hikari.HikariDataSource
+      url: jdbc:postgresql://localhost:5432/schemr
+      username: schemr
+      password:
+      hikari:
+        poolName: HikariOds
+        auto-commit: false
   jpa:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production

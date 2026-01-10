@@ -1,10 +1,8 @@
 package com.planitsquare.schemr.config
 
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -23,14 +21,13 @@ class LiquibaseConfiguration(private val env: Environment) {
     @Bean
     fun liquibase(
         @Qualifier("taskExecutor") executor: Executor,
-        @LiquibaseDataSource liquibaseDataSource: ObjectProvider<DataSource>,
         liquibaseProperties: LiquibaseProperties,
-        dataSource: ObjectProvider<DataSource>,
-        dataSourceProperties: DataSourceProperties
+        @Qualifier("metaDataSource") dataSource: DataSource,
+        @Qualifier("metaDataSourceProperties") dataSourceProperties: DataSourceProperties
     ) =
         // If you don't want Liquibase to start asynchronously, substitute by this:
-        // val liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties)
-        SpringLiquibaseUtil.createAsyncSpringLiquibase(this.env, executor, liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties)
+        // val liquibase = SpringLiquibaseUtil.createSpringLiquibase(dataSource, liquibaseProperties, dataSource, dataSourceProperties)
+        SpringLiquibaseUtil.createAsyncSpringLiquibase(this.env, executor, dataSource, liquibaseProperties, dataSource, dataSourceProperties)
             .apply {
                 changeLog = "classpath:config/liquibase/master.xml"
                 contexts = liquibaseProperties.contexts

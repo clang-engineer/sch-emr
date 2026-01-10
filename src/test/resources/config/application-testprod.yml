@@ -10,11 +10,18 @@
 
 spring:
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      poolName: Hikari
-      auto-commit: false
-      maximum-pool-size: 1
+    meta:
+      type: com.zaxxer.hikari.HikariDataSource
+      hikari:
+        poolName: Hikari
+        auto-commit: false
+        maximum-pool-size: 1
+    ods:
+      type: com.zaxxer.hikari.HikariDataSource
+      hikari:
+        poolName: HikariOds
+        auto-commit: false
+        maximum-pool-size: 1
   jpa:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
     open-in-view: false
