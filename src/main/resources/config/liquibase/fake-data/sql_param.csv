@@ -1,0 +1,16 @@
+sql_id;name;type
+1;startDate;DATE
+1;endDate;DATE
+2;userId;INTEGER
+2;userName;STRING
+3;status;STRING
+3;limit;INTEGER
+4;isEnabled;BOOLEAN
+5;categoryId;INTEGER
+6;searchQuery;STRING
+7;orderBy;STRING
+8;pageSize;INTEGER
+8;pageNumber;INTEGER
+9;filterType;STRING
+10;threshold;DECIMAL
+10;maxRetries;INTEGER
