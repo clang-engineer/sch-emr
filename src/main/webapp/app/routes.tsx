@@ -39,10 +39,10 @@ const AppRoutes = () => {
     <div className="view-routes">
       <ErrorBoundaryRoutes>
         <Route element={<EmrLayout />}>
-          <Route path="emr-viewer" element={<EmrViewer />} />
+          <Route index element={<EmrViewer />} />
         </Route>
         <Route element={<MainLayout />}>
-          <Route index element={<Home />} />
+          <Route path="home" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
           <Route path="account">
