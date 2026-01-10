@@ -297,13 +297,9 @@ const RecordFinder = () => {
     setRecordHeight(prev => Math.max(150, Math.min(prev + delta, remainingHeight - 150 - 16)));
   };
 
-  const handleSearch = () => {
-    console.log('조회:', dateRange);
-  };
+  const handleSearch = () => {};
 
-  const handlePatientSearch = (patientId: string) => {
-    console.log('환자 검색:', patientId);
-  };
+  const handlePatientSearch = (patientId: string) => {};
 
   return (
     <Box

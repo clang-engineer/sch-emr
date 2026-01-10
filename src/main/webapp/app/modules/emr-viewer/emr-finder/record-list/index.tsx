@@ -146,10 +146,6 @@ const RecordList = () => {
     }
   };
 
-  const handleSearch = () => {
-    console.log('조회 버튼 클릭', dateRange);
-  };
-
   const toggleButtonStyle = {
     py: 0.5,
     px: 1.5,

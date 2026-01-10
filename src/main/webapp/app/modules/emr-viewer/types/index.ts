@@ -39,7 +39,7 @@ export interface GenericCardProps {
 }
 
 export type OverrideIcon =
-  | (OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
+  | (OverridableComponent<SvgIconTypeMap<Record<string, unknown>, 'svg'>> & {
       muiName: string;
     })
   | React.ComponentClass<any>
