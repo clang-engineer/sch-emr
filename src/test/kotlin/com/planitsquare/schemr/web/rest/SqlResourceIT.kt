@@ -3,6 +3,7 @@ package com.planitsquare.schemr.web.rest
 import com.planitsquare.schemr.IntegrationTest
 import com.planitsquare.schemr.domain.Sql
 import com.planitsquare.schemr.domain.SqlParam
+import com.planitsquare.schemr.domain.enumeration.SqlParamType
 import com.planitsquare.schemr.repository.SqlRepository
 import com.planitsquare.schemr.service.mapper.SqlMapper
 import org.assertj.core.api.Assertions.assertThat
@@ -615,9 +616,9 @@ class SqlResourceIT {
         updatedSql.activated = UPDATED_ACTIVATED
         updatedSql.orderNo = UPDATED_ORDER_NO
         updatedSql.params.clear()
-        updatedSql.params.add(SqlParam(name = "userId", type = "INTEGER"))
-        updatedSql.params.add(SqlParam(name = "userName", type = "STRING"))
-        updatedSql.params.add(SqlParam(name = "isEnabled", type = "BOOLEAN"))
+        updatedSql.params.add(SqlParam(name = "userId", type = SqlParamType.INTEGER))
+        updatedSql.params.add(SqlParam(name = "userName", type = SqlParamType.STRING))
+        updatedSql.params.add(SqlParam(name = "isEnabled", type = SqlParamType.BOOLEAN))
         val sqlDTO = sqlMapper.toDto(updatedSql)
 
         restSqlMockMvc.perform(
@@ -756,9 +757,9 @@ class SqlResourceIT {
             description = UPDATED_DESCRIPTION
             activated = UPDATED_ACTIVATED
             orderNo = UPDATED_ORDER_NO
-            params.add(SqlParam(name = "userId", type = "INTEGER"))
-            params.add(SqlParam(name = "userName", type = "STRING"))
-            params.add(SqlParam(name = "isEnabled", type = "BOOLEAN"))
+            params.add(SqlParam(name = "userId", type = SqlParamType.INTEGER))
+            params.add(SqlParam(name = "userName", type = SqlParamType.STRING))
+            params.add(SqlParam(name = "isEnabled", type = SqlParamType.BOOLEAN))
         }
 
         restSqlMockMvc.perform(
@@ -906,8 +907,8 @@ class SqlResourceIT {
             )
 
             // Add SqlParam test data
-            sql.params.add(SqlParam(name = "startDate", type = "DATE"))
-            sql.params.add(SqlParam(name = "endDate", type = "DATE"))
+            sql.params.add(SqlParam(name = "startDate", type = SqlParamType.DATE))
+            sql.params.add(SqlParam(name = "endDate", type = SqlParamType.DATE))
 
             return sql
         }
@@ -932,9 +933,9 @@ class SqlResourceIT {
             )
 
             // Add updated SqlParam test data
-            sql.params.add(SqlParam(name = "userId", type = "INTEGER"))
-            sql.params.add(SqlParam(name = "userName", type = "STRING"))
-            sql.params.add(SqlParam(name = "isEnabled", type = "BOOLEAN"))
+            sql.params.add(SqlParam(name = "userId", type = SqlParamType.INTEGER))
+            sql.params.add(SqlParam(name = "userName", type = SqlParamType.STRING))
+            sql.params.add(SqlParam(name = "isEnabled", type = SqlParamType.BOOLEAN))
 
             return sql
         }

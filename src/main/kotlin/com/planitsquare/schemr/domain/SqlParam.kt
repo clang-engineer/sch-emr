@@ -1,5 +1,6 @@
 package com.planitsquare.schemr.domain
 
+import com.planitsquare.schemr.domain.enumeration.SqlParamType
 import java.io.Serializable
 import javax.persistence.*
 import javax.validation.constraints.*
@@ -15,8 +16,9 @@ data class SqlParam(
     var name: String? = null,
 
     @get: NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 50, nullable = false)
-    var type: String? = null
+    var type: SqlParamType? = null
 
 ) : Serializable {
 
