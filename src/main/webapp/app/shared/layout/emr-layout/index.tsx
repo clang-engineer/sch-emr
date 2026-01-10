@@ -10,7 +10,7 @@ import { Outlet } from 'react-router-dom';
 
 // assets
 import * as React from 'react';
-import CommonLayout from 'app/shared/layout/emr-layout/rex-sidebar/CommonLayout';
+import RexSidebar from 'app/shared/layout/emr-layout/rex-sidebar/RexSidebar';
 import { useAppSelector } from 'app/config/store';
 
 import './style.scss';
@@ -69,7 +69,7 @@ const MainLayout = () => {
       <CssBaseline />
 
       {/* Common Layout */}
-      <CommonLayout />
+      <RexSidebar />
 
       {/* App Sidebar */}
       <Sidebar />

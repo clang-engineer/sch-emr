@@ -20,7 +20,7 @@ import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import { AUTHORITIES } from 'app/config/constants';
 import axios from 'axios';
 
-const CommonLayout = () => {
+const RexSideBar = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
@@ -162,4 +162,4 @@ const CommonLayout = () => {
   );
 };
 
-export default CommonLayout;
+export default RexSideBar;

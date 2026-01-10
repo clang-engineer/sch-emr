@@ -6,7 +6,7 @@ import { Box, Drawer, useMediaQuery } from '@mui/material';
 // import { openDrawer } from 'store/slices/menu';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { openDrawer } from 'app/shared/layout/emr-layout/emr-layout.reducer';
-import EmrFinder from 'app/modules/emr-finder';
+import EmrFinder from '../emr-finder';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
