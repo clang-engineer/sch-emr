@@ -1,12 +1,9 @@
 // material-ui
 import { styled } from '@mui/material/styles';
-import { Box, CssBaseline } from '@mui/material';
+import { AppBar, Box, CssBaseline, Toolbar } from '@mui/material';
 
-// project imports
-import Sidebar from './Sidebar';
-import { Outlet } from 'react-router-dom';
-
-// theme constant
+import { useTheme } from '@mui/material/styles';
+import EmrFinder from './emr-finder';
 
 // assets
 import * as React from 'react';
@@ -16,6 +13,7 @@ import { useAppSelector } from 'app/config/store';
 import './style.scss';
 import { finderWidthNarrow, finderWidthWide } from 'app/modules/emr-viewer/constant';
 import EmrContent from 'app/modules/emr-viewer/emr-content';
+import Header from './Header';
 
 interface MainStyleProps {
   open: boolean;
@@ -61,19 +59,38 @@ const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })<Main
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
-const MainLayout = () => {
+const EmrViewer = () => {
+  const theme = useTheme();
+
   const { finderWidth } = useAppSelector(state => state.emrLayout);
   const { drawerOpen } = useAppSelector(state => state.emrLayout);
 
+  const header = () => {
+    return (
+      <Toolbar sx={{ height: '48px' }}>
+        <Header />
+      </Toolbar>
+    );
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
+      <AppBar
+        enableColorOnDark
+        position="fixed"
+        color="inherit"
+        elevation={0}
+        sx={{ background: theme.palette.background.default, ml: '48px', zIndex: 1 }}
+      >
+        {header()}
+      </AppBar>
       <CssBaseline />
 
       {/* Common Layout */}
       <RexSidebar />
 
       {/* App Sidebar */}
-      <Sidebar />
+      <EmrFinder />
 
       {/* main content */}
       <Main open={drawerOpen} finderwidth={finderWidth}>
@@ -85,4 +102,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default EmrViewer;
