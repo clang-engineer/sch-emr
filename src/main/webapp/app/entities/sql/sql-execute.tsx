@@ -133,7 +133,13 @@ export const SqlExecute = () => {
             )}
 
             <div className="mt-3">
-              <Button color="primary" onClick={handleExecute} disabled={loading}>
+              <Button
+                color="primary"
+                onClick={() => {
+                  handleExecute();
+                }}
+                disabled={loading}
+              >
                 <FontAwesomeIcon icon="play" /> {loading ? 'Executing...' : 'Execute'}
               </Button>{' '}
               <Button tag={Link} to="/sql" color="secondary">
