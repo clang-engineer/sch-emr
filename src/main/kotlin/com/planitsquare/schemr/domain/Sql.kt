@@ -24,23 +24,17 @@ data class Sql(
     var id: Long? = null,
 
     @get: NotNull
-    @get: Size(min = 5, max = 20)
-
-    @Column(name = "title", length = 20, nullable = false, unique = true)
+    @get: Size(min = 5, max = 100)
+    @Column(name = "title", length = 100, nullable = false, unique = true)
     var title: String? = null,
 
-    @get: NotNull
-
-    @Column(name = "description", nullable = false)
     var description: String? = null,
 
     @get: NotNull
-
     @Column(name = "activated", nullable = false)
     var activated: String? = null,
 
     @get: NotNull
-
     @Column(name = "order_no", nullable = false)
     var orderNo: Int? = null,
 

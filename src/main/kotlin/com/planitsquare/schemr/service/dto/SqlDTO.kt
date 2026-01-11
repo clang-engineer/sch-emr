@@ -14,10 +14,9 @@ data class SqlDTO(
     var id: Long? = null,
 
     @get: NotNull
-    @get: Size(min = 5, max = 20)
+    @get: Size(min = 5, max = 100)
     var title: String? = null,
 
-    @get: NotNull
     var description: String? = null,
 
     @get: NotNull

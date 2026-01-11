@@ -14,7 +14,7 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="title" type="varchar(20)">
+            <column name="title" type="varchar(100)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_tbl_sql__title" />
             </column>
             <column name="description" type="varchar(255)">
