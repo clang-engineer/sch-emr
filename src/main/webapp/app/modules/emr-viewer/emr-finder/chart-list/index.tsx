@@ -31,13 +31,13 @@ interface DateRange {
   key: string;
 }
 
-interface RecordListHeaderProps {
+interface ChartListHeaderProps {
   dateRange: DateRange[];
   onDateRangeChange: (range: DateRange[]) => void;
   onSearch: () => void;
 }
 
-export const RecordListHeader: React.FC<RecordListHeaderProps> = ({ dateRange, onDateRangeChange, onSearch }) => {
+export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onDateRangeChange, onSearch }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleCalendarClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -123,7 +123,7 @@ export const RecordListHeader: React.FC<RecordListHeaderProps> = ({ dateRange, o
   );
 };
 
-const RecordList = () => {
+const ChartList = () => {
   const [deptFilter, setDeptFilter] = useState<DeptFilter>('수진과');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('전체');
   const [dateRange, setDateRange] = useState([
@@ -162,7 +162,7 @@ const RecordList = () => {
   };
 
   // 샘플 데이터
-  const records = [
+  const charts = [
     { date: '2024-01-10', time: '14:30', type: '외래', dept: '내과', doctor: '홍길동', content: '진료기록' },
     { date: '2024-01-09', time: '10:15', type: '입원', dept: '외과', doctor: '김철수', content: '수술기록' },
     { date: '2024-01-08', time: '16:45', type: '응급', dept: '응급의학과', doctor: '이영희', content: '응급기록' },
@@ -217,7 +217,7 @@ const RecordList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {records.map((record, index) => (
+            {charts.map((chart, index) => (
               <TableRow
                 key={index}
                 hover
@@ -226,24 +226,24 @@ const RecordList = () => {
                   '&:hover': { bgcolor: '#f5f5f5' },
                 }}
               >
-                <TableCell sx={{ py: 0.8 }}>{record.date}</TableCell>
-                <TableCell sx={{ py: 0.8 }}>{record.time}</TableCell>
+                <TableCell sx={{ py: 0.8 }}>{chart.date}</TableCell>
+                <TableCell sx={{ py: 0.8 }}>{chart.time}</TableCell>
                 <TableCell sx={{ py: 0.8 }}>
                   <Chip
-                    label={record.type}
+                    label={chart.type}
                     size="small"
                     sx={{
                       height: '20px',
                       fontSize: '0.7rem',
-                      bgcolor: record.type === '외래' ? '#e3f2fd' : record.type === '입원' ? '#fff3e0' : '#ffebee',
-                      color: record.type === '외래' ? '#1976d2' : record.type === '입원' ? '#f57c00' : '#d32f2f',
+                      bgcolor: chart.type === '외래' ? '#e3f2fd' : chart.type === '입원' ? '#fff3e0' : '#ffebee',
+                      color: chart.type === '외래' ? '#1976d2' : chart.type === '입원' ? '#f57c00' : '#d32f2f',
                       fontWeight: 600,
                     }}
                   />
                 </TableCell>
-                <TableCell sx={{ py: 0.8 }}>{record.dept}</TableCell>
-                <TableCell sx={{ py: 0.8 }}>{record.doctor}</TableCell>
-                <TableCell sx={{ py: 0.8 }}>{record.content}</TableCell>
+                <TableCell sx={{ py: 0.8 }}>{chart.dept}</TableCell>
+                <TableCell sx={{ py: 0.8 }}>{chart.doctor}</TableCell>
+                <TableCell sx={{ py: 0.8 }}>{chart.content}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -253,4 +253,4 @@ const RecordList = () => {
   );
 };
 
-export default RecordList;
+export default ChartList;

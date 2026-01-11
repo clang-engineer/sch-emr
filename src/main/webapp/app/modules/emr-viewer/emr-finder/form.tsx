@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import * as React from 'react';
 import FormList from './form-list';
 import PatientInfo, { PatientSearch } from './patient-info';
-import RecordList, { RecordListHeader } from './record-list';
+import ChartList, { ChartListHeader } from './chart-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch } from 'app/config/store';
@@ -58,9 +58,9 @@ const RecordFinder = () => {
             height={recordHeight}
             isFirst
             onResize={handleRecordResize}
-            headerContent={<RecordListHeader dateRange={dateRange} onDateRangeChange={setDateRange} onSearch={handleSearch} />}
+            headerContent={<ChartListHeader dateRange={dateRange} onDateRangeChange={setDateRange} onSearch={handleSearch} />}
           >
-            <RecordList />
+            <ChartList />
           </ResizableSection>
           <ResizableSection title="서식 목록" color="#0097a7" height={formHeight} isLast>
             <FormList />
