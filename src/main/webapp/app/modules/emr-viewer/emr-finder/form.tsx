@@ -6,8 +6,11 @@ import PatientInfo, { PatientSearch } from './patient-info';
 import RecordList, { RecordListHeader } from './record-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
+import { useAppDispatch } from 'app/config/store';
+import { getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 const RecordFinder = () => {
+  const dispatch = useAppDispatch();
   const { patientExpanded, setPatientExpanded, patientSectionRef, recordHeight, formHeight, handleRecordResize } = useRecordFinderLayout();
 
   const [dateRange, setDateRange] = React.useState([
@@ -20,7 +23,9 @@ const RecordFinder = () => {
 
   const handleSearch = () => {};
 
-  const handlePatientSearch = (patientId: string) => {};
+  const handlePatientSearch = (ptNo: string) => {
+    dispatch(getPatientInfo(ptNo));
+  };
 
   return (
     <Box
