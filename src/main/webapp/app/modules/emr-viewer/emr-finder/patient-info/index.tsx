@@ -76,11 +76,11 @@ export const PatientSearch: React.FC<PatientSearchProps> = ({ onSearch }) => {
 const PatientInfo = () => {
   const { patient, loading } = useAppSelector(state => state.emrContent);
 
-  const patientNumber = patient?.pt_no ?? '-';
-  const patientName = patient?.patient_name ?? '-';
+  const patientNumber = patient?.ptNo ?? '-';
+  const patientName = patient?.patientName ?? '-';
   const patientGender = patient?.gender ?? '-';
   const patientAge = patient?.age ?? '-';
-  const residentNumber = patient?.resident_number ?? '-';
+  const residentNumber = patient?.residentNumber ?? '-';
   const department = patient?.department ?? '-';
 
   const renderValue = (value: string | number) => (loading ? '조회중...' : value);

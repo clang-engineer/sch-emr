@@ -6,31 +6,41 @@ import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 
 export interface Patient {
-  id?: string;
-  name?: string;
+  id?: number;
+  ptNo?: string;
+  patientName?: string;
   gender?: string;
   age?: number;
-  residentNo?: string;
+  residentNumber?: string;
   department?: string;
+  createdAt?: string;
   [key: string]: unknown;
 }
 
 export interface Chart {
-  id: string;
-  patientName: string;
-  patientId: string;
-  recordType: string;
-  recordDate: string;
-  department: string;
-  doctor: string;
-  status?: string;
+  chartNo?: number;
+  ptNo?: string;
+  chartDate?: string;
+  chartTime?: string;
+  visitType?: string;
+  department?: string;
+  doctorName?: string;
+  content?: string;
+  createdAt?: string;
+  patientName?: string;
   [key: string]: unknown;
 }
 
 export interface Form {
-  id: string;
-  name: string;
-  code?: string;
+  formNo?: string;
+  parentFormNo?: string;
+  ptNo?: string;
+  chartNo?: number;
+  name?: string;
+  type?: string;
+  recordData?: string;
+  createdAt?: string;
+  patientName?: string;
   [key: string]: unknown;
 }
 

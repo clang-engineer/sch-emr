@@ -58,9 +58,7 @@ class OdsSearchService(
         log.debug("Parameter values: $paramValues")
 
         val results = jdbcTemplate.queryForList(sql, paramValues)
-        return results.map { row ->
-            row.mapKeys { (key, _) -> key.lowercase() }
-        }
+        return results
     }
 
     /**
