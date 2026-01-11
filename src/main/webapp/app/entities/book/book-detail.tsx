@@ -39,7 +39,7 @@ export const BookDetail = () => {
           <dt>
             <span id="activated">Activated</span>
           </dt>
-          <dd>{bookEntity.activated}</dd>
+          <dd>{bookEntity.activated ? 'true' : 'false'}</dd>
           <dt>
             <span id="orderNo">Order No</span>
           </dt>

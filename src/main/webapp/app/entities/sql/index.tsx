@@ -7,6 +7,7 @@ import Sql from './sql';
 import SqlDetail from './sql-detail';
 import SqlUpdate from './sql-update';
 import SqlDeleteDialog from './sql-delete-dialog';
+import SqlExecute from './sql-execute';
 
 const SqlRoutes = () => (
   <ErrorBoundaryRoutes>
@@ -16,6 +17,7 @@ const SqlRoutes = () => (
       <Route index element={<SqlDetail />} />
       <Route path="edit" element={<SqlUpdate />} />
       <Route path="delete" element={<SqlDeleteDialog />} />
+      <Route path="execute" element={<SqlExecute />} />
     </Route>
   </ErrorBoundaryRoutes>
 );

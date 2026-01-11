@@ -20,7 +20,7 @@ data class SqlCriteria(
     var id: LongFilter? = null,
     var title: StringFilter? = null,
     var description: StringFilter? = null,
-    var activated: StringFilter? = null,
+    var activated: BooleanFilter? = null,
     var orderNo: IntegerFilter? = null,
     var distinct: Boolean? = null
 ) : Serializable, Criteria {

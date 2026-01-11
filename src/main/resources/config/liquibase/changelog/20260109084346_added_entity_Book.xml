@@ -15,12 +15,12 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="varchar(20)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_tbl_book__title" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_book__title" />
             </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="activated" type="varchar(255)">
+            <column name="activated" type="boolean">
                 <constraints nullable="false" />
             </column>
             <column name="order_no" type="integer">
@@ -49,7 +49,7 @@
             <column name="id" type="numeric"/>
             <column name="title" type="string"/>
             <column name="description" type="string"/>
-            <column name="activated" type="string"/>
+            <column name="activated" type="boolean"/>
             <column name="order_no" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

@@ -7,20 +7,20 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity tbl_Sql.
+        Added the entity Sql.
     -->
     <changeSet id="20260109084346-1" author="jhipster">
         <createTable tableName="tbl_sql">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="title" type="varchar(100)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_tbl_sql__title" />
+            <column name="title" type="varchar(50)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_sql__title" />
             </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="activated" type="varchar(255)">
+            <column name="activated" type="boolean">
                 <constraints nullable="false" />
             </column>
             <column name="order_no" type="integer">
@@ -49,7 +49,7 @@
             <column name="id" type="numeric"/>
             <column name="title" type="string"/>
             <column name="description" type="string"/>
-            <column name="activated" type="string"/>
+            <column name="activated" type="boolean"/>
             <column name="order_no" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

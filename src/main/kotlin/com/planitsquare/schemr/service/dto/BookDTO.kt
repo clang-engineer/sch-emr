@@ -20,7 +20,7 @@ data class BookDTO(
     var description: String? = null,
 
     @get: NotNull
-    var activated: String? = null,
+    var activated: Boolean? = null,
 
     @get: NotNull
     var orderNo: Int? = null

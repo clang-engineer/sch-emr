@@ -90,7 +90,7 @@ class BookQueryService(
                 specification = specification.and(buildStringSpecification(criteria.description, Book_.description))
             }
             if (criteria.activated != null) {
-                specification = specification.and(buildStringSpecification(criteria.activated, Book_.activated))
+                specification = specification.and(buildSpecification(criteria.activated, Book_.activated))
             }
             if (criteria.orderNo != null) {
                 specification = specification.and(buildRangeSpecification(criteria.orderNo, Book_.orderNo))

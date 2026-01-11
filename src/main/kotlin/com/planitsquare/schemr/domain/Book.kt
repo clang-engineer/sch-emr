@@ -37,7 +37,7 @@ data class Book(
     @get: NotNull
 
     @Column(name = "activated", nullable = false)
-    var activated: String? = null,
+    var activated: Boolean? = null,
 
     @get: NotNull
 

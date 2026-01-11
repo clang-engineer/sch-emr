@@ -16,7 +16,7 @@
     },
     {
       "fieldName": "activated",
-      "fieldType": "String",
+      "fieldType": "Boolean",
       "fieldValidateRules": ["required"]
     },
     {

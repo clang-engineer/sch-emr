@@ -110,7 +110,7 @@ export const SqlUpdate = () => {
                 validate={{
                   required: { value: true, message: 'This field is required.' },
                   minLength: { value: 5, message: 'This field is required to be at least 5 characters.' },
-                  maxLength: { value: 20, message: 'This field cannot be longer than 20 characters.' },
+                  maxLength: { value: 50, message: 'This field cannot be longer than 50 characters.' },
                 }}
               />
               <ValidatedField
@@ -123,16 +123,7 @@ export const SqlUpdate = () => {
                   required: { value: true, message: 'This field is required.' },
                 }}
               />
-              <ValidatedField
-                label="Activated"
-                id="sql-activated"
-                name="activated"
-                data-cy="activated"
-                type="text"
-                validate={{
-                  required: { value: true, message: 'This field is required.' },
-                }}
-              />
+              <ValidatedField label="Activated" id="sql-activated" name="activated" data-cy="activated" check type="checkbox" />
               <ValidatedField
                 label="Order No"
                 id="sql-orderNo"

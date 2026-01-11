@@ -100,16 +100,7 @@ export const BookUpdate = () => {
                   required: { value: true, message: 'This field is required.' },
                 }}
               />
-              <ValidatedField
-                label="Activated"
-                id="book-activated"
-                name="activated"
-                data-cy="activated"
-                type="text"
-                validate={{
-                  required: { value: true, message: 'This field is required.' },
-                }}
-              />
+              <ValidatedField label="Activated" id="book-activated" name="activated" data-cy="activated" check type="checkbox" />
               <ValidatedField
                 label="Order No"
                 id="book-orderNo"

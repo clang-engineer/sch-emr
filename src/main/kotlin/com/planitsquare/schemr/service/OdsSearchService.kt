@@ -44,7 +44,7 @@ class OdsSearchService(
             sqlRepository.findByTitle(title)
                 ?: throw IllegalArgumentException("SQL entity with title '$title' not found")
 
-        if (sqlEntity.activated != "Y") {
+        if (sqlEntity.activated != true) {
             throw IllegalStateException("SQL entity with title '$title' is not activated")
         }
 

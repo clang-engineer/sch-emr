@@ -128,7 +128,7 @@ export const Book = () => {
                   </td>
                   <td>{book.title}</td>
                   <td>{book.description}</td>
-                  <td>{book.activated}</td>
+                  <td>{book.activated ? 'true' : 'false'}</td>
                   <td>{book.orderNo}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

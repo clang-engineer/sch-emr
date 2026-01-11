@@ -429,34 +429,6 @@ class SqlResourceIT {
     @Test
     @Transactional
     @Throws(Exception::class)
-    fun getAllSqlsByActivatedContainsSomething() {
-        // Initialize the database
-        sqlRepository.saveAndFlush(sql)
-
-        // Get all the sqlList where activated contains DEFAULT_ACTIVATED
-        defaultSqlShouldBeFound("activated.contains=$DEFAULT_ACTIVATED")
-
-        // Get all the sqlList where activated contains UPDATED_ACTIVATED
-        defaultSqlShouldNotBeFound("activated.contains=$UPDATED_ACTIVATED")
-    }
-
-    @Test
-    @Transactional
-    @Throws(Exception::class)
-    fun getAllSqlsByActivatedNotContainsSomething() {
-        // Initialize the database
-        sqlRepository.saveAndFlush(sql)
-
-        // Get all the sqlList where activated does not contain DEFAULT_ACTIVATED
-        defaultSqlShouldNotBeFound("activated.doesNotContain=$DEFAULT_ACTIVATED")
-
-        // Get all the sqlList where activated does not contain UPDATED_ACTIVATED
-        defaultSqlShouldBeFound("activated.doesNotContain=$UPDATED_ACTIVATED")
-    }
-
-    @Test
-    @Transactional
-    @Throws(Exception::class)
     fun getAllSqlsByOrderNoIsEqualToSomething() {
         // Initialize the database
         sqlRepository.saveAndFlush(sql)
@@ -874,8 +846,8 @@ class SqlResourceIT {
         private const val DEFAULT_DESCRIPTION = "AAAAAAAAAA"
         private const val UPDATED_DESCRIPTION = "BBBBBBBBBB"
 
-        private const val DEFAULT_ACTIVATED = "AAAAAAAAAA"
-        private const val UPDATED_ACTIVATED = "BBBBBBBBBB"
+        private const val DEFAULT_ACTIVATED: Boolean = false
+        private const val UPDATED_ACTIVATED: Boolean = true
 
         private const val DEFAULT_ORDER_NO: Int = 1
         private const val UPDATED_ORDER_NO: Int = 2

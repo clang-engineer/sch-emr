@@ -18,7 +18,7 @@ export interface ISql {
   id?: number;
   title?: string;
   description?: string;
-  activated?: string;
+  activated?: boolean;
   orderNo?: number;
   params?: ISqlParam[];
 }

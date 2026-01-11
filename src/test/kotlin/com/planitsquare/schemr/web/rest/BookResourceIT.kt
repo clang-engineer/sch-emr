@@ -423,34 +423,6 @@ class BookResourceIT {
     @Test
     @Transactional
     @Throws(Exception::class)
-    fun getAllBooksByActivatedContainsSomething() {
-        // Initialize the database
-        bookRepository.saveAndFlush(book)
-
-        // Get all the bookList where activated contains DEFAULT_ACTIVATED
-        defaultBookShouldBeFound("activated.contains=$DEFAULT_ACTIVATED")
-
-        // Get all the bookList where activated contains UPDATED_ACTIVATED
-        defaultBookShouldNotBeFound("activated.contains=$UPDATED_ACTIVATED")
-    }
-
-    @Test
-    @Transactional
-    @Throws(Exception::class)
-    fun getAllBooksByActivatedNotContainsSomething() {
-        // Initialize the database
-        bookRepository.saveAndFlush(book)
-
-        // Get all the bookList where activated does not contain DEFAULT_ACTIVATED
-        defaultBookShouldNotBeFound("activated.doesNotContain=$DEFAULT_ACTIVATED")
-
-        // Get all the bookList where activated does not contain UPDATED_ACTIVATED
-        defaultBookShouldBeFound("activated.doesNotContain=$UPDATED_ACTIVATED")
-    }
-
-    @Test
-    @Transactional
-    @Throws(Exception::class)
     fun getAllBooksByOrderNoIsEqualToSomething() {
         // Initialize the database
         bookRepository.saveAndFlush(book)
@@ -855,8 +827,8 @@ class BookResourceIT {
         private const val DEFAULT_DESCRIPTION = "AAAAAAAAAA"
         private const val UPDATED_DESCRIPTION = "BBBBBBBBBB"
 
-        private const val DEFAULT_ACTIVATED = "AAAAAAAAAA"
-        private const val UPDATED_ACTIVATED = "BBBBBBBBBB"
+        private const val DEFAULT_ACTIVATED: Boolean = false
+        private const val UPDATED_ACTIVATED: Boolean = true
 
         private const val DEFAULT_ORDER_NO: Int = 1
         private const val UPDATED_ORDER_NO: Int = 2

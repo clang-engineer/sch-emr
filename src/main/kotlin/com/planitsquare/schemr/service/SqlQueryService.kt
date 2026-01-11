@@ -90,7 +90,7 @@ class SqlQueryService(
                 specification = specification.and(buildStringSpecification(criteria.description, Sql_.description))
             }
             if (criteria.activated != null) {
-                specification = specification.and(buildStringSpecification(criteria.activated, Sql_.activated))
+                specification = specification.and(buildSpecification(criteria.activated, Sql_.activated))
             }
             if (criteria.orderNo != null) {
                 specification = specification.and(buildRangeSpecification(criteria.orderNo, Sql_.orderNo))

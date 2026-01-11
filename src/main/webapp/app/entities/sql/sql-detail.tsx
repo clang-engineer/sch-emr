@@ -39,7 +39,7 @@ export const SqlDetail = () => {
           <dt>
             <span id="activated">Activated</span>
           </dt>
-          <dd>{sqlEntity.activated}</dd>
+          <dd>{sqlEntity.activated ? 'true' : 'false'}</dd>
           <dt>
             <span id="orderNo">Order No</span>
           </dt>

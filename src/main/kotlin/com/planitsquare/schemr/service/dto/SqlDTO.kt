@@ -14,13 +14,14 @@ data class SqlDTO(
     var id: Long? = null,
 
     @get: NotNull
-    @get: Size(min = 5, max = 100)
+    @get: Size(min = 5, max = 50)
     var title: String? = null,
 
+    @get: NotNull
     var description: String? = null,
 
     @get: NotNull
-    var activated: String? = null,
+    var activated: Boolean? = null,
 
     @get: NotNull
     var orderNo: Int? = null,

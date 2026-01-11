@@ -57,7 +57,7 @@ class OdsSearchControllerIT {
             createSqlEntity(
                 title = "TEST_SELECT",
                 description = "SELECT * FROM test_users WHERE age > :minAge AND status = :status",
-                activated = "Y",
+                activated = true,
                 params =
                 setOf(
                     SqlParam(name = "minAge", type = SqlParamType.INTEGER),
@@ -96,7 +96,7 @@ class OdsSearchControllerIT {
             createSqlEntity(
                 title = "TEST_SELECT_DATE",
                 description = "SELECT * FROM test_users WHERE created_date >= :startDate",
-                activated = "Y",
+                activated = true,
                 params =
                 setOf(
                     SqlParam(name = "startDate", type = SqlParamType.DATE),
@@ -150,7 +150,7 @@ class OdsSearchControllerIT {
             createSqlEntity(
                 title = "INACTIVE_SQL",
                 description = "SELECT * FROM test_users",
-                activated = "N",
+                activated = false,
                 params = emptySet(),
             )
         sqlRepository.saveAndFlush(sql)
@@ -178,7 +178,7 @@ class OdsSearchControllerIT {
             createSqlEntity(
                 title = "MISSING_PARAM",
                 description = "SELECT * FROM test_users WHERE age > :minAge",
-                activated = "Y",
+                activated = true,
                 params =
                 setOf(
                     SqlParam(name = "minAge", type = SqlParamType.INTEGER),
@@ -216,7 +216,7 @@ class OdsSearchControllerIT {
                   AND status = :status
                 ORDER BY age DESC
                 """.trimIndent(),
-                activated = "Y",
+                activated = true,
                 params =
                 setOf(
                     SqlParam(name = "minAge", type = SqlParamType.INTEGER),
@@ -267,7 +267,7 @@ class OdsSearchControllerIT {
                   AND age < :maxAge
                   AND status = :userStatus
                 """.trimIndent(),
-                activated = "Y",
+                activated = true,
                 params =
                 setOf(
                     SqlParam(name = "minAge", type = SqlParamType.INTEGER),
@@ -306,7 +306,7 @@ class OdsSearchControllerIT {
             createSqlEntity(
                 title = "MULTI_PARAM",
                 description = "SELECT * FROM test_users WHERE age > :minAge AND age < :maxAge AND status = :status",
-                activated = "Y",
+                activated = true,
                 params =
                 setOf(
                     SqlParam(name = "maxAge", type = SqlParamType.INTEGER),
@@ -342,7 +342,7 @@ class OdsSearchControllerIT {
     private fun createSqlEntity(
         title: String,
         description: String,
-        activated: String,
+        activated: Boolean,
         params: Set<SqlParam>,
     ): Sql =
         Sql(

@@ -128,10 +128,13 @@ export const Sql = () => {
                   </td>
                   <td>{sql.title}</td>
                   <td>{sql.description}</td>
-                  <td>{sql.activated}</td>
+                  <td>{sql.activated ? 'true' : 'false'}</td>
                   <td>{sql.orderNo}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
+                      <Button tag={Link} to={`/sql/${sql.id}/execute`} color="success" size="sm" data-cy="entityExecuteButton">
+                        <FontAwesomeIcon icon="play" /> <span className="d-none d-md-inline">Execute</span>
+                      </Button>
                       <Button tag={Link} to={`/sql/${sql.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                       </Button>
