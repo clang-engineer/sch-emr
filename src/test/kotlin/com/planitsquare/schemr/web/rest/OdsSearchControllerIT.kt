@@ -40,6 +40,21 @@ class OdsSearchControllerIT {
     @Autowired
     private lateinit var restMockMvc: MockMvc
 
+    companion object {
+        private const val SELECT_COLUMNS = """id AS "id", name AS "name", age AS "age", status AS "status", created_date AS "created_date""""
+
+        private fun buildQuery(whereClause: String = "", orderByClause: String = ""): String {
+            val query = StringBuilder("SELECT $SELECT_COLUMNS FROM test_users")
+            if (whereClause.isNotEmpty()) {
+                query.append(" WHERE ").append(whereClause)
+            }
+            if (orderByClause.isNotEmpty()) {
+                query.append(" ORDER BY ").append(orderByClause)
+            }
+            return query.toString()
+        }
+    }
+
     @BeforeEach
     fun setUp() {
         createTestTable()
@@ -56,7 +71,7 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "TEST_SELECT",
-                description = "SELECT * FROM test_users WHERE age > :minAge AND status = :status",
+                description = buildQuery(whereClause = "age > :minAge AND status = :status"),
                 activated = true,
                 params =
                 setOf(
@@ -95,7 +110,7 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "TEST_SELECT_DATE",
-                description = "SELECT * FROM test_users WHERE created_date >= :startDate",
+                description = buildQuery(whereClause = "created_date >= :startDate"),
                 activated = true,
                 params =
                 setOf(
@@ -149,7 +164,7 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "INACTIVE_SQL",
-                description = "SELECT * FROM test_users",
+                description = buildQuery(),
                 activated = false,
                 params = emptySet(),
             )
@@ -177,7 +192,7 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "MISSING_PARAM",
-                description = "SELECT * FROM test_users WHERE age > :minAge",
+                description = buildQuery(whereClause = "age > :minAge"),
                 activated = true,
                 params =
                 setOf(
@@ -208,14 +223,10 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "MULTILINE_QUERY",
-                description =
-                """
-                SELECT *
-                FROM test_users
-                WHERE age > :minAge
-                  AND status = :status
-                ORDER BY age DESC
-                """.trimIndent(),
+                description = buildQuery(
+                    whereClause = "age > :minAge AND status = :status",
+                    orderByClause = "age DESC"
+                ),
                 activated = true,
                 params =
                 setOf(
@@ -256,17 +267,9 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "CASE_INSENSITIVE_MULTILINE",
-                description =
-                """
-                SELECT
-                    name,
-                    age,
-                    status
-                FROM test_users
-                WHERE age > :minAge
-                  AND age < :maxAge
-                  AND status = :userStatus
-                """.trimIndent(),
+                description = buildQuery(
+                    whereClause = "age > :minAge AND age < :maxAge AND status = :userStatus"
+                ),
                 activated = true,
                 params =
                 setOf(
@@ -305,7 +308,7 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "MULTI_PARAM",
-                description = "SELECT * FROM test_users WHERE age > :minAge AND age < :maxAge AND status = :status",
+                description = buildQuery(whereClause = "age > :minAge AND age < :maxAge AND status = :status"),
                 activated = true,
                 params =
                 setOf(
@@ -344,7 +347,7 @@ class OdsSearchControllerIT {
         val sql =
             createSqlEntity(
                 title = "SAME_PARAM_MULTIPLE_TIMES",
-                description = "SELECT * FROM test_users WHERE name = :searchTerm OR status = :searchTerm",
+                description = buildQuery(whereClause = "name = :searchTerm OR status = :searchTerm"),
                 activated = true,
                 params =
                 setOf(
