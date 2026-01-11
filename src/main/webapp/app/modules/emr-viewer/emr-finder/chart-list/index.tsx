@@ -136,14 +136,155 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
           horizontal: 'right',
         }}
       >
-        <DateRangePicker
-          ranges={dateRange}
-          onChange={(item: any) => onDateRangeChange([item.selection])}
-          locale={ko}
-          months={2}
-          direction="horizontal"
-          showMonthAndYearPickers={false}
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            '& .rdrDefinedRangesWrapper': {
+              display: 'none',
+            },
+            '& .rdrDateDisplayWrapper': {
+              display: 'none',
+            },
+          }}
+        >
+          <Box sx={{ p: 2, borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', gap: 1, minWidth: '140px' }}>
+            {/* <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', mb: 0.5 }}>빠른 선택</Typography> */}
+            <Box
+              sx={{
+                px: 1.5,
+                py: 0.8,
+                fontSize: '0.75rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: '#f5f5f5' },
+              }}
+              onClick={() => {
+                const today = new Date();
+                onDateRangeChange([{ startDate: today, endDate: today, key: 'selection' }]);
+              }}
+            >
+              오늘
+            </Box>
+            <Box
+              sx={{
+                px: 1.5,
+                py: 0.8,
+                fontSize: '0.75rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: '#f5f5f5' },
+              }}
+              onClick={() => {
+                const today = new Date();
+                const weekAgo = new Date(today);
+                weekAgo.setDate(today.getDate() - 7);
+                onDateRangeChange([{ startDate: weekAgo, endDate: today, key: 'selection' }]);
+              }}
+            >
+              최근 1주일
+            </Box>
+            <Box
+              sx={{
+                px: 1.5,
+                py: 0.8,
+                fontSize: '0.75rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: '#f5f5f5' },
+              }}
+              onClick={() => {
+                const today = new Date();
+                const monthAgo = new Date(today);
+                monthAgo.setMonth(today.getMonth() - 1);
+                onDateRangeChange([{ startDate: monthAgo, endDate: today, key: 'selection' }]);
+              }}
+            >
+              최근 1개월
+            </Box>
+            <Box
+              sx={{
+                px: 1.5,
+                py: 0.8,
+                fontSize: '0.75rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: '#f5f5f5' },
+              }}
+              onClick={() => {
+                const today = new Date();
+                const threeMonthsAgo = new Date(today);
+                threeMonthsAgo.setMonth(today.getMonth() - 3);
+                onDateRangeChange([{ startDate: threeMonthsAgo, endDate: today, key: 'selection' }]);
+              }}
+            >
+              최근 3개월
+            </Box>
+            <Box
+              sx={{
+                px: 1.5,
+                py: 0.8,
+                fontSize: '0.75rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: '#f5f5f5' },
+              }}
+              onClick={() => {
+                const today = new Date();
+                const sixMonthsAgo = new Date(today);
+                sixMonthsAgo.setMonth(today.getMonth() - 6);
+                onDateRangeChange([{ startDate: sixMonthsAgo, endDate: today, key: 'selection' }]);
+              }}
+            >
+              최근 6개월
+            </Box>
+            <Box
+              sx={{
+                px: 1.5,
+                py: 0.8,
+                fontSize: '0.75rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: '#f5f5f5' },
+              }}
+              onClick={() => {
+                const today = new Date();
+                const oneYearAgo = new Date(today);
+                oneYearAgo.setFullYear(today.getFullYear() - 1);
+                onDateRangeChange([{ startDate: oneYearAgo, endDate: today, key: 'selection' }]);
+              }}
+            >
+              최근 1년
+            </Box>
+            <Box
+              sx={{
+                px: 1.5,
+                py: 0.8,
+                fontSize: '0.75rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: '#f5f5f5' },
+              }}
+              onClick={() => {
+                const today = new Date();
+                const threeYearsAgo = new Date(today);
+                threeYearsAgo.setFullYear(today.getFullYear() - 3);
+                onDateRangeChange([{ startDate: threeYearsAgo, endDate: today, key: 'selection' }]);
+              }}
+            >
+              최근 3년
+            </Box>
+          </Box>
+          <DateRangePicker
+            ranges={dateRange}
+            onChange={(item: any) => onDateRangeChange([item.selection])}
+            locale={ko}
+            months={2}
+            direction="horizontal"
+            showMonthAndYearPickers={false}
+            staticRanges={[]}
+            inputRanges={[]}
+          />
+        </Box>
       </Popover>
     </>
   );
