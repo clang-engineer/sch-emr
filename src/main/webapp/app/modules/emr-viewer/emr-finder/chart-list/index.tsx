@@ -15,12 +15,14 @@ import {
   IconButton,
   TextField,
   InputAdornment,
+  CircularProgress,
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DateRangePicker } from 'react-date-range';
 import { ko } from 'date-fns/locale';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { useAppSelector } from 'app/config/store';
 
 type DeptFilter = '수진과' | '작성과';
 type TypeFilter = '전체' | '외래' | '입원' | '응급';
@@ -90,7 +92,15 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
           readOnly: true,
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton size="small" edge="end" sx={{ color: '#1976d2', padding: '2px' }} onClick={onSearch}>
+              <IconButton
+                size="small"
+                edge="end"
+                sx={{ color: '#1976d2', padding: '2px' }}
+                onClick={e => {
+                  e.stopPropagation();
+                  onSearch();
+                }}
+              >
                 <FontAwesomeIcon icon={['fas', 'search']} style={{ fontSize: '1rem' }} />
               </IconButton>
             </InputAdornment>
@@ -124,15 +134,9 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
 };
 
 const ChartList = () => {
+  const { charts, loading } = useAppSelector(state => state.emrContent);
   const [deptFilter, setDeptFilter] = useState<DeptFilter>('수진과');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('전체');
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    },
-  ]);
 
   const handleDeptChange = (_event: React.MouseEvent<HTMLElement>, newValue: DeptFilter | null) => {
     if (newValue !== null) {
@@ -145,6 +149,16 @@ const ChartList = () => {
       setTypeFilter(newValue);
     }
   };
+
+  // 필터링된 차트 목록
+  const filteredCharts = charts.filter(chart => {
+    // 유형 필터
+    if (typeFilter !== '전체' && chart.visitType !== typeFilter) {
+      return false;
+    }
+    // 추가 필터링 로직 (수진과/작성과는 현재 데이터에 없으므로 나중에 추가)
+    return true;
+  });
 
   const toggleButtonStyle = {
     py: 0.5,
@@ -160,13 +174,6 @@ const ChartList = () => {
       },
     },
   };
-
-  // 샘플 데이터
-  const charts = [
-    { date: '2024-01-10', time: '14:30', type: '외래', dept: '내과', doctor: '홍길동', content: '진료기록' },
-    { date: '2024-01-09', time: '10:15', type: '입원', dept: '외과', doctor: '김철수', content: '수술기록' },
-    { date: '2024-01-08', time: '16:45', type: '응급', dept: '응급의학과', doctor: '이영희', content: '응급기록' },
-  ];
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -217,35 +224,49 @@ const ChartList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {charts.map((chart, index) => (
-              <TableRow
-                key={index}
-                hover
-                sx={{
-                  cursor: 'pointer',
-                  '&:hover': { bgcolor: '#f5f5f5' },
-                }}
-              >
-                <TableCell sx={{ py: 0.8 }}>{chart.date}</TableCell>
-                <TableCell sx={{ py: 0.8 }}>{chart.time}</TableCell>
-                <TableCell sx={{ py: 0.8 }}>
-                  <Chip
-                    label={chart.type}
-                    size="small"
-                    sx={{
-                      height: '20px',
-                      fontSize: '0.7rem',
-                      bgcolor: chart.type === '외래' ? '#e3f2fd' : chart.type === '입원' ? '#fff3e0' : '#ffebee',
-                      color: chart.type === '외래' ? '#1976d2' : chart.type === '입원' ? '#f57c00' : '#d32f2f',
-                      fontWeight: 600,
-                    }}
-                  />
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={6} sx={{ textAlign: 'center', py: 4 }}>
+                  <CircularProgress size={24} />
                 </TableCell>
-                <TableCell sx={{ py: 0.8 }}>{chart.dept}</TableCell>
-                <TableCell sx={{ py: 0.8 }}>{chart.doctor}</TableCell>
-                <TableCell sx={{ py: 0.8 }}>{chart.content}</TableCell>
               </TableRow>
-            ))}
+            ) : filteredCharts.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} sx={{ textAlign: 'center', py: 4, color: '#90a4ae' }}>
+                  조회된 기록이 없습니다.
+                </TableCell>
+              </TableRow>
+            ) : (
+              filteredCharts.map((chart, index) => (
+                <TableRow
+                  key={index}
+                  hover
+                  sx={{
+                    cursor: 'pointer',
+                    '&:hover': { bgcolor: '#f5f5f5' },
+                  }}
+                >
+                  <TableCell sx={{ py: 0.8 }}>{chart.chartDate}</TableCell>
+                  <TableCell sx={{ py: 0.8 }}>{chart.chartTime}</TableCell>
+                  <TableCell sx={{ py: 0.8 }}>
+                    <Chip
+                      label={chart.visitType}
+                      size="small"
+                      sx={{
+                        height: '20px',
+                        fontSize: '0.7rem',
+                        bgcolor: chart.visitType === '외래' ? '#e3f2fd' : chart.visitType === '입원' ? '#fff3e0' : '#ffebee',
+                        color: chart.visitType === '외래' ? '#1976d2' : chart.visitType === '입원' ? '#f57c00' : '#d32f2f',
+                        fontWeight: 600,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell sx={{ py: 0.8 }}>{chart.department}</TableCell>
+                  <TableCell sx={{ py: 0.8 }}>{chart.doctorName}</TableCell>
+                  <TableCell sx={{ py: 0.8 }}>{chart.content}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

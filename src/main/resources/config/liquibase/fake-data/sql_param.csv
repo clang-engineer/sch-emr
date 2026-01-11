@@ -4,6 +4,8 @@ sql_id;name;type
 3;minAge;INTEGER
 3;maxAge;INTEGER
 4;ptNo;STRING
+4;startDate;DATE
+4;endDate;DATE
 5;startDate;DATE
 5;endDate;DATE
 6;doctorName;STRING

@@ -6,11 +6,13 @@ import PatientInfo, { PatientSearch } from './patient-info';
 import ChartList, { ChartListHeader } from './chart-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
-import { useAppDispatch } from 'app/config/store';
-import { getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getChartList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 const RecordFinder = () => {
   const dispatch = useAppDispatch();
+
+  const patient = useAppSelector(state => state.emrContent.patient);
   const { patientExpanded, setPatientExpanded, patientSectionRef, recordHeight, formHeight, handleRecordResize } = useRecordFinderLayout();
 
   const [dateRange, setDateRange] = React.useState([
@@ -21,7 +23,22 @@ const RecordFinder = () => {
     },
   ]);
 
-  const handleSearch = () => {};
+  const handleChartSearch = () => {
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    dispatch(
+      getChartList({
+        ptNo: patient.ptNo,
+        startDate: formatDate(dateRange[0].startDate),
+        endDate: formatDate(dateRange[0].endDate),
+      })
+    );
+  };
 
   const handlePatientSearch = (ptNo: string) => {
     dispatch(getPatientInfo(ptNo));
@@ -58,7 +75,15 @@ const RecordFinder = () => {
             height={recordHeight}
             isFirst
             onResize={handleRecordResize}
-            headerContent={<ChartListHeader dateRange={dateRange} onDateRangeChange={setDateRange} onSearch={handleSearch} />}
+            headerContent={
+              <ChartListHeader
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+                onSearch={() => {
+                  handleChartSearch();
+                }}
+              />
+            }
           >
             <ChartList />
           </ResizableSection>
