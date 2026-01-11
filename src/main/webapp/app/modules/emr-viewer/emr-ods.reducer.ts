@@ -64,13 +64,17 @@ const initialState: EmrOdsState = {
 
 const apiUrl = 'api/ods';
 
+const SELECT_PATIENT = 'SELECT_PATIENT';
+const SELECT_CHART_LIST = 'SELECT_CHART_LIST';
+const SELECT_FORM_LIST = 'SELECT_FORM_LIST';
+
 export const getPatientInfo = createAsyncThunk(
   'emr-ods/fetch_patient',
   async (ptNo: string) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {
-      key: 'patient_by_number',
+      key: SELECT_PATIENT,
       map: {
         ptNo,
       },
@@ -87,7 +91,7 @@ export const getChartList = createAsyncThunk(
     const requestUrl = `${apiUrl}`;
 
     const payload = {
-      key: 'chart_by_patient',
+      key: SELECT_CHART_LIST,
       map: data,
     };
 
@@ -95,16 +99,14 @@ export const getChartList = createAsyncThunk(
   },
   { serializeError: serializeAxiosError }
 );
-
 export const getFormList = createAsyncThunk(
   'emr-ods/fetch_form_list',
   async ({ ptNo, chartNo }: { ptNo?: string | number; chartNo?: string | number }) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {
-      key: 'record_by_patient',
+      key: SELECT_FORM_LIST,
       map: {
-        ptNo,
         chartNo,
       },
     };

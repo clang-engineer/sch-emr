@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Box, TextField, InputAdornment, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAppSelector } from 'app/config/store';
 
 interface FormNode {
   id: string;
@@ -96,64 +97,64 @@ const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onS
   );
 };
 
-const FormList = () => {
-  const [selected, setSelected] = useState<string>('');
-  const [searchText, setSearchText] = useState('');
-  const [expanded, setExpanded] = useState<string[]>(['1', '2', '3', '4', '5']);
+interface FormListProps {
+  selectedChartNo?: number | null;
+}
 
-  // 샘플 데이터
-  const formData: FormNode[] = [
-    {
-      id: '1',
-      name: '진료기록',
-      type: 'folder',
-      children: [
-        { id: '1-1', name: '초진기록지', type: 'form' },
-        { id: '1-2', name: '경과기록지', type: 'form' },
-        { id: '1-3', name: '퇴원요약지', type: 'form' },
-      ],
-    },
-    {
-      id: '2',
-      name: '수술기록',
-      type: 'folder',
-      children: [
-        { id: '2-1', name: '수술기록지', type: 'form' },
-        { id: '2-2', name: '마취기록지', type: 'form' },
-        { id: '2-3', name: '수술동의서', type: 'form' },
-      ],
-    },
-    {
-      id: '3',
-      name: '검사기록',
-      type: 'folder',
-      children: [
-        { id: '3-1', name: '혈액검사 결과지', type: 'form' },
-        { id: '3-2', name: '영상검사 판독지', type: 'form' },
-        { id: '3-3', name: '병리검사 결과지', type: 'form' },
-      ],
-    },
-    {
-      id: '4',
-      name: '간호기록',
-      type: 'folder',
-      children: [
-        { id: '4-1', name: '간호정보조사지', type: 'form' },
-        { id: '4-2', name: '간호경과기록지', type: 'form' },
-        { id: '4-3', name: 'V/S 기록지', type: 'form' },
-      ],
-    },
-    {
-      id: '5',
-      name: '동의서',
-      type: 'folder',
-      children: [
-        { id: '5-1', name: '입원동의서', type: 'form' },
-        { id: '5-2', name: '개인정보 제공동의서', type: 'form' },
-        { id: '5-3', name: '진료정보 열람동의서', type: 'form' },
-      ],
-    },
-  ];
+const FormList: React.FC<FormListProps> = ({ selectedChartNo }) => {
+  const [selected, setSelected] = useState<string>('');
+  const [expanded, setExpanded] = useState<string[]>(['1', '2', '3', '4', '5']);
+  const { forms, loading } = useAppSelector(state => state.emrContent);
+
+  const formData = useMemo<FormNode[]>(() => {
+    if (!forms.length) {
+      return [];
+    }
+
+    const normalized = forms
+      .filter(form => (selectedChartNo ? form.chartNo === selectedChartNo : true))
+      .map(form => ({
+        id: String(form.formNo ?? ''),
+        parentId: form.parentFormNo ? String(form.parentFormNo) : null,
+        name: form.name ?? '',
+        type: form.type === 'folder' ? 'folder' : 'form',
+      }))
+      .filter(form => form.id && form.name);
+
+    const nodes = new Map<string, FormNode>();
+    normalized.forEach(form => {
+      nodes.set(form.id, { id: form.id, name: form.name, type: form.type, children: [] });
+    });
+
+    const roots: FormNode[] = [];
+    normalized.forEach(form => {
+      const node = nodes.get(form.id);
+      if (!node) {
+        return;
+      }
+      if (!form.parentId || !nodes.has(form.parentId)) {
+        roots.push(node);
+        return;
+      }
+      const parent = nodes.get(form.parentId);
+      if (parent) {
+        parent.children = parent.children ?? [];
+        parent.children.push(node);
+      }
+    });
+
+    const sortNodes = (items: FormNode[]) => {
+      items.sort((a, b) => a.name.localeCompare(b.name, 'ko-KR'));
+      items.forEach(item => {
+        if (item.children?.length) {
+          sortNodes(item.children);
+        }
+      });
+    };
+    sortNodes(roots);
+
+    return roots;
+  }, [forms, selectedChartNo]);
 
   const handleSelect = (nodeId: string) => {
     setSelected(nodeId);
@@ -163,23 +164,31 @@ const FormList = () => {
     setExpanded(prev => (prev.includes(nodeId) ? prev.filter(id => id !== nodeId) : [...prev, nodeId]));
   };
 
+  const showEmpty = !loading && formData.length === 0;
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* 트리 영역 */}
       <Box sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px', bgcolor: '#fff' }}>
-        <List component="nav" disablePadding>
-          {formData.map(node => (
-            <TreeItemComponent
-              key={node.id}
-              node={node}
-              level={0}
-              selected={selected}
-              onSelect={handleSelect}
-              expanded={expanded}
-              onToggle={handleToggle}
-            />
-          ))}
-        </List>
+        {showEmpty ? (
+          <Box sx={{ py: 4, textAlign: 'center' }}>
+            <Typography sx={{ fontSize: '0.75rem', color: '#90a4ae' }}>선택된 기록의 서식이 없습니다.</Typography>
+          </Box>
+        ) : (
+          <List component="nav" disablePadding>
+            {formData.map(node => (
+              <TreeItemComponent
+                key={node.id}
+                node={node}
+                level={0}
+                selected={selected}
+                onSelect={handleSelect}
+                expanded={expanded}
+                onToggle={handleToggle}
+              />
+            ))}
+          </List>
+        )}
       </Box>
     </Box>
   );

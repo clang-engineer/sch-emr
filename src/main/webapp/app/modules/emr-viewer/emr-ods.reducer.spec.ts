@@ -141,14 +141,14 @@ describe('Emr content reducer tests', () => {
 
     it('dispatches FETCH_CHART_LIST actions', async () => {
       const expectedActions = [{ type: getChartList.pending.type }, { type: getChartList.fulfilled.type, payload: resolvedObject }];
-      await store.dispatch(getChartList('P100'));
+      await store.dispatch(getChartList({ ptNo: 'P100', startDate: '2024-01-01', endDate: '2024-01-01' }));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches FETCH_FORM_LIST actions', async () => {
       const expectedActions = [{ type: getFormList.pending.type }, { type: getFormList.fulfilled.type, payload: resolvedObject }];
-      await store.dispatch(getFormList({ chartId: 123 }));
+      await store.dispatch(getFormList({ chartNo: 123 }));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });

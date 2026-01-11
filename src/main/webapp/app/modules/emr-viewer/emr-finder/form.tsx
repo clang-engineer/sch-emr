@@ -7,7 +7,7 @@ import ChartList, { ChartListHeader } from './chart-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getChartList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 const RecordFinder = () => {
   const dispatch = useAppDispatch();
@@ -22,12 +22,14 @@ const RecordFinder = () => {
       key: 'selection',
     },
   ]);
+  const [selectedChartNo, setSelectedChartNo] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     if (!patient?.ptNo) {
       return;
     }
     setDateRange([{ startDate: null, endDate: null, key: 'selection' }]);
+    setSelectedChartNo(null);
   }, [patient?.ptNo]);
 
   const handleChartSearch = () => {
@@ -52,6 +54,14 @@ const RecordFinder = () => {
 
   const handlePatientSearch = (ptNo: string) => {
     dispatch(getPatientInfo(ptNo));
+  };
+
+  const handleChartSelect = (chartNo?: number) => {
+    if (!chartNo) {
+      return;
+    }
+    setSelectedChartNo(chartNo);
+    dispatch(getFormList({ chartNo }));
   };
 
   return (
@@ -96,10 +106,10 @@ const RecordFinder = () => {
               />
             }
           >
-            <ChartList />
+            <ChartList onSelectChart={handleChartSelect} selectedChartNo={selectedChartNo} />
           </ResizableSection>
           <ResizableSection title="서식 목록" color="#0097a7" height={formHeight} isLast>
-            <FormList />
+            <FormList selectedChartNo={selectedChartNo} />
           </ResizableSection>
         </>
       )}

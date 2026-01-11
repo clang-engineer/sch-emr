@@ -147,7 +147,12 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
   );
 };
 
-const ChartList = () => {
+interface ChartListProps {
+  onSelectChart?: (chartNo?: number) => void;
+  selectedChartNo?: number | null;
+}
+
+const ChartList: React.FC<ChartListProps> = ({ onSelectChart, selectedChartNo }) => {
   const { charts, loading, patient } = useAppSelector(state => state.emrContent);
   const [deptFilter, setDeptFilter] = useState<DeptFilter>('수진과');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('전체');
@@ -265,7 +270,11 @@ const ChartList = () => {
                   hover
                   sx={{
                     cursor: 'pointer',
-                    '&:hover': { bgcolor: '#f5f5f5' },
+                    bgcolor: chart.chartNo === selectedChartNo ? '#e3f2fd' : 'transparent',
+                    '&:hover': { bgcolor: chart.chartNo === selectedChartNo ? '#e3f2fd' : '#f5f5f5' },
+                  }}
+                  onClick={() => {
+                    onSelectChart?.(chart.chartNo);
                   }}
                 >
                   <TableCell sx={{ py: 0.8 }}>{chart.chartDate}</TableCell>
