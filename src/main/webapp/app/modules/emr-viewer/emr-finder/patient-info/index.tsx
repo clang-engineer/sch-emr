@@ -126,6 +126,7 @@ const PatientInfo = () => {
     return (
       <Box
         sx={{
+          height: '100%',
           px: 2,
           py: 2,
           borderRadius: '8px',
@@ -133,6 +134,7 @@ const PatientInfo = () => {
           bgcolor: '#fafafa',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           gap: 1.2,
         }}
       >
