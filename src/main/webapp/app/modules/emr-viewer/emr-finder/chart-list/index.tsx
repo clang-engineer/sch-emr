@@ -24,6 +24,7 @@ import { ko } from 'date-fns/locale';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { useAppSelector } from 'app/config/store';
+import EmptyState from '../empty-state';
 
 type DeptFilter = '수진과' | '작성과';
 type TypeFilter = '전체' | '외래' | '입원' | '응급';
@@ -270,54 +271,70 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
       </Box>
 
       {/* 테이블 영역 */}
-      <TableContainer sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
-        <Table stickyHeader size="small" sx={{ '& .MuiTableCell-root': { fontSize: '0.75rem' } }}>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ bgcolor: '#f8f9fa', py: 0.6, width: '36px' }}>
-                <Checkbox
-                  size="small"
-                  checked={isAllSelected}
-                  indeterminate={isSomeSelected}
-                  onChange={handleToggleAll}
-                  inputProps={{ 'aria-label': '기록 전체 선택' }}
-                />
-              </TableCell>
-              <TableCell sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                날짜
-              </TableCell>
-              <TableCell sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                시간
-              </TableCell>
-              <TableCell sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                유형
-              </TableCell>
-              <TableCell sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                진료과
-              </TableCell>
-              <TableCell sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                담당의
-              </TableCell>
-              <TableCell sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                내용
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loading ? (
+      {loading ? (
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid #e0e0e0',
+            borderRadius: '4px',
+            bgcolor: '#fff',
+          }}
+        >
+          <CircularProgress size={24} />
+        </Box>
+      ) : filteredCharts.length === 0 ? (
+        <EmptyState icon="file-medical" title="조회된 기록 없음" description="날짜를 선택하고 검색해주세요." />
+      ) : (
+        <TableContainer sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
+          <Table stickyHeader size="small" sx={{ '& .MuiTableCell-root': { fontSize: '0.75rem' } }}>
+            <TableHead>
               <TableRow>
-                <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
-                  <CircularProgress size={24} />
+                <TableCell sx={{ bgcolor: '#f8f9fa', py: 0.6, width: '36px' }}>
+                  <Checkbox
+                    size="small"
+                    checked={isAllSelected}
+                    indeterminate={isSomeSelected}
+                    onChange={handleToggleAll}
+                    inputProps={{ 'aria-label': '기록 전체 선택' }}
+                  />
+                </TableCell>
+                <TableCell
+                  sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
+                >
+                  날짜
+                </TableCell>
+                <TableCell
+                  sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
+                >
+                  시간
+                </TableCell>
+                <TableCell
+                  sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
+                >
+                  유형
+                </TableCell>
+                <TableCell
+                  sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
+                >
+                  진료과
+                </TableCell>
+                <TableCell
+                  sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
+                >
+                  담당의
+                </TableCell>
+                <TableCell
+                  sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
+                >
+                  내용
                 </TableCell>
               </TableRow>
-            ) : filteredCharts.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4, color: '#90a4ae' }}>
-                  조회된 기록이 없습니다.
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredCharts.map((chart, index) => (
+            </TableHead>
+            <TableBody>
+              {filteredCharts.map((chart, index) => (
                 <TableRow
                   key={index}
                   hover
@@ -358,11 +375,11 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
                   <TableCell sx={{ py: 0.8 }}>{chart.doctorName}</TableCell>
                   <TableCell sx={{ py: 0.8 }}>{chart.content}</TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Box>
   );
 };

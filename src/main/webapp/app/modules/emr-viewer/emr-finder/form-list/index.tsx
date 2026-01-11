@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from 'app/config/store';
+import EmptyState from '../empty-state';
 
 interface FormNode {
   id: string;
@@ -169,12 +170,10 @@ const FormList: React.FC<FormListProps> = ({ selectedChartNos = [] }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* 트리 영역 */}
-      <Box sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px', bgcolor: '#fff' }}>
-        {showEmpty ? (
-          <Box sx={{ py: 4, textAlign: 'center' }}>
-            <Typography sx={{ fontSize: '0.75rem', color: '#90a4ae' }}>선택된 기록의 서식이 없습니다.</Typography>
-          </Box>
-        ) : (
+      {showEmpty ? (
+        <EmptyState icon="file-alt" title="서식 없음" description="선택된 기록의 서식이 없습니다." />
+      ) : (
+        <Box sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px', bgcolor: '#fff' }}>
           <List component="nav" disablePadding>
             {formData.map(node => (
               <TreeItemComponent
@@ -188,8 +187,8 @@ const FormList: React.FC<FormListProps> = ({ selectedChartNos = [] }) => {
               />
             ))}
           </List>
-        )}
-      </Box>
+        </Box>
+      )}
     </Box>
   );
 };

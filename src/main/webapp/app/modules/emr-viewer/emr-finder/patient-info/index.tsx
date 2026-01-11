@@ -3,6 +3,7 @@ import { Box, IconButton, InputAdornment, TextField, Typography, CircularProgres
 import Grid from '@mui/material/Grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from 'app/config/store';
+import EmptyState from '../empty-state';
 
 interface PatientSearchProps {
   onSearch: (patientId: string) => void;
@@ -123,43 +124,7 @@ const PatientInfo = () => {
   const initial = patientName && patientName !== '-' ? patientName.charAt(0) : '?';
 
   if (!loading && !patient) {
-    return (
-      <Box
-        sx={{
-          height: '100%',
-          px: 2,
-          py: 2,
-          borderRadius: '8px',
-          border: '1px dashed #cfd8dc',
-          bgcolor: '#fafafa',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 1.2,
-        }}
-      >
-        <Box
-          sx={{
-            width: 36,
-            height: 36,
-            borderRadius: '12px',
-            bgcolor: '#e3f2fd',
-            color: '#1976d2',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 700,
-            fontSize: '0.9rem',
-          }}
-        >
-          <FontAwesomeIcon icon={['fas', 'user']} style={{ fontSize: '0.9rem' }} />
-        </Box>
-        <Box>
-          <Typography sx={{ fontSize: '0.85rem', fontWeight: 600, color: '#455a64' }}>조회된 환자 없음</Typography>
-          <Typography sx={{ fontSize: '0.72rem', color: '#90a4ae' }}>등록번호로 환자를 검색해주세요.</Typography>
-        </Box>
-      </Box>
-    );
+    return <EmptyState icon="user" title="조회된 환자 없음" description="등록번호로 환자를 검색해주세요." />;
   }
 
   return (
