@@ -3,7 +3,7 @@ sql_id;name;type
 2;department;STRING
 3;minAge;INTEGER
 3;maxAge;INTEGER
-4;patientId;LONG
+4;patientNumber;STRING
 5;startDate;DATE
 5;endDate;DATE
 6;doctorName;STRING

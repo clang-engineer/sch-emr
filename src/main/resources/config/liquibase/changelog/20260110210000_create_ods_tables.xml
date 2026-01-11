@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Create ODS schema tables: tbl_patient, tbl_chart, tbl_record
+        Create ODS schema tables: tbl_patient, tbl_chart, tbl_form
     -->
 
     <!-- Create ODS schema -->
@@ -72,11 +72,11 @@
         </createTable>
     </changeSet>
 
-    <!-- Create tbl_record -->
+    <!-- Create tbl_form -->
     <changeSet id="20260110210000-3" author="developer">
-        <createTable tableName="tbl_record" schemaName="ods">
+        <createTable tableName="tbl_form" schemaName="ods">
             <column name="id" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_record"/>
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_form"/>
             </column>
             <column name="parent_id" type="varchar(50)">
                 <constraints nullable="true"/>
@@ -109,17 +109,17 @@
                                  referencedTableSchemaName="ods"/>
 
         <addForeignKeyConstraint baseColumnNames="patient_id"
-                                 baseTableName="tbl_record"
+                                 baseTableName="tbl_form"
                                  baseTableSchemaName="ods"
-                                 constraintName="fk_tbl_record__patient_id"
+                                 constraintName="fk_tbl_form__patient_id"
                                  referencedColumnNames="id"
                                  referencedTableName="tbl_patient"
                                  referencedTableSchemaName="ods"/>
 
         <addForeignKeyConstraint baseColumnNames="chart_id"
-                                 baseTableName="tbl_record"
+                                 baseTableName="tbl_form"
                                  baseTableSchemaName="ods"
-                                 constraintName="fk_tbl_record__chart_id"
+                                 constraintName="fk_tbl_form__chart_id"
                                  referencedColumnNames="id"
                                  referencedTableName="tbl_chart"
                                  referencedTableSchemaName="ods"/>
@@ -162,12 +162,12 @@
         </loadData>
     </changeSet>
 
-    <!-- Load sample data for tbl_record -->
+    <!-- Load sample data for tbl_form -->
     <changeSet id="20260110210000-7-data" author="developer" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/record.csv"
+                  file="config/liquibase/fake-data/form.csv"
                   separator=";"
-                  tableName="tbl_record"
+                  tableName="tbl_form"
                   schemaName="ods"
                   usePreparedStatements="true">
             <column name="id" type="string"/>
@@ -182,17 +182,17 @@
 
     <!-- Update empty parent_id to NULL -->
     <changeSet id="20260110210000-7-fix" author="developer" context="faker">
-        <sql>UPDATE ods.tbl_record SET parent_id = NULL WHERE parent_id = ''</sql>
+        <sql>UPDATE ods.tbl_form SET parent_id = NULL WHERE parent_id = ''</sql>
     </changeSet>
 
     <!-- Add self-referencing foreign key constraint after data load -->
     <changeSet id="20260110210000-8" author="developer">
         <addForeignKeyConstraint baseColumnNames="parent_id"
-                                 baseTableName="tbl_record"
+                                 baseTableName="tbl_form"
                                  baseTableSchemaName="ods"
-                                 constraintName="fk_tbl_record__parent_id"
+                                 constraintName="fk_tbl_form__parent_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="tbl_record"
+                                 referencedTableName="tbl_form"
                                  referencedTableSchemaName="ods"/>
     </changeSet>
 

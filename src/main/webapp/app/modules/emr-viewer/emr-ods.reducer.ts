@@ -62,7 +62,7 @@ export const getPatientInfo = createAsyncThunk(
     const payload = {
       key: 'patient_by_number',
       map: {
-        patientNumber: ptNo,
+        ptNo,
       },
     };
 
@@ -73,13 +73,13 @@ export const getPatientInfo = createAsyncThunk(
 
 export const getChartList = createAsyncThunk(
   'emr-ods/fetch_record_list',
-  async (patientNumber: string) => {
+  async (ptNo: string) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {
       key: 'chart_by_patient',
       map: {
-        patientNumber,
+        ptNo,
       },
     };
 
@@ -90,30 +90,17 @@ export const getChartList = createAsyncThunk(
 
 export const getFormList = createAsyncThunk(
   'emr-ods/fetch_form_list',
-  async ({ patientId, chartId }: { patientId?: string | number; chartId?: string | number }) => {
+  async ({ ptNo, chartNo }: { ptNo?: string | number; chartNo?: string | number }) => {
     const requestUrl = `${apiUrl}`;
 
-    if (chartId !== undefined && chartId !== null) {
-      const payload = {
-        key: 'record_by_chart',
-        map: {
-          chartId,
-        },
-      };
-      return axios.post<Form[]>(requestUrl, cleanEntity(payload));
-    }
-
-    if (patientId !== undefined && patientId !== null) {
-      const payload = {
-        key: 'record_by_patient',
-        map: {
-          patientId,
-        },
-      };
-      return axios.post<Form[]>(requestUrl, cleanEntity(payload));
-    }
-
-    throw new Error('patientId or chartId is required');
+    const payload = {
+      key: 'record_by_patient',
+      map: {
+        ptNo,
+        chartNo,
+      },
+    };
+    return axios.post<Form[]>(requestUrl, cleanEntity(payload));
   },
   { serializeError: serializeAxiosError }
 );
