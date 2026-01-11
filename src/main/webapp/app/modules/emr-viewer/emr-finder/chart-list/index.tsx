@@ -238,7 +238,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* 필터 영역 - 데이터가 있을 때만 표시 */}
-      {!loading && filteredCharts.length > 0 && (
+      {!loading && charts.length > 0 && (
         <Box sx={{ mb: 1.5, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>구분</Typography>
@@ -287,7 +287,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
         >
           <CircularProgress size={24} />
         </Box>
-      ) : filteredCharts.length === 0 ? (
+      ) : charts.length === 0 ? (
         <EmptyState icon="file-medical" title="조회된 기록 없음" description="날짜를 선택하고 검색해주세요." />
       ) : (
         <TableContainer sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
@@ -336,48 +336,56 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredCharts.map((chart, index) => (
-                <TableRow
-                  key={index}
-                  hover
-                  sx={{
-                    cursor: 'pointer',
-                    bgcolor: isSelected(chart.chartNo) ? '#e3f2fd' : 'transparent',
-                    '&:hover': { bgcolor: isSelected(chart.chartNo) ? '#e3f2fd' : '#f5f5f5' },
-                  }}
-                  onClick={() => {
-                    handleRowClick(chart.chartNo);
-                  }}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      size="small"
-                      checked={isSelected(chart.chartNo)}
-                      onClick={event => event.stopPropagation()}
-                      onChange={() => handleRowClick(chart.chartNo)}
-                      inputProps={{ 'aria-label': `기록 선택 ${chart.chartNo ?? ''}` }}
-                    />
+              {filteredCharts.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} sx={{ py: 4, textAlign: 'center', color: '#78909c' }}>
+                    선택한 조건에 맞는 기록이 없습니다.
                   </TableCell>
-                  <TableCell sx={{ py: 0.8 }}>{chart.chartDate}</TableCell>
-                  <TableCell sx={{ py: 0.8 }}>{chart.chartTime}</TableCell>
-                  <TableCell sx={{ py: 0.8 }}>
-                    <Chip
-                      label={chart.visitType}
-                      size="small"
-                      sx={{
-                        height: '20px',
-                        fontSize: '0.7rem',
-                        bgcolor: chart.visitType === '외래' ? '#e3f2fd' : chart.visitType === '입원' ? '#fff3e0' : '#ffebee',
-                        color: chart.visitType === '외래' ? '#1976d2' : chart.visitType === '입원' ? '#f57c00' : '#d32f2f',
-                        fontWeight: 600,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ py: 0.8 }}>{chart.department}</TableCell>
-                  <TableCell sx={{ py: 0.8 }}>{chart.doctorName}</TableCell>
-                  <TableCell sx={{ py: 0.8 }}>{chart.content}</TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                filteredCharts.map((chart, index) => (
+                  <TableRow
+                    key={index}
+                    hover
+                    sx={{
+                      cursor: 'pointer',
+                      bgcolor: isSelected(chart.chartNo) ? '#e3f2fd' : 'transparent',
+                      '&:hover': { bgcolor: isSelected(chart.chartNo) ? '#e3f2fd' : '#f5f5f5' },
+                    }}
+                    onClick={() => {
+                      handleRowClick(chart.chartNo);
+                    }}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        size="small"
+                        checked={isSelected(chart.chartNo)}
+                        onClick={event => event.stopPropagation()}
+                        onChange={() => handleRowClick(chart.chartNo)}
+                        inputProps={{ 'aria-label': `기록 선택 ${chart.chartNo ?? ''}` }}
+                      />
+                    </TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.chartDate}</TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.chartTime}</TableCell>
+                    <TableCell sx={{ py: 0.8 }}>
+                      <Chip
+                        label={chart.visitType}
+                        size="small"
+                        sx={{
+                          height: '20px',
+                          fontSize: '0.7rem',
+                          bgcolor: chart.visitType === '외래' ? '#e3f2fd' : chart.visitType === '입원' ? '#fff3e0' : '#ffebee',
+                          color: chart.visitType === '외래' ? '#1976d2' : chart.visitType === '입원' ? '#f57c00' : '#d32f2f',
+                          fontWeight: 600,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.department}</TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.doctorName}</TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.content}</TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
