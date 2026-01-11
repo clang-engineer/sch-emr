@@ -237,38 +237,40 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      {/* 필터 영역 */}
-      <Box sx={{ mb: 1.5, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>구분</Typography>
-          <ToggleButtonGroup value={deptFilter} exclusive onChange={handleDeptChange} size="small" sx={{ height: '28px' }}>
-            <ToggleButton value="수진과" sx={toggleButtonStyle}>
-              수진과
-            </ToggleButton>
-            <ToggleButton value="작성과" sx={toggleButtonStyle}>
-              작성과
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
+      {/* 필터 영역 - 데이터가 있을 때만 표시 */}
+      {!loading && filteredCharts.length > 0 && (
+        <Box sx={{ mb: 1.5, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>구분</Typography>
+            <ToggleButtonGroup value={deptFilter} exclusive onChange={handleDeptChange} size="small" sx={{ height: '28px' }}>
+              <ToggleButton value="수진과" sx={toggleButtonStyle}>
+                수진과
+              </ToggleButton>
+              <ToggleButton value="작성과" sx={toggleButtonStyle}>
+                작성과
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>유형</Typography>
-          <ToggleButtonGroup value={typeFilter} exclusive onChange={handleTypeChange} size="small" sx={{ height: '28px' }}>
-            <ToggleButton value="전체" sx={toggleButtonStyle}>
-              전체
-            </ToggleButton>
-            <ToggleButton value="외래" sx={toggleButtonStyle}>
-              외래
-            </ToggleButton>
-            <ToggleButton value="입원" sx={toggleButtonStyle}>
-              입원
-            </ToggleButton>
-            <ToggleButton value="응급" sx={toggleButtonStyle}>
-              응급
-            </ToggleButton>
-          </ToggleButtonGroup>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>유형</Typography>
+            <ToggleButtonGroup value={typeFilter} exclusive onChange={handleTypeChange} size="small" sx={{ height: '28px' }}>
+              <ToggleButton value="전체" sx={toggleButtonStyle}>
+                전체
+              </ToggleButton>
+              <ToggleButton value="외래" sx={toggleButtonStyle}>
+                외래
+              </ToggleButton>
+              <ToggleButton value="입원" sx={toggleButtonStyle}>
+                입원
+              </ToggleButton>
+              <ToggleButton value="응급" sx={toggleButtonStyle}>
+                응급
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
         </Box>
-      </Box>
+      )}
 
       {/* 테이블 영역 */}
       {loading ? (
