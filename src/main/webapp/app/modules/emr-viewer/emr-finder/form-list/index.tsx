@@ -98,21 +98,21 @@ const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onS
 };
 
 interface FormListProps {
-  selectedChartNo?: number | null;
+  selectedChartNos?: number[];
 }
 
-const FormList: React.FC<FormListProps> = ({ selectedChartNo }) => {
+const FormList: React.FC<FormListProps> = ({ selectedChartNos = [] }) => {
   const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>(['1', '2', '3', '4', '5']);
   const { forms, loading } = useAppSelector(state => state.emrContent);
 
   const formData = useMemo<FormNode[]>(() => {
-    if (!forms.length) {
+    if (!forms.length || selectedChartNos.length === 0) {
       return [];
     }
 
     const normalized = forms
-      .filter(form => (selectedChartNo ? form.chartNo === selectedChartNo : true))
+      .filter(form => (form.chartNo ? selectedChartNos.includes(form.chartNo) : false))
       .map(form => ({
         id: String(form.formNo ?? ''),
         parentId: form.parentFormNo ? String(form.parentFormNo) : null,
@@ -154,7 +154,7 @@ const FormList: React.FC<FormListProps> = ({ selectedChartNo }) => {
     sortNodes(roots);
 
     return roots;
-  }, [forms, selectedChartNo]);
+  }, [forms, selectedChartNos]);
 
   const handleSelect = (nodeId: string) => {
     setSelected(nodeId);

@@ -3,4 +3,4 @@ sql_id;name;type
 2;ptNo;STRING
 2;startDate;DATE
 2;endDate;DATE
-3;chartNo;LONG
+3;chartNos;LONG

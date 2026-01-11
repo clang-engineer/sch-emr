@@ -22,14 +22,14 @@ const RecordFinder = () => {
       key: 'selection',
     },
   ]);
-  const [selectedChartNo, setSelectedChartNo] = React.useState<number | null>(null);
+  const [selectedChartNos, setSelectedChartNos] = React.useState<number[]>([]);
 
   React.useEffect(() => {
     if (!patient?.ptNo) {
       return;
     }
     setDateRange([{ startDate: null, endDate: null, key: 'selection' }]);
-    setSelectedChartNo(null);
+    setSelectedChartNos([]);
   }, [patient?.ptNo]);
 
   const handleChartSearch = () => {
@@ -56,12 +56,12 @@ const RecordFinder = () => {
     dispatch(getPatientInfo(ptNo));
   };
 
-  const handleChartSelect = (chartNo?: number) => {
-    if (!chartNo) {
+  const handleChartSelectionChange = (chartNos: number[]) => {
+    setSelectedChartNos(chartNos);
+    if (!chartNos.length) {
       return;
     }
-    setSelectedChartNo(chartNo);
-    dispatch(getFormList({ chartNo }));
+    dispatch(getFormList({ chartNos }));
   };
 
   return (
@@ -106,10 +106,10 @@ const RecordFinder = () => {
               />
             }
           >
-            <ChartList onSelectChart={handleChartSelect} selectedChartNo={selectedChartNo} />
+            <ChartList onSelectionChange={handleChartSelectionChange} selectedChartNos={selectedChartNos} />
           </ResizableSection>
           <ResizableSection title="서식 목록" color="#0097a7" height={formHeight} isLast>
-            <FormList selectedChartNo={selectedChartNo} />
+            <FormList selectedChartNos={selectedChartNos} />
           </ResizableSection>
         </>
       )}

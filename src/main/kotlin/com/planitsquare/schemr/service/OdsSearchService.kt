@@ -129,6 +129,25 @@ class OdsSearchService(
     private fun convertParameterValue(
         value: Any,
         type: SqlParamType?,
+    ): Any? {
+        if (value is Iterable<*>) {
+            return value.map { item ->
+                requireNotNull(item) { "Cannot convert null item in parameter list" }
+                convertSingleParameterValue(item, type)
+            }
+        }
+        if (value is Array<*>) {
+            return value.map { item ->
+                requireNotNull(item) { "Cannot convert null item in parameter list" }
+                convertSingleParameterValue(item, type)
+            }
+        }
+        return convertSingleParameterValue(value, type)
+    }
+
+    private fun convertSingleParameterValue(
+        value: Any,
+        type: SqlParamType?,
     ): Any? =
         when (type) {
             SqlParamType.STRING -> {

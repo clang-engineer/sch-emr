@@ -101,13 +101,13 @@ export const getChartList = createAsyncThunk(
 );
 export const getFormList = createAsyncThunk(
   'emr-ods/fetch_form_list',
-  async ({ ptNo, chartNo }: { ptNo?: string | number; chartNo?: string | number }) => {
+  async ({ chartNos }: { chartNos: Array<string | number> }) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {
       key: SELECT_FORM_LIST,
       map: {
-        chartNo,
+        chartNos,
       },
     };
     return axios.post<Form[]>(requestUrl, cleanEntity(payload));
