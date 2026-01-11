@@ -1,7 +1,10 @@
 
 package com.planitsquare.schemr.web.rest.vm
 
+import javax.validation.constraints.NotBlank
+
 class OdsSearchVM(
-    var key: String,
-    var map: Map<String, Any>,
+    @field:NotBlank
+    var key: String?,
+    var map: Map<String, Any>?,
 )

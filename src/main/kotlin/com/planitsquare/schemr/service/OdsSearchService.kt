@@ -32,7 +32,7 @@ class OdsSearchService(
      * Execute SQL query by title with given parameters.
      * @param title the title of the SQL entity
      * @param params the parameter map (parameter name -> value)
-     * @return List of maps containing query results
+     * @return List of maps containing query results with lowercase keys
      */
     fun executeQuery(
         title: String,
@@ -57,7 +57,10 @@ class OdsSearchService(
         log.debug("Prepared SQL: $sql")
         log.debug("Parameter values: $paramValues")
 
-        return jdbcTemplate.queryForList(sql, paramValues)
+        val results = jdbcTemplate.queryForList(sql, paramValues)
+        return results.map { row ->
+            row.mapKeys { (key, _) -> key.lowercase() }
+        }
     }
 
     /**
