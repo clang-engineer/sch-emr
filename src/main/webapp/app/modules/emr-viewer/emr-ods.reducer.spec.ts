@@ -141,7 +141,7 @@ describe('Emr content reducer tests', () => {
 
     it('dispatches FETCH_CHART_LIST actions', async () => {
       const expectedActions = [{ type: getChartList.pending.type }, { type: getChartList.fulfilled.type, payload: resolvedObject }];
-      await store.dispatch(getChartList(1));
+      await store.dispatch(getChartList('P100'));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });

@@ -73,13 +73,13 @@ export const getPatientInfo = createAsyncThunk(
 
 export const getChartList = createAsyncThunk(
   'emr-ods/fetch_record_list',
-  async (patientId: string | number) => {
+  async (patientNumber: string) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {
       key: 'chart_by_patient',
       map: {
-        patientId,
+        patientNumber,
       },
     };
 
