@@ -10,4 +10,12 @@ import org.springframework.stereotype.Repository
  */
 @Suppress("unused")
 @Repository
-interface SqlRepository : JpaRepository<Sql, Long>, JpaSpecificationExecutor<Sql>
+interface SqlRepository : JpaRepository<Sql, Long>, JpaSpecificationExecutor<Sql> {
+
+    /**
+     * Find Sql entity by title.
+     * @param title the title of the Sql entity
+     * @return Optional containing the Sql entity if found
+     */
+    fun findByTitle(title: String): Sql?
+}
