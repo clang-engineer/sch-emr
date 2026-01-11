@@ -339,6 +339,45 @@ class OdsSearchControllerIT {
             .andExpect(jsonPath("$.length()").value(2))
     }
 
+    @Test
+    fun search_withSameParameterUsedMultipleTimes_shouldReturnResults() {
+        val sql =
+            createSqlEntity(
+                title = "SAME_PARAM_MULTIPLE_TIMES",
+                description = "SELECT * FROM test_users WHERE name = :searchTerm OR status = :searchTerm",
+                activated = true,
+                params =
+                setOf(
+                    SqlParam(name = "searchTerm", type = SqlParamType.STRING),
+                ),
+            )
+        sqlRepository.saveAndFlush(sql)
+
+        restMockMvc
+            .perform(
+                post("/api/ods")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(
+                        """
+                        {
+                            "key": "SAME_PARAM_MULTIPLE_TIMES",
+                            "map": {
+                                "searchTerm": "ACTIVE"
+                            }
+                        }
+                        """.trimIndent(),
+                    ),
+            )
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[0].name").value("Alice"))
+            .andExpect(jsonPath("$[0].status").value("ACTIVE"))
+            .andExpect(jsonPath("$[1].name").value("Bob"))
+            .andExpect(jsonPath("$[1].status").value("ACTIVE"))
+    }
+
     private fun createSqlEntity(
         title: String,
         description: String,
