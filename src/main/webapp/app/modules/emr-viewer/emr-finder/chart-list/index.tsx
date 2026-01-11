@@ -44,6 +44,31 @@ interface ChartListHeaderProps {
 
 export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onDateRangeChange, onSearch, disabled = false }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [startDateInput, setStartDateInput] = useState('');
+  const [endDateInput, setEndDateInput] = useState('');
+
+  // dateRange가 변경되면 입력 필드 동기화
+  useEffect(() => {
+    if (dateRange[0].startDate) {
+      const formatted = `${dateRange[0].startDate.getFullYear()}/${String(dateRange[0].startDate.getMonth() + 1).padStart(2, '0')}/${String(
+        dateRange[0].startDate.getDate()
+      ).padStart(2, '0')}`;
+      setStartDateInput(formatted);
+    } else {
+      setStartDateInput('');
+    }
+  }, [dateRange[0].startDate]);
+
+  useEffect(() => {
+    if (dateRange[0].endDate) {
+      const formatted = `${dateRange[0].endDate.getFullYear()}/${String(dateRange[0].endDate.getMonth() + 1).padStart(2, '0')}/${String(
+        dateRange[0].endDate.getDate()
+      ).padStart(2, '0')}`;
+      setEndDateInput(formatted);
+    } else {
+      setEndDateInput('');
+    }
+  }, [dateRange[0].endDate]);
 
   const handleCalendarClick = (event: React.MouseEvent<HTMLElement>) => {
     if (disabled) {
@@ -147,8 +172,68 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
             },
           }}
         >
-          <Box sx={{ p: 2, borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', gap: 1, minWidth: '140px' }}>
-            {/* <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', mb: 0.5 }}>빠른 선택</Typography> */}
+          <Box sx={{ p: 2, borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: '160px' }}>
+            <Box>
+              <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#546e7a', mb: 0.5 }}>직접 입력</Typography>
+              <TextField
+                type="text"
+                size="small"
+                placeholder="yyyy/mm/dd"
+                value={startDateInput}
+                onChange={e => {
+                  setStartDateInput(e.target.value);
+                }}
+                onBlur={e => {
+                  const value = e.target.value;
+                  // yyyy/mm/dd 형식으로 파싱
+                  const match = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+                  if (match) {
+                    const [, year, month, day] = match;
+                    const newStartDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                    if (!isNaN(newStartDate.getTime())) {
+                      onDateRangeChange([{ startDate: newStartDate, endDate: dateRange[0].endDate, key: 'selection' }]);
+                    }
+                  } else if (value === '') {
+                    onDateRangeChange([{ startDate: null, endDate: dateRange[0].endDate, key: 'selection' }]);
+                  }
+                }}
+                sx={{
+                  width: '100%',
+                  mb: 1,
+                  '& .MuiInputBase-input': { fontSize: '0.75rem', py: 0.5 },
+                }}
+              />
+              <TextField
+                type="text"
+                size="small"
+                placeholder="yyyy/mm/dd"
+                value={endDateInput}
+                onChange={e => {
+                  setEndDateInput(e.target.value);
+                }}
+                onBlur={e => {
+                  const value = e.target.value;
+                  // yyyy/mm/dd 형식으로 파싱
+                  const match = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+                  if (match) {
+                    const [, year, month, day] = match;
+                    const newEndDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                    if (!isNaN(newEndDate.getTime())) {
+                      onDateRangeChange([{ startDate: dateRange[0].startDate, endDate: newEndDate, key: 'selection' }]);
+                    }
+                  } else if (value === '') {
+                    onDateRangeChange([{ startDate: dateRange[0].startDate, endDate: null, key: 'selection' }]);
+                  }
+                }}
+                sx={{
+                  width: '100%',
+                  '& .MuiInputBase-input': { fontSize: '0.75rem', py: 0.5 },
+                }}
+              />
+            </Box>
+            <Box sx={{ borderTop: '1px solid #e0e0e0', pt: 1 }}>
+              <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#546e7a', mb: 0.5 }}>빠른 선택</Typography>
+            </Box>
             <Box
               sx={{
                 px: 1.5,
