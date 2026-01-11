@@ -17,13 +17,23 @@ const RecordFinder = () => {
 
   const [dateRange, setDateRange] = React.useState([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: null,
+      endDate: null,
       key: 'selection',
     },
   ]);
 
+  React.useEffect(() => {
+    if (!patient?.ptNo) {
+      return;
+    }
+    setDateRange([{ startDate: null, endDate: null, key: 'selection' }]);
+  }, [patient?.ptNo]);
+
   const handleChartSearch = () => {
+    if (!patient?.ptNo || !dateRange[0].startDate || !dateRange[0].endDate) {
+      return;
+    }
     const formatDate = (date: Date) => {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -82,6 +92,7 @@ const RecordFinder = () => {
                 onSearch={() => {
                   handleChartSearch();
                 }}
+                disabled={!patient?.ptNo}
               />
             }
           >

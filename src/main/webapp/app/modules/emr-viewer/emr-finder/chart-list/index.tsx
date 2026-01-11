@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   ToggleButton,
@@ -28,8 +28,8 @@ type DeptFilter = '수진과' | '작성과';
 type TypeFilter = '전체' | '외래' | '입원' | '응급';
 
 interface DateRange {
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | null;
+  endDate: Date | null;
   key: string;
 }
 
@@ -37,12 +37,16 @@ interface ChartListHeaderProps {
   dateRange: DateRange[];
   onDateRangeChange: (range: DateRange[]) => void;
   onSearch: () => void;
+  disabled?: boolean;
 }
 
-export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onDateRangeChange, onSearch }) => {
+export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onDateRangeChange, onSearch, disabled = false }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleCalendarClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (disabled) {
+      return;
+    }
     setAnchorEl(event.currentTarget);
   };
 
@@ -52,7 +56,10 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
 
   const open = Boolean(anchorEl);
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | null) => {
+    if (!date) {
+      return '';
+    }
     return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
   };
 
@@ -85,9 +92,15 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
     <>
       <TextField
         variant="standard"
-        value={`${formatDate(dateRange[0].startDate)} ~ ${formatDate(dateRange[0].endDate)}`}
+        value={
+          dateRange[0].startDate && dateRange[0].endDate
+            ? `${formatDate(dateRange[0].startDate)} ~ ${formatDate(dateRange[0].endDate)}`
+            : ''
+        }
+        placeholder="날짜 선택"
         sx={dateFieldStyle}
         onClick={handleCalendarClick}
+        disabled={disabled}
         InputProps={{
           readOnly: true,
           endAdornment: (
@@ -96,6 +109,7 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
                 size="small"
                 edge="end"
                 sx={{ color: '#1976d2', padding: '2px' }}
+                disabled={disabled}
                 onClick={e => {
                   e.stopPropagation();
                   onSearch();
@@ -134,9 +148,14 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
 };
 
 const ChartList = () => {
-  const { charts, loading } = useAppSelector(state => state.emrContent);
+  const { charts, loading, patient } = useAppSelector(state => state.emrContent);
   const [deptFilter, setDeptFilter] = useState<DeptFilter>('수진과');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('전체');
+
+  useEffect(() => {
+    setDeptFilter('수진과');
+    setTypeFilter('전체');
+  }, [patient?.ptNo]);
 
   const handleDeptChange = (_event: React.MouseEvent<HTMLElement>, newValue: DeptFilter | null) => {
     if (newValue !== null) {
@@ -152,6 +171,9 @@ const ChartList = () => {
 
   // 필터링된 차트 목록
   const filteredCharts = charts.filter(chart => {
+    if (!patient?.ptNo || chart.ptNo !== patient.ptNo) {
+      return false;
+    }
     // 유형 필터
     if (typeFilter !== '전체' && chart.visitType !== typeFilter) {
       return false;
