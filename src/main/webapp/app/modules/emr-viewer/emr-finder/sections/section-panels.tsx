@@ -86,6 +86,8 @@ interface ResizableSectionProps {
   isFirst?: boolean;
   onResize?: (delta: number) => void;
   headerContent?: React.ReactNode;
+  disabled?: boolean;
+  disabledMessage?: string;
 }
 
 export const ResizableSection: React.FC<ResizableSectionProps> = ({
@@ -97,6 +99,8 @@ export const ResizableSection: React.FC<ResizableSectionProps> = ({
   isFirst = false,
   onResize,
   headerContent,
+  disabled = false,
+  disabledMessage,
 }) => {
   const [isDragging, setIsDragging] = React.useState(false);
   const startYRef = React.useRef<number>(0);
@@ -185,7 +189,39 @@ export const ResizableSection: React.FC<ResizableSectionProps> = ({
             </Box>
             {headerContent && <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>{headerContent}</Box>}
           </Box>
-          <Box sx={{ p: 1.5, flex: 1, overflow: 'auto' }}>{children}</Box>
+          <Box sx={{ p: 1.5, flex: 1, overflow: 'auto', position: 'relative' }}>
+            {children}
+            {disabled && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  bgcolor: 'rgba(255, 255, 255, 0.85)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 1,
+                  zIndex: 10,
+                }}
+              >
+                <FontAwesomeIcon icon={['fas', 'lock']} style={{ fontSize: '2rem', color: '#90a4ae' }} />
+                <Typography
+                  sx={{
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                    color: '#546e7a',
+                    textAlign: 'center',
+                  }}
+                >
+                  {disabledMessage || '비활성화됨'}
+                </Typography>
+              </Box>
+            )}
+          </Box>
         </Paper>
       </Box>
       {!isLast && (

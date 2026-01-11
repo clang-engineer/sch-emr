@@ -99,7 +99,7 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
             ? `${formatDate(dateRange[0].startDate)} ~ ${formatDate(dateRange[0].endDate)}`
             : ''
         }
-        placeholder="날짜 선택"
+        placeholder={disabled ? '환자 입력 후 이용 가능' : '차트 검색 기간 선택'}
         sx={dateFieldStyle}
         onClick={handleCalendarClick}
         disabled={disabled}

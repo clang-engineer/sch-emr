@@ -95,6 +95,8 @@ const RecordFinder = () => {
             height={recordHeight}
             isFirst
             onResize={handleRecordResize}
+            disabled={!patient?.ptNo}
+            disabledMessage="환자 입력 후 이용 가능"
             headerContent={
               <ChartListHeader
                 dateRange={dateRange}
@@ -108,7 +110,14 @@ const RecordFinder = () => {
           >
             <ChartList onSelectionChange={handleChartSelectionChange} selectedChartNos={selectedChartNos} />
           </ResizableSection>
-          <ResizableSection title="서식 목록" color="#0097a7" height={formHeight} isLast>
+          <ResizableSection
+            title="서식 목록"
+            color="#0097a7"
+            height={formHeight}
+            isLast
+            disabled={selectedChartNos.length === 0}
+            disabledMessage="기록 선택 후 이용 가능"
+          >
             <FormList selectedChartNos={selectedChartNos} />
           </ResizableSection>
         </>
