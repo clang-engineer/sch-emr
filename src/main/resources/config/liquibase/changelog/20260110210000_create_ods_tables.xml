@@ -21,7 +21,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_patient"/>
             </column>
-            <column name="patient_number" type="varchar(50)">
+            <column name="pt_no" type="varchar(50)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="patient_name" type="varchar(100)">
@@ -46,10 +46,10 @@
     <!-- Create tbl_chart -->
     <changeSet id="20260110210000-2" author="developer">
         <createTable tableName="tbl_chart" schemaName="ods">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="chart_no" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_chart"/>
             </column>
-            <column name="patient_id" type="bigint">
+            <column name="pt_no" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="chart_date" type="date">
@@ -75,16 +75,16 @@
     <!-- Create tbl_form -->
     <changeSet id="20260110210000-3" author="developer">
         <createTable tableName="tbl_form" schemaName="ods">
-            <column name="id" type="varchar(50)">
+            <column name="form_no" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tbl_form"/>
             </column>
-            <column name="parent_id" type="varchar(50)">
+            <column name="parent_form_no" type="varchar(50)">
                 <constraints nullable="true"/>
             </column>
-            <column name="patient_id" type="bigint">
+            <column name="pt_no" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="chart_id" type="bigint">
+            <column name="chart_no" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="varchar(200)">
@@ -100,27 +100,27 @@
 
     <!-- Add foreign key constraints -->
     <changeSet id="20260110210000-4" author="developer">
-        <addForeignKeyConstraint baseColumnNames="patient_id"
+        <addForeignKeyConstraint baseColumnNames="pt_no"
                                  baseTableName="tbl_chart"
                                  baseTableSchemaName="ods"
-                                 constraintName="fk_tbl_chart__patient_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_tbl_chart__pt_no"
+                                 referencedColumnNames="pt_no"
                                  referencedTableName="tbl_patient"
                                  referencedTableSchemaName="ods"/>
 
-        <addForeignKeyConstraint baseColumnNames="patient_id"
+        <addForeignKeyConstraint baseColumnNames="pt_no"
                                  baseTableName="tbl_form"
                                  baseTableSchemaName="ods"
-                                 constraintName="fk_tbl_form__patient_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_tbl_form__pt_no"
+                                 referencedColumnNames="pt_no"
                                  referencedTableName="tbl_patient"
                                  referencedTableSchemaName="ods"/>
 
-        <addForeignKeyConstraint baseColumnNames="chart_id"
+        <addForeignKeyConstraint baseColumnNames="chart_no"
                                  baseTableName="tbl_form"
                                  baseTableSchemaName="ods"
-                                 constraintName="fk_tbl_form__chart_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_tbl_form__chart_no"
+                                 referencedColumnNames="chart_no"
                                  referencedTableName="tbl_chart"
                                  referencedTableSchemaName="ods"/>
     </changeSet>
@@ -133,8 +133,8 @@
                   tableName="tbl_patient"
                   schemaName="ods"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
-            <column name="patient_number" type="string"/>
+            <column name="chart_no" type="numeric"/>
+            <column name="pt_no" type="string"/>
             <column name="patient_name" type="string"/>
             <column name="gender" type="string"/>
             <column name="age" type="numeric"/>
@@ -152,7 +152,7 @@
                   schemaName="ods"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="patient_id" type="numeric"/>
+            <column name="pt_no" type="string"/>
             <column name="chart_date" type="date"/>
             <column name="chart_time" type="time"/>
             <column name="visit_type" type="string"/>
@@ -170,28 +170,28 @@
                   tableName="tbl_form"
                   schemaName="ods"
                   usePreparedStatements="true">
-            <column name="id" type="string"/>
-            <column name="parent_id" type="string"/>
-            <column name="patient_id" type="numeric"/>
-            <column name="chart_id" type="numeric"/>
+            <column name="form_no" type="string"/>
+            <column name="parent_form_no" type="string"/>
+            <column name="pt_no" type="string"/>
+            <column name="chart_no" type="numeric"/>
             <column name="name" type="string"/>
             <column name="type" type="string"/>
             <column name="record_data" type="string"/>
         </loadData>
     </changeSet>
 
-    <!-- Update empty parent_id to NULL -->
+    <!-- Update empty parent_form_no to NULL -->
     <changeSet id="20260110210000-7-fix" author="developer" context="faker">
-        <sql>UPDATE ods.tbl_form SET parent_id = NULL WHERE parent_id = ''</sql>
+        <sql>UPDATE ods.tbl_form SET parent_form_no = NULL WHERE parent_form_no = ''</sql>
     </changeSet>
 
     <!-- Add self-referencing foreign key constraint after data load -->
     <changeSet id="20260110210000-8" author="developer">
-        <addForeignKeyConstraint baseColumnNames="parent_id"
+        <addForeignKeyConstraint baseColumnNames="parent_form_no"
                                  baseTableName="tbl_form"
                                  baseTableSchemaName="ods"
-                                 constraintName="fk_tbl_form__parent_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_tbl_form__parent_form_no"
+                                 referencedColumnNames="form_no"
                                  referencedTableName="tbl_form"
                                  referencedTableSchemaName="ods"/>
     </changeSet>

@@ -1,4 +1,4 @@
-id;patient_number;patient_name;gender;age;resident_number;department
+id;pt_no;patient_name;gender;age;resident_number;department
 1;P2024001;김철수;남;45;701215-1234567;내과
 2;P2024002;이영희;여;32;920323-2345678;산부인과
 3;P2024003;박민수;남;58;660512-1456789;정형외과
