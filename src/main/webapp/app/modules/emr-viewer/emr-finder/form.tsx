@@ -15,41 +15,23 @@ const RecordFinder = () => {
   const patient = useAppSelector(state => state.emrContent.patient);
   const { patientExpanded, setPatientExpanded, patientSectionRef, recordHeight, formHeight, handleRecordResize } = useRecordFinderLayout();
 
-  const [dateRange, setDateRange] = React.useState([
-    {
-      startDate: null,
-      endDate: null,
-      key: 'selection',
-    },
-  ]);
   const [selectedChartNos, setSelectedChartNos] = React.useState<string[]>([]);
+  const [termFilter, setTermFilter] = React.useState<number>(100);
 
   React.useEffect(() => {
     if (!patient?.ptNo) {
       return;
     }
-    setDateRange([{ startDate: null, endDate: null, key: 'selection' }]);
     setSelectedChartNos([]);
-  }, [patient?.ptNo]);
-
-  const handleChartSearch = () => {
-    if (!patient?.ptNo || !dateRange[0].startDate || !dateRange[0].endDate) {
-      return;
-    }
-    const formatDate = (date: Date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    };
-
+    setTermFilter(100);
+    // 환자가 선택되면 자동으로 전체 기간의 차트 목록 로드
     dispatch(
       getChartList({
         ptNo: patient.ptNo,
         term: '100',
       })
     );
-  };
+  }, [patient?.ptNo, dispatch]);
 
   const handlePatientSearch = (ptNo: string) => {
     dispatch(getPatientInfo(ptNo));
@@ -96,18 +78,9 @@ const RecordFinder = () => {
             onResize={handleRecordResize}
             disabled={!patient?.ptNo}
             disabledMessage="환자 입력 후 이용 가능"
-            headerContent={
-              <ChartListHeader
-                dateRange={dateRange}
-                onDateRangeChange={setDateRange}
-                onSearch={() => {
-                  handleChartSearch();
-                }}
-                disabled={!patient?.ptNo}
-              />
-            }
+            headerContent={<ChartListHeader termFilter={termFilter} onTermFilterChange={setTermFilter} disabled={!patient?.ptNo} />}
           >
-            <ChartList onSelectionChange={handleChartSelectionChange} selectedChartNos={selectedChartNos} />
+            <ChartList onSelectionChange={handleChartSelectionChange} selectedChartNos={selectedChartNos} termFilter={termFilter} />
           </ResizableSection>
           <ResizableSection
             title="서식 목록"

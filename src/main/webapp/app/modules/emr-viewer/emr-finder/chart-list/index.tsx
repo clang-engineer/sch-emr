@@ -12,17 +12,11 @@ import {
   Typography,
   Chip,
   Checkbox,
-  Popover,
-  IconButton,
-  TextField,
-  InputAdornment,
   CircularProgress,
+  Select,
+  MenuItem,
+  FormControl,
 } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DateRangePicker } from 'react-date-range';
-import { ko } from 'date-fns/locale';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
 import { useAppSelector } from 'app/config/store';
 import EmptyState from '../empty-state';
 import { Chart } from 'app/modules/emr-viewer/emr-ods.reducer';
@@ -30,358 +24,58 @@ import { Chart } from 'app/modules/emr-viewer/emr-ods.reducer';
 type DeptFilter = '수진과' | '작성과';
 type TypeFilter = '전체' | '외래' | '입원' | '응급';
 
-interface DateRange {
-  startDate: Date | null;
-  endDate: Date | null;
-  key: string;
-}
-
 interface ChartListHeaderProps {
-  dateRange: DateRange[];
-  onDateRangeChange: (range: DateRange[]) => void;
-  onSearch: () => void;
+  termFilter: number;
+  onTermFilterChange: (term: number) => void;
   disabled?: boolean;
 }
 
-export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onDateRangeChange, onSearch, disabled = false }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [startDateInput, setStartDateInput] = useState('');
-  const [endDateInput, setEndDateInput] = useState('');
-
-  // dateRange가 변경되면 입력 필드 동기화
-  useEffect(() => {
-    if (dateRange[0].startDate) {
-      const formatted = `${dateRange[0].startDate.getFullYear()}/${String(dateRange[0].startDate.getMonth() + 1).padStart(2, '0')}/${String(
-        dateRange[0].startDate.getDate()
-      ).padStart(2, '0')}`;
-      setStartDateInput(formatted);
-    } else {
-      setStartDateInput('');
-    }
-  }, [dateRange[0].startDate]);
-
-  useEffect(() => {
-    if (dateRange[0].endDate) {
-      const formatted = `${dateRange[0].endDate.getFullYear()}/${String(dateRange[0].endDate.getMonth() + 1).padStart(2, '0')}/${String(
-        dateRange[0].endDate.getDate()
-      ).padStart(2, '0')}`;
-      setEndDateInput(formatted);
-    } else {
-      setEndDateInput('');
-    }
-  }, [dateRange[0].endDate]);
-
-  const handleCalendarClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (disabled) {
-      return;
-    }
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCalendarClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-
-  const formatDate = (date: Date | null) => {
-    if (!date) {
-      return '';
-    }
-    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-  };
-
-  const dateFieldStyle = {
-    width: '180px',
-    '& .MuiInput-root': {
-      fontSize: '0.75rem',
-      cursor: 'pointer',
-      '&:before': {
-        borderBottom: '1px solid #1976d2',
-      },
-      '&:hover:not(.Mui-disabled):before': {
-        borderBottom: '1px solid #1976d2',
-      },
-      '&:after': {
-        borderBottom: '2px solid #1976d2',
-      },
-    },
-    '& .MuiInput-input': {
-      padding: '4px 0',
-      fontWeight: 500,
-      fontSize: '0.75rem',
-      color: '#1976d2',
-      cursor: 'pointer',
-      textAlign: 'center',
-    },
-  };
-
+export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ termFilter, onTermFilterChange, disabled = false }) => {
   return (
-    <>
-      <TextField
-        variant="standard"
-        value={
-          dateRange[0].startDate && dateRange[0].endDate
-            ? `${formatDate(dateRange[0].startDate)} ~ ${formatDate(dateRange[0].endDate)}`
-            : ''
-        }
-        placeholder={disabled ? '환자 입력 후 이용 가능' : '차트 검색 기간 선택'}
-        sx={dateFieldStyle}
-        onClick={handleCalendarClick}
-        disabled={disabled}
-        InputProps={{
-          readOnly: true,
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                size="small"
-                edge="end"
-                sx={{ color: '#1976d2', padding: '2px' }}
-                disabled={disabled}
-                onClick={e => {
-                  e.stopPropagation();
-                  onSearch();
-                }}
-              >
-                <FontAwesomeIcon icon={['fas', 'search']} style={{ fontSize: '1rem' }} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <Popover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleCalendarClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Box
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>기간</Typography>
+      <FormControl size="small" sx={{ minWidth: 100 }}>
+        <Select
+          value={termFilter}
+          onChange={e => onTermFilterChange(e.target.value as number)}
+          disabled={disabled}
           sx={{
-            display: 'flex',
-            '& .rdrDefinedRangesWrapper': {
-              display: 'none',
-            },
-            '& .rdrDateDisplayWrapper': {
-              display: 'none',
+            height: '28px',
+            fontSize: '0.75rem',
+            '& .MuiSelect-select': {
+              py: 0.5,
+              px: 1.5,
             },
           }}
         >
-          <Box sx={{ p: 2, borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: '160px' }}>
-            <Box>
-              <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#546e7a', mb: 0.5 }}>직접 입력</Typography>
-              <TextField
-                type="text"
-                size="small"
-                placeholder="yyyy/mm/dd"
-                value={startDateInput}
-                onChange={e => {
-                  setStartDateInput(e.target.value);
-                }}
-                onBlur={e => {
-                  const value = e.target.value;
-                  // yyyy/mm/dd 형식으로 파싱
-                  const match = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
-                  if (match) {
-                    const [, year, month, day] = match;
-                    const newStartDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-                    if (!isNaN(newStartDate.getTime())) {
-                      onDateRangeChange([{ startDate: newStartDate, endDate: dateRange[0].endDate, key: 'selection' }]);
-                    }
-                  } else if (value === '') {
-                    onDateRangeChange([{ startDate: null, endDate: dateRange[0].endDate, key: 'selection' }]);
-                  }
-                }}
-                sx={{
-                  width: '100%',
-                  mb: 1,
-                  '& .MuiInputBase-input': { fontSize: '0.75rem', py: 0.5 },
-                }}
-              />
-              <TextField
-                type="text"
-                size="small"
-                placeholder="yyyy/mm/dd"
-                value={endDateInput}
-                onChange={e => {
-                  setEndDateInput(e.target.value);
-                }}
-                onBlur={e => {
-                  const value = e.target.value;
-                  // yyyy/mm/dd 형식으로 파싱
-                  const match = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
-                  if (match) {
-                    const [, year, month, day] = match;
-                    const newEndDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-                    if (!isNaN(newEndDate.getTime())) {
-                      onDateRangeChange([{ startDate: dateRange[0].startDate, endDate: newEndDate, key: 'selection' }]);
-                    }
-                  } else if (value === '') {
-                    onDateRangeChange([{ startDate: dateRange[0].startDate, endDate: null, key: 'selection' }]);
-                  }
-                }}
-                sx={{
-                  width: '100%',
-                  '& .MuiInputBase-input': { fontSize: '0.75rem', py: 0.5 },
-                }}
-              />
-            </Box>
-            <Box sx={{ borderTop: '1px solid #e0e0e0', pt: 1 }}>
-              <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#546e7a', mb: 0.5 }}>빠른 선택</Typography>
-            </Box>
-            <Box
-              sx={{
-                px: 1.5,
-                py: 0.8,
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-              onClick={() => {
-                const today = new Date();
-                onDateRangeChange([{ startDate: today, endDate: today, key: 'selection' }]);
-              }}
-            >
-              오늘
-            </Box>
-            <Box
-              sx={{
-                px: 1.5,
-                py: 0.8,
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-              onClick={() => {
-                const today = new Date();
-                const weekAgo = new Date(today);
-                weekAgo.setDate(today.getDate() - 7);
-                onDateRangeChange([{ startDate: weekAgo, endDate: today, key: 'selection' }]);
-              }}
-            >
-              최근 1주일
-            </Box>
-            <Box
-              sx={{
-                px: 1.5,
-                py: 0.8,
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-              onClick={() => {
-                const today = new Date();
-                const monthAgo = new Date(today);
-                monthAgo.setMonth(today.getMonth() - 1);
-                onDateRangeChange([{ startDate: monthAgo, endDate: today, key: 'selection' }]);
-              }}
-            >
-              최근 1개월
-            </Box>
-            <Box
-              sx={{
-                px: 1.5,
-                py: 0.8,
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-              onClick={() => {
-                const today = new Date();
-                const threeMonthsAgo = new Date(today);
-                threeMonthsAgo.setMonth(today.getMonth() - 3);
-                onDateRangeChange([{ startDate: threeMonthsAgo, endDate: today, key: 'selection' }]);
-              }}
-            >
-              최근 3개월
-            </Box>
-            <Box
-              sx={{
-                px: 1.5,
-                py: 0.8,
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-              onClick={() => {
-                const today = new Date();
-                const sixMonthsAgo = new Date(today);
-                sixMonthsAgo.setMonth(today.getMonth() - 6);
-                onDateRangeChange([{ startDate: sixMonthsAgo, endDate: today, key: 'selection' }]);
-              }}
-            >
-              최근 6개월
-            </Box>
-            <Box
-              sx={{
-                px: 1.5,
-                py: 0.8,
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-              onClick={() => {
-                const today = new Date();
-                const oneYearAgo = new Date(today);
-                oneYearAgo.setFullYear(today.getFullYear() - 1);
-                onDateRangeChange([{ startDate: oneYearAgo, endDate: today, key: 'selection' }]);
-              }}
-            >
-              최근 1년
-            </Box>
-            <Box
-              sx={{
-                px: 1.5,
-                py: 0.8,
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-              onClick={() => {
-                const today = new Date();
-                const threeYearsAgo = new Date(today);
-                threeYearsAgo.setFullYear(today.getFullYear() - 3);
-                onDateRangeChange([{ startDate: threeYearsAgo, endDate: today, key: 'selection' }]);
-              }}
-            >
-              최근 3년
-            </Box>
-          </Box>
-          <DateRangePicker
-            ranges={dateRange}
-            onChange={(item: any) => onDateRangeChange([item.selection])}
-            locale={ko}
-            months={2}
-            direction="horizontal"
-            showMonthAndYearPickers={false}
-            staticRanges={[]}
-            inputRanges={[]}
-          />
-        </Box>
-      </Popover>
-    </>
+          <MenuItem value={100} sx={{ fontSize: '0.75rem' }}>
+            전체
+          </MenuItem>
+          <MenuItem value={10} sx={{ fontSize: '0.75rem' }}>
+            10년
+          </MenuItem>
+          <MenuItem value={5} sx={{ fontSize: '0.75rem' }}>
+            5년
+          </MenuItem>
+          <MenuItem value={3} sx={{ fontSize: '0.75rem' }}>
+            3년
+          </MenuItem>
+          <MenuItem value={1} sx={{ fontSize: '0.75rem' }}>
+            1년
+          </MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 
 interface ChartListProps {
   onSelectionChange?: (chartNos: string[]) => void;
   selectedChartNos?: string[];
+  termFilter?: number;
 }
 
-const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartNos = [] }) => {
+const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartNos = [], termFilter = 100 }) => {
   const { loading, patient } = useAppSelector(state => state.emrContent);
 
   const charts = useAppSelector<Chart[]>(state => state.emrContent.charts);
@@ -413,6 +107,16 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
     // 유형 필터
     if (typeFilter !== '전체' && chart.type !== typeFilter) {
       return false;
+    }
+    // 기간 필터
+    if (termFilter !== 100 && chart.inDate) {
+      const today = new Date();
+      const chartDate = new Date(chart.inDate);
+      const yearsAgo = new Date(today);
+      yearsAgo.setFullYear(today.getFullYear() - termFilter);
+      if (chartDate < yearsAgo) {
+        return false;
+      }
     }
     // 추가 필터링 로직 (수진과/작성과는 현재 데이터에 없으므로 나중에 추가)
     return true;
