@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    meta:
+      type: com.zaxxer.hikari.HikariDataSource
+      url: jdbc:h2:file:./build/h2db/db/schemr;DB_CLOSE_DELAY=-1;MODE=LEGACY
+      username: schemr
+      password:
+      hikari:
+        poolName: Hikari
+        auto-commit: false
+    ods:
+      type: com.zaxxer.hikari.HikariDataSource
+      url: jdbc:oracle:thin:@172.22.101.11:1521/HSSEMRDD
+      username: CDWKYK
+      password: pltkyk2512f
+      hikari:
+        poolName: HikariOds
+        auto-commit: false
