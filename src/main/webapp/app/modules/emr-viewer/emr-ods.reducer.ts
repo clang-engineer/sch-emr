@@ -18,16 +18,14 @@ export interface Patient {
 }
 
 export interface Chart {
-  chartNo?: number;
-  ptNo?: string;
-  chartDate?: string;
-  chartTime?: string;
-  visitType?: string;
+  chartNo: string;
+  type: string;
+  code: string;
+  inDate?: string;
+  outDate?: number;
   department?: string;
-  doctorName?: string;
-  content?: string;
-  createdAt?: string;
-  patientName?: string;
+  doctor?: string;
+  ptNo?: string;
   [key: string]: unknown;
 }
 
@@ -87,7 +85,7 @@ export const getPatientInfo = createAsyncThunk(
 
 export const getChartList = createAsyncThunk(
   'emr-ods/fetch_record_list',
-  async (data: { ptNo: string; startDate: string; endDate: string }) => {
+  async (data: { ptNo: string; term: string }) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {

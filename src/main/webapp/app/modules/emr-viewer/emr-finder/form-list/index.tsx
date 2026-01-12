@@ -99,7 +99,7 @@ const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onS
 };
 
 interface FormListProps {
-  selectedChartNos?: number[];
+  selectedChartNos?: string[];
 }
 
 const FormList: React.FC<FormListProps> = ({ selectedChartNos = [] }) => {

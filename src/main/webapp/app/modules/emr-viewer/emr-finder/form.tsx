@@ -22,7 +22,7 @@ const RecordFinder = () => {
       key: 'selection',
     },
   ]);
-  const [selectedChartNos, setSelectedChartNos] = React.useState<number[]>([]);
+  const [selectedChartNos, setSelectedChartNos] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     if (!patient?.ptNo) {
@@ -46,8 +46,7 @@ const RecordFinder = () => {
     dispatch(
       getChartList({
         ptNo: patient.ptNo,
-        startDate: formatDate(dateRange[0].startDate),
-        endDate: formatDate(dateRange[0].endDate),
+        term: '100',
       })
     );
   };
@@ -56,7 +55,7 @@ const RecordFinder = () => {
     dispatch(getPatientInfo(ptNo));
   };
 
-  const handleChartSelectionChange = (chartNos: number[]) => {
+  const handleChartSelectionChange = (chartNos: string[]) => {
     setSelectedChartNos(chartNos);
     if (!chartNos.length) {
       return;

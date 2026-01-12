@@ -25,6 +25,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { useAppSelector } from 'app/config/store';
 import EmptyState from '../empty-state';
+import { Chart } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 type DeptFilter = '수진과' | '작성과';
 type TypeFilter = '전체' | '외래' | '입원' | '응급';
@@ -376,12 +377,14 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ dateRange, onD
 };
 
 interface ChartListProps {
-  onSelectionChange?: (chartNos: number[]) => void;
-  selectedChartNos?: number[];
+  onSelectionChange?: (chartNos: string[]) => void;
+  selectedChartNos?: string[];
 }
 
 const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartNos = [] }) => {
-  const { charts, loading, patient } = useAppSelector(state => state.emrContent);
+  const { loading, patient } = useAppSelector(state => state.emrContent);
+
+  const charts = useAppSelector<Chart[]>(state => state.emrContent.charts);
   const [deptFilter, setDeptFilter] = useState<DeptFilter>('수진과');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('전체');
 
@@ -408,20 +411,20 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
       return false;
     }
     // 유형 필터
-    if (typeFilter !== '전체' && chart.visitType !== typeFilter) {
+    if (typeFilter !== '전체' && chart.type !== typeFilter) {
       return false;
     }
     // 추가 필터링 로직 (수진과/작성과는 현재 데이터에 없으므로 나중에 추가)
     return true;
   });
 
-  const isSelected = (chartNo?: number) => (chartNo ? selectedChartNos.includes(chartNo) : false);
+  const isSelected = (chartNo?: string) => (chartNo ? selectedChartNos.includes(chartNo) : false);
 
-  const updateSelection = (nextSelected: number[]) => {
+  const updateSelection = (nextSelected: string[]) => {
     onSelectionChange?.(nextSelected);
   };
 
-  const handleRowClick = (chartNo?: number) => {
+  const handleRowClick = (chartNo?: string) => {
     if (!chartNo) {
       return;
     }
@@ -430,7 +433,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
     updateSelection(nextSelected);
   };
 
-  const chartNosInView = filteredCharts.map(chart => chart.chartNo).filter((chartNo): chartNo is number => Boolean(chartNo));
+  const chartNosInView = filteredCharts.map(chart => chart.chartNo).filter((chartNo): chartNo is string => Boolean(chartNo));
 
   const handleToggleAll = () => {
     const chartNos = chartNosInView;
@@ -532,17 +535,17 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
                 <TableCell
                   sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
                 >
-                  날짜
+                  구분
                 </TableCell>
                 <TableCell
                   sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
                 >
-                  시간
+                  입원일
                 </TableCell>
                 <TableCell
                   sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
                 >
-                  유형
+                  퇴(내)원일
                 </TableCell>
                 <TableCell
                   sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
@@ -552,12 +555,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
                 <TableCell
                   sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
                 >
-                  담당의
-                </TableCell>
-                <TableCell
-                  sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
-                >
-                  내용
+                  주치의
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -591,24 +589,23 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
                         inputProps={{ 'aria-label': `기록 선택 ${chart.chartNo ?? ''}` }}
                       />
                     </TableCell>
-                    <TableCell sx={{ py: 0.8 }}>{chart.chartDate}</TableCell>
-                    <TableCell sx={{ py: 0.8 }}>{chart.chartTime}</TableCell>
                     <TableCell sx={{ py: 0.8 }}>
                       <Chip
-                        label={chart.visitType}
+                        label={chart.type}
                         size="small"
                         sx={{
                           height: '20px',
                           fontSize: '0.7rem',
-                          bgcolor: chart.visitType === '외래' ? '#e3f2fd' : chart.visitType === '입원' ? '#fff3e0' : '#ffebee',
-                          color: chart.visitType === '외래' ? '#1976d2' : chart.visitType === '입원' ? '#f57c00' : '#d32f2f',
+                          bgcolor: chart.type === '외래' ? '#e3f2fd' : chart.type === '입원' ? '#fff3e0' : '#ffebee',
+                          color: chart.type === '외래' ? '#1976d2' : chart.type === '입원' ? '#f57c00' : '#d32f2f',
                           fontWeight: 600,
                         }}
                       />
                     </TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.inDate}</TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.outDate}</TableCell>
                     <TableCell sx={{ py: 0.8 }}>{chart.department}</TableCell>
-                    <TableCell sx={{ py: 0.8 }}>{chart.doctorName}</TableCell>
-                    <TableCell sx={{ py: 0.8 }}>{chart.content}</TableCell>
+                    <TableCell sx={{ py: 0.8 }}>{chart.doctor}</TableCell>
                   </TableRow>
                 ))
               )}
