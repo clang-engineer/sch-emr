@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
@@ -24,19 +24,19 @@
             <column name="pt_no" type="varchar(50)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="patient_name" type="varchar(100)">
+            <column name="name" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="gender" type="varchar(10)">
+            <column name="sex" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
             <column name="age" type="integer">
                 <constraints nullable="false"/>
             </column>
-            <column name="resident_number" type="varchar(14)">
-                <constraints nullable="false" unique="true"/>
+            <column name="resident_no1" type="varchar(6)">
+                <constraints nullable="false"/>
             </column>
-            <column name="department" type="varchar(50)">
+            <column name="resident_no2" type="varchar(7)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
@@ -52,22 +52,22 @@
             <column name="pt_no" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="chart_date" type="date">
+            <column name="type" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="chart_time" type="time">
+            <column name="code" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="visit_type" type="varchar(20)">
+            <column name="in_date" type="date">
                 <constraints nullable="false"/>
             </column>
+            <column name="out_date" type="date"/>
             <column name="department" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="doctor_name" type="varchar(100)">
+            <column name="doctor" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="content" type="text"/>
             <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
     </changeSet>
@@ -133,13 +133,13 @@
                   tableName="tbl_patient"
                   schemaName="ods"
                   usePreparedStatements="true">
-            <column name="chart_no" type="numeric"/>
+            <column name="id" type="numeric"/>
             <column name="pt_no" type="string"/>
-            <column name="patient_name" type="string"/>
-            <column name="gender" type="string"/>
+            <column name="name" type="string"/>
+            <column name="sex" type="string"/>
             <column name="age" type="numeric"/>
-            <column name="resident_number" type="string"/>
-            <column name="department" type="string"/>
+            <column name="resident_no1" type="string"/>
+            <column name="resident_no2" type="string"/>
         </loadData>
     </changeSet>
 
@@ -151,14 +151,14 @@
                   tableName="tbl_chart"
                   schemaName="ods"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
+            <column name="chart_no" type="numeric"/>
             <column name="pt_no" type="string"/>
-            <column name="chart_date" type="date"/>
-            <column name="chart_time" type="time"/>
-            <column name="visit_type" type="string"/>
+            <column name="type" type="string"/>
+            <column name="code" type="string"/>
+            <column name="in_date" type="date"/>
+            <column name="out_date" type="date"/>
             <column name="department" type="string"/>
-            <column name="doctor_name" type="string"/>
-            <column name="content" type="string"/>
+            <column name="doctor" type="string"/>
         </loadData>
     </changeSet>
 
