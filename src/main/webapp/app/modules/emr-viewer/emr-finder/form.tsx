@@ -24,14 +24,20 @@ const RecordFinder = () => {
     }
     setSelectedChartNos([]);
     setTermFilter(100);
-    // 환자가 선택되면 자동으로 전체 기간의 차트 목록 로드
+  }, [patient?.ptNo]);
+
+  // 기간 필터가 변경되면 차트 목록 재조회
+  React.useEffect(() => {
+    if (!patient?.ptNo) {
+      return;
+    }
     dispatch(
       getChartList({
         ptNo: patient.ptNo,
-        term: '100',
+        term: String(termFilter),
       })
     );
-  }, [patient?.ptNo, dispatch]);
+  }, [patient?.ptNo, termFilter, dispatch]);
 
   const handlePatientSearch = (ptNo: string) => {
     dispatch(getPatientInfo(ptNo));
@@ -80,7 +86,7 @@ const RecordFinder = () => {
             disabledMessage="환자 입력 후 이용 가능"
             headerContent={<ChartListHeader termFilter={termFilter} onTermFilterChange={setTermFilter} disabled={!patient?.ptNo} />}
           >
-            <ChartList onSelectionChange={handleChartSelectionChange} selectedChartNos={selectedChartNos} termFilter={termFilter} />
+            <ChartList onSelectionChange={handleChartSelectionChange} selectedChartNos={selectedChartNos} />
           </ResizableSection>
           <ResizableSection
             title="서식 목록"

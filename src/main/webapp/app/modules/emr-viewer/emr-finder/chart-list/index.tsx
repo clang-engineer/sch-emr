@@ -31,37 +31,76 @@ interface ChartListHeaderProps {
 }
 
 export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ termFilter, onTermFilterChange, disabled = false }) => {
+  const getTermLabel = (term: number) => {
+    switch (term) {
+      case 100:
+        return '📅 전체 기간';
+      case 10:
+        return '📅 최근 10년';
+      case 5:
+        return '📅 최근 5년';
+      case 3:
+        return '📅 최근 3년';
+      case 1:
+        return '📅 최근 1년';
+      default:
+        return '📅 전체 기간';
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>기간</Typography>
-      <FormControl size="small" sx={{ minWidth: 100 }}>
+      <FormControl size="small" sx={{ minWidth: 130 }}>
         <Select
           value={termFilter}
           onChange={e => onTermFilterChange(e.target.value as number)}
           disabled={disabled}
+          displayEmpty
+          renderValue={value => getTermLabel(value as number)}
           sx={{
-            height: '28px',
+            height: '32px',
             fontSize: '0.75rem',
+            bgcolor: disabled ? 'rgba(255, 255, 255, 0.1)' : '#fff',
+            borderRadius: '6px',
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: disabled ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.7)',
+              borderWidth: '1.5px',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: disabled ? 'rgba(255, 255, 255, 0.3)' : '#fff',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#fff',
+              borderWidth: '2px',
+            },
             '& .MuiSelect-select': {
-              py: 0.5,
+              py: 0.7,
               px: 1.5,
+              color: disabled ? 'rgba(255, 255, 255, 0.5)' : '#0288d1',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+            },
+            '& .MuiSelect-icon': {
+              color: disabled ? 'rgba(255, 255, 255, 0.3)' : '#0288d1',
             },
           }}
         >
-          <MenuItem value={100} sx={{ fontSize: '0.75rem' }}>
-            전체
+          <MenuItem value={100} sx={{ fontSize: '0.75rem', py: 1 }}>
+            📅 전체 기간
           </MenuItem>
-          <MenuItem value={10} sx={{ fontSize: '0.75rem' }}>
-            10년
+          <MenuItem value={10} sx={{ fontSize: '0.75rem', py: 1 }}>
+            📅 최근 10년
           </MenuItem>
-          <MenuItem value={5} sx={{ fontSize: '0.75rem' }}>
-            5년
+          <MenuItem value={5} sx={{ fontSize: '0.75rem', py: 1 }}>
+            📅 최근 5년
           </MenuItem>
-          <MenuItem value={3} sx={{ fontSize: '0.75rem' }}>
-            3년
+          <MenuItem value={3} sx={{ fontSize: '0.75rem', py: 1 }}>
+            📅 최근 3년
           </MenuItem>
-          <MenuItem value={1} sx={{ fontSize: '0.75rem' }}>
-            1년
+          <MenuItem value={1} sx={{ fontSize: '0.75rem', py: 1 }}>
+            📅 최근 1년
           </MenuItem>
         </Select>
       </FormControl>
@@ -72,10 +111,9 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ termFilter, on
 interface ChartListProps {
   onSelectionChange?: (chartNos: string[]) => void;
   selectedChartNos?: string[];
-  termFilter?: number;
 }
 
-const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartNos = [], termFilter = 100 }) => {
+const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartNos = [] }) => {
   const { loading, patient } = useAppSelector(state => state.emrContent);
 
   const charts = useAppSelector<Chart[]>(state => state.emrContent.charts);
@@ -99,7 +137,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
     }
   };
 
-  // 필터링된 차트 목록
+  // 필터링된 차트 목록 (기간 필터는 서버에서 처리)
   const filteredCharts = charts.filter(chart => {
     if (!patient?.ptNo || chart.ptNo !== patient.ptNo) {
       return false;
@@ -107,16 +145,6 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
     // 유형 필터
     if (typeFilter !== '전체' && chart.type !== typeFilter) {
       return false;
-    }
-    // 기간 필터
-    if (termFilter !== 100 && chart.inDate) {
-      const today = new Date();
-      const chartDate = new Date(chart.inDate);
-      const yearsAgo = new Date(today);
-      yearsAgo.setFullYear(today.getFullYear() - termFilter);
-      if (chartDate < yearsAgo) {
-        return false;
-      }
     }
     // 추가 필터링 로직 (수진과/작성과는 현재 데이터에 없으므로 나중에 추가)
     return true;
