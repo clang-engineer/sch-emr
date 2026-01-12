@@ -129,7 +129,8 @@ class OdsSearchService(
      * Extract named parameter names from SQL.
      */
     private fun extractNamedParams(sql: String): Set<String> {
-        val regex = Regex(":([a-zA-Z][a-zA-Z0-9_]*)")
+        // Ignore PostgreSQL type casts like ::interval by excluding a leading colon.
+        val regex = Regex("(?<!:):([a-zA-Z][a-zA-Z0-9_]*)")
         return regex
             .findAll(sql)
             .map { it.groupValues[1] }
