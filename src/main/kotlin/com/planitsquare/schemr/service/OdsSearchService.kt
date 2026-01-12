@@ -49,16 +49,59 @@ class OdsSearchService(
         }
 
         val sql = sqlEntity.description ?: ""
-        validateReadOnlySql(sql)
-        validateParams(sql, sqlEntity.params, map)
+
+        // Sanitize SQL to prevent encoding issues
+        val sanitizedSql = sanitizeSql(sql)
+
+        // Log SQL before and after sanitization for debugging
+        if (sql != sanitizedSql) {
+            log.warn("SQL was sanitized. Original length: ${sql.length}, Sanitized length: ${sanitizedSql.length}")
+            log.debug("Original SQL first 200 chars: ${sql.take(200)}")
+            log.debug("Sanitized SQL first 200 chars: ${sanitizedSql.take(200)}")
+        }
+
+        validateReadOnlySql(sanitizedSql)
+        validateParams(sanitizedSql, sqlEntity.params, map)
 
         val paramValues = buildParameterValues(sqlEntity.params, map)
 
-        log.debug("Prepared SQL: $sql")
+        log.debug("Prepared SQL length: ${sanitizedSql.length}")
         log.debug("Parameter values: $paramValues")
 
-        val results = jdbcTemplate.queryForList(sql, paramValues)
-        return results
+        try {
+            val results = jdbcTemplate.queryForList(sanitizedSql, paramValues)
+            return results
+        } catch (e: Exception) {
+            log.error("Failed to execute SQL query. Title: $title", e)
+            log.error("SQL query: $sanitizedSql")
+            throw IllegalStateException("Failed to execute SQL query: ${e.message}", e)
+        }
+    }
+
+    /**
+     * Sanitize SQL query to prevent encoding issues.
+     * Removes invalid characters that may cause SQL syntax errors.
+     */
+    private fun sanitizeSql(sql: String): String {
+        // Check for problematic characters that indicate encoding issues
+        val hasEncodingIssues = sql.contains("�") || sql.contains("??")
+
+        if (hasEncodingIssues) {
+            log.warn("Detected encoding issues in SQL query. Attempting to sanitize...")
+        }
+
+        // Replace Unicode replacement character and other invalid characters
+        var sanitized = sql
+            .replace("\uFFFD", " ") // Unicode replacement character
+            .replace("??", " ") // Double question marks (encoding issue indicator)
+            .replace("�", " ") // Invalid character
+
+        // Normalize whitespace but preserve SQL structure
+        sanitized = sanitized
+            .replace(Regex("\\s+"), " ") // Replace multiple spaces with single space
+            .trim()
+
+        return sanitized
     }
 
     /**
