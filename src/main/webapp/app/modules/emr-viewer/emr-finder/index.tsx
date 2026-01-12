@@ -7,7 +7,7 @@ import { Box, Drawer, useMediaQuery } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { openDrawer, setFinderWidthAction, setViewModeAction } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
-import EmrFinder from './form';
+import EmrFinder from './main';
 import CollapsedSidebar from './collapsed-sidebar';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
