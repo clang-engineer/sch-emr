@@ -8,11 +8,11 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 export interface Patient {
   id?: number;
   ptNo?: string;
-  patientName?: string;
-  gender?: string;
+  name?: string;
+  sex?: string;
   age?: number;
-  residentNumber?: string;
-  department?: string;
+  residentNo1?: string;
+  residentNo2?: string;
   createdAt?: string;
   [key: string]: unknown;
 }

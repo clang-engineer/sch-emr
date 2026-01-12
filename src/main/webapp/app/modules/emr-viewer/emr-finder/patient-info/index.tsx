@@ -78,11 +78,10 @@ const PatientInfo = () => {
   const { patient, loading } = useAppSelector(state => state.emrContent);
 
   const patientNumber = patient?.ptNo ?? '-';
-  const patientName = patient?.patientName ?? '-';
-  const patientGender = patient?.gender ?? '-';
+  const patientName = patient?.name ?? '-';
+  const patientGender = patient?.sex ?? '-';
   const patientAge = patient?.age ?? '-';
-  const residentNumber = patient?.residentNumber ?? '-';
-  const department = patient?.department ?? '-';
+  const residentNumber = patient?.residentNo1 + '-' + '*******' ?? '-';
 
   const renderValue = (value: string | number) => (loading ? '조회중...' : value);
   const renderInitial = () => (loading ? '...' : initial);
@@ -110,7 +109,6 @@ const PatientInfo = () => {
 
   const summaryName = patientName !== '-' ? patientName : '환자 정보';
   const summaryNumber = patientNumber !== '-' ? patientNumber : '미지정';
-  const summaryDepartment = department !== '-' ? department : '부서 미지정';
   const initial = patientName && patientName !== '-' ? patientName.charAt(0) : '?';
 
   if (!loading && !patient) {
@@ -178,9 +176,6 @@ const PatientInfo = () => {
               <Typography sx={{ fontSize: '1.05rem', fontWeight: 700, color: '#263238', lineHeight: 1.3, mb: 0.3 }}>
                 {renderValue(summaryName)}
               </Typography>
-              <Typography sx={{ fontSize: '0.75rem', color: '#78909c', fontWeight: 500 }}>
-                {renderValue(summaryNumber)} · {renderValue(summaryDepartment)}
-              </Typography>
             </Box>
           </Box>
         </Grid>
@@ -207,12 +202,6 @@ const PatientInfo = () => {
             <Box sx={fieldBoxStyle}>
               <Typography sx={fieldLabelStyle}>주민번호</Typography>
               <Box sx={infoTextStyle}>{renderValue(residentNumber)}</Box>
-            </Box>
-          </Grid>
-          <Grid size={6}>
-            <Box sx={fieldBoxStyle}>
-              <Typography sx={fieldLabelStyle}>진료부서</Typography>
-              <Box sx={infoTextStyle}>{renderValue(department)}</Box>
             </Box>
           </Grid>
         </Grid>
