@@ -2,4 +2,3 @@ sql_id;name;type
 1;ptNo;STRING
 2;ptNo;STRING
 2;term;INTEGER
-3;chartNos;LONG
