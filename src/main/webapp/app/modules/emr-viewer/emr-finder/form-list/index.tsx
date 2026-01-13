@@ -113,15 +113,24 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
       return [];
     }
 
-    const normalized = forms
-      .filter(form => (form.chartNo ? selectedChart.chartNo === form.chartNo : false))
-      .map(form => ({
-        id: String(form.formNo ?? ''),
-        parentId: form.parentFormNo ? String(form.parentFormNo) : null,
-        name: form.name ?? '',
-        type: form.type === 'folder' ? 'folder' : 'form',
-      }))
-      .filter(form => form.id && form.name);
+    const hasItemIndexSeq = forms.some(form => form.ITEMINDXSEQ !== undefined && form.ITEMINDXSEQ !== null);
+    const normalized = (
+      hasItemIndexSeq
+        ? forms.map(form => ({
+            id: String(form.ITEMINDXSEQ ?? ''),
+            parentId: form.SUPITEMINDXSEQ && form.SUPITEMINDXSEQ !== 0 ? String(form.SUPITEMINDXSEQ) : null,
+            name: form.INDXNM && form.INDXNM !== '-' ? form.INDXNM : form.FORMNM ?? '',
+            type: form.LEVL === '1' || form.LEVL === 1 ? 'folder' : 'form',
+          }))
+        : forms
+            .filter(form => (form.chartNo ? selectedChart.chartNo === form.chartNo : false))
+            .map(form => ({
+              id: String(form.formNo ?? ''),
+              parentId: form.parentFormNo ? String(form.parentFormNo) : null,
+              name: form.name ?? '',
+              type: form.type === 'folder' ? 'folder' : 'form',
+            }))
+    ).filter(form => form.id && form.name);
 
     const nodes = new Map<string, FormNode>();
     normalized.forEach(form => {
