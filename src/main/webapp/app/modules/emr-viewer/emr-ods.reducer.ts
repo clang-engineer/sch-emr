@@ -125,6 +125,9 @@ const emrOds = createSlice({
     reset() {
       return initialState;
     },
+    clearForms(state) {
+      state.forms = [];
+    },
   },
   extraReducers(builder) {
     builder
@@ -159,6 +162,6 @@ const emrOds = createSlice({
   },
 });
 
-export const { reset } = emrOds.actions;
+export const { reset, clearForms } = emrOds.actions;
 
 export default emrOds.reducer;

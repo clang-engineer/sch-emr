@@ -7,7 +7,7 @@ import ChartList, { ChartListHeader } from './chart-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { Chart, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { Chart, clearForms, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 import axios from 'axios';
 import { CATEGORY_QUERY_META, FORM_QUERY_META } from './emr-finder.constant';
 
@@ -47,29 +47,32 @@ const RecordFinder = () => {
 
   const handleChartSelectionChange = (chart: Chart) => {
     setSelectedChart(chart);
+    dispatch(clearForms());
 
     fetchFormData(chart);
   };
 
-  const fetchFormData = (c: Chart) => {
-    CATEGORY_QUERY_META.filter(m => m.code.toLowerCase() === c.code.toLowerCase()).forEach(m => {
-      axios
-        .post('/api/ods', {
-          key: m.query,
+  const fetchFormData = async (c: Chart) => {
+    if (!patient?.ptNo) {
+      return;
+    }
+
+    const categoryMatches = CATEGORY_QUERY_META.filter(m => m.code.toLowerCase() === c.code.toLowerCase());
+    await Promise.all(
+      categoryMatches.map(async meta => {
+        const { data } = await axios.post('/api/ods', {
+          key: meta.query,
           map: {
             ptNo: patient.ptNo,
             inDate: c.inDate,
             outDate: c.outDate,
           },
-        })
-        .then(({ data }) => {
-          const obj = data[0];
-          const keysWithY = Object.keys(obj).filter(key => obj[key] === 'Y');
-          FORM_QUERY_META.filter(fm => keysWithY.includes(fm.code)).forEach(fm => {
-            dispatch(getFormList({ query: fm.query }));
-          });
         });
-    });
+        const obj = data?.[0] ?? {};
+        const keysWithY = Object.keys(obj).filter(key => obj[key] === 'Y');
+        await Promise.all(FORM_QUERY_META.filter(fm => keysWithY.includes(fm.code)).map(fm => dispatch(getFormList({ query: fm.query }))));
+      })
+    );
   };
 
   return (
