@@ -208,13 +208,20 @@ const emrOds = createSlice({
         state.forms = [...state.forms, ...(action.payload.data ?? [])];
         state.updateSuccess = true;
       })
+      .addCase(fetchCategoryForms.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.forms = [];
+        state.categories = [];
+      })
       .addCase(fetchCategoryForms.fulfilled, (state, action) => {
         state.loading = false;
         state.forms = [...state.forms, ...(action.payload.forms ?? [])];
         state.categories = action.payload.categoryData.map(item => item.data);
         state.updateSuccess = true;
       })
-      .addMatcher(isPending(getPatientInfo, getChartList, getFormList, fetchCategoryForms), state => {
+      .addMatcher(isPending(getPatientInfo, getChartList, getFormList), state => {
         state.loading = true;
         state.errorMessage = null;
         state.updateSuccess = false;
