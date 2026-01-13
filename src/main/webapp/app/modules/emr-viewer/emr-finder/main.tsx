@@ -9,7 +9,7 @@ import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { Chart, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 import axios from 'axios';
-import { FORM_QUERY_META } from './emr-finder.constant';
+import { CATEGORY_QUERY_META, FORM_QUERY_META } from './emr-finder.constant';
 
 const RecordFinder = () => {
   const dispatch = useAppDispatch();
@@ -52,11 +52,19 @@ const RecordFinder = () => {
   };
 
   const fetchFormData = () => {
-    FORM_QUERY_META.filter(m => m.code.toLowerCase() === selectedChart.code.toLowerCase()).forEach(m => {
-      axios.post('/api/ods', {
-        key: m.query,
-        date: selectedChart.date,
-      });
+    CATEGORY_QUERY_META.filter(m => m.code.toLowerCase() === selectedChart.code.toLowerCase()).forEach(m => {
+      axios
+        .post('/api/ods', {
+          key: m.query,
+          date: selectedChart.date,
+        })
+        .then(({ data }) => {
+          const obj = data[0];
+          const keysWithY = Object.keys(obj).filter(key => obj[key] === 'Y');
+          FORM_QUERY_META.filter(fm => keysWithY.includes(fm.code)).forEach(fm => {
+            console.log('Fetching form data for query:', fm.query);
+          });
+        });
     });
   };
 
