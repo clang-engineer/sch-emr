@@ -7,31 +7,33 @@
 //      , MAX(decode(b, 'F', 'Y', 'N')) f		-- 내시경
 //      , MAX(decode(c, 'G', 'Y', 'N')) g		-- 기능
 //      , MAX(decode(d, 'H', 'Y', 'N')) h		-- 핵의학
-const category = [
+const FORM_QUERY_META = [
   {
-    type: 'O',
+    code: 'O',
     query: 'SELECT_CATEGORY_OUTPATIENT_1',
   },
   {
-    type: 'O',
+    code: 'O',
     query: 'SELECT_CATEGORY_OUTPATIENT_2',
   },
   {
-    type: 'I',
+    code: 'I',
     query: 'SELECT_CATEGORY_INPATIENT_1',
   },
   {
-    type: 'I',
+    code: 'I',
     query: 'SELECT_CATEGORY_INPATIENT_2',
   },
   {
-    type: 'E',
+    code: 'E',
     query: 'SELECT_CATEGORY_EMERGENCY_1',
   },
   {
-    type: 'E',
+    code: 'E',
     query: 'SELECT_CATEGORY_EMERGENCY_2',
   },
 ];
 
-const form = [];
+const FORM_DETAIL_QUERY_META = [];
+
+export { FORM_QUERY_META, FORM_DETAIL_QUERY_META };

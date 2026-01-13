@@ -8,6 +8,8 @@ import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { Chart, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
+import axios from 'axios';
+import { FORM_QUERY_META } from './emr-finder.constant';
 
 const RecordFinder = () => {
   const dispatch = useAppDispatch();
@@ -46,7 +48,16 @@ const RecordFinder = () => {
   const handleChartSelectionChange = (chart: Chart) => {
     setSelectedChart(chart);
 
-    dispatch(getFormList({ chart }));
+    fetchFormData();
+  };
+
+  const fetchFormData = () => {
+    FORM_QUERY_META.filter(m => m.code.toLowerCase() === selectedChart.code.toLowerCase()).forEach(m => {
+      axios.post('/api/ods', {
+        key: m.query,
+        date: selectedChart.date,
+      });
+    });
   };
 
   return (

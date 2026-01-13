@@ -174,7 +174,6 @@ ALTER TABLE ods.tbl_form
     FOREIGN KEY (parent_form_no)
     REFERENCES ods.tbl_form (form_no);
 
-
 CREATE TABLE ods.tbl_category_outpatient1 (
     n VARCHAR(1), -- 방사선
     m VARCHAR(1), -- 미생물
