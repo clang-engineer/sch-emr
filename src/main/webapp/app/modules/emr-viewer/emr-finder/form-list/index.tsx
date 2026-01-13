@@ -9,6 +9,11 @@ interface FormNode {
   id: string;
   name: string;
   type: 'folder' | 'form';
+  sortKeys?: {
+    first?: number;
+    second?: number;
+    third?: number;
+  };
   children?: FormNode[];
 }
 
@@ -48,12 +53,27 @@ const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onS
         }}
       >
         {node.type === 'folder' && (
-          <Box sx={{ mr: 0.5, display: 'flex', alignItems: 'center' }}>
-            {isExpanded ? (
-              <FontAwesomeIcon icon={['fas', 'chevron-down']} style={{ fontSize: '1.2rem', color: '#546e7a' }} />
-            ) : (
-              <FontAwesomeIcon icon={['fas', 'chevron-right']} style={{ fontSize: '1.2rem', color: '#546e7a' }} />
-            )}
+          <Box
+            sx={{
+              mr: 0.6,
+              width: 14,
+              height: 14,
+              borderRadius: '2px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'transform 120ms ease',
+            }}
+          >
+            <FontAwesomeIcon
+              icon={['fas', 'caret-right']}
+              style={{
+                fontSize: '0.75rem',
+                color: '#607d8b',
+                transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                transition: 'transform 120ms ease',
+              }}
+            />
           </Box>
         )}
         <ListItemIcon sx={{ minWidth: 'unset', mr: 0.8 }}>
@@ -114,6 +134,10 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     }
 
     const hasItemIndexSeq = forms.some(form => form.ITEMINDXSEQ !== undefined && form.ITEMINDXSEQ !== null);
+    const parseSort = (value: unknown) => {
+      const numberValue = typeof value === 'string' ? Number(value) : typeof value === 'number' ? value : NaN;
+      return Number.isFinite(numberValue) ? numberValue : undefined;
+    };
     const normalized = (
       hasItemIndexSeq
         ? forms.map(form => ({
@@ -121,6 +145,11 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
             parentId: form.SUPITEMINDXSEQ && form.SUPITEMINDXSEQ !== 0 ? String(form.SUPITEMINDXSEQ) : null,
             name: form.INDXNM && form.INDXNM !== '-' ? form.INDXNM : form.FORMNM ?? '',
             type: form.LEVL === '1' || form.LEVL === 1 ? 'folder' : 'form',
+            sortKeys: {
+              first: parseSort(form.FIRSTSORTNO),
+              second: parseSort(form.SECONDSORTNO),
+              third: parseSort(form.THIRDSORTNO),
+            },
           }))
         : forms
             .filter(form => (form.chartNo ? selectedChart.chartNo === form.chartNo : false))
@@ -134,7 +163,7 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
 
     const nodes = new Map<string, FormNode>();
     normalized.forEach(form => {
-      nodes.set(form.id, { id: form.id, name: form.name, type: form.type, children: [] });
+      nodes.set(form.id, { id: form.id, name: form.name, type: form.type, sortKeys: form.sortKeys, children: [] });
     });
 
     const roots: FormNode[] = [];
@@ -155,7 +184,18 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     });
 
     const sortNodes = (items: FormNode[]) => {
-      items.sort((a, b) => a.name.localeCompare(b.name, 'ko-KR'));
+      items.sort((a, b) => {
+        if (a.sortKeys?.second !== undefined || b.sortKeys?.second !== undefined) {
+          return (a.sortKeys?.second ?? Number.MAX_SAFE_INTEGER) - (b.sortKeys?.second ?? Number.MAX_SAFE_INTEGER);
+        }
+        if (a.sortKeys?.first !== undefined || b.sortKeys?.first !== undefined) {
+          return (a.sortKeys?.first ?? Number.MAX_SAFE_INTEGER) - (b.sortKeys?.first ?? Number.MAX_SAFE_INTEGER);
+        }
+        if (a.sortKeys?.third !== undefined || b.sortKeys?.third !== undefined) {
+          return (a.sortKeys?.third ?? Number.MAX_SAFE_INTEGER) - (b.sortKeys?.third ?? Number.MAX_SAFE_INTEGER);
+        }
+        return a.name.localeCompare(b.name, 'ko-KR');
+      });
       items.forEach(item => {
         if (item.children?.length) {
           sortNodes(item.children);
