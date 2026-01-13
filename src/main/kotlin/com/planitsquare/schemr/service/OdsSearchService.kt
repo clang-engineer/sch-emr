@@ -144,17 +144,11 @@ class OdsSearchService(
         sqlParams: Set<SqlParam>,
         map: Map<String, Any>,
     ): Map<String, Any?> =
-        map
-            .mapKeys { (paramName, _) ->
-                // Find matching SqlParam (case-insensitive) and use its name
-                sqlParams.find { it.name.equals(paramName, ignoreCase = true) }?.name ?: paramName
-            }.mapValues { (paramName, paramValue) ->
-                val sqlParam =
-                    sqlParams.find { it.name.equals(paramName, ignoreCase = true) }
-                        ?: throw IllegalArgumentException("Parameter $paramName not found in SQL entity definition")
-
-                convertParameterValue(paramValue, sqlParam.type)
-            }
+        sqlParams.mapNotNull { sqlParam ->
+            val paramName = sqlParam.name ?: return@mapNotNull null
+            val paramValue = map.entries.find { it.key.equals(paramName, ignoreCase = true) }?.value ?: return@mapNotNull null
+            paramName to convertParameterValue(paramValue, sqlParam.type)
+        }.toMap()
 
     private fun validateReadOnlySql(sql: String) {
         val trimmed = sql.trimStart()
