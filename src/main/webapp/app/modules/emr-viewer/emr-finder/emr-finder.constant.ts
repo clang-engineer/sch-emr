@@ -6,27 +6,27 @@ interface ICategory {
 const CATEGORY_QUERY_META: ICategory[] = [
   {
     code: 'O',
-    query: 'SELECT_CATEGORY_OUTPATIENT_1',
+    query: 'SELECT_CATEGORY_OUTPATIENT1',
   },
   {
     code: 'O',
-    query: 'SELECT_CATEGORY_OUTPATIENT_2',
+    query: 'SELECT_CATEGORY_OUTPATIENT2',
   },
   {
     code: 'I',
-    query: 'SELECT_CATEGORY_INPATIENT_1',
+    query: 'SELECT_CATEGORY_INPATIENT1',
   },
   {
     code: 'I',
-    query: 'SELECT_CATEGORY_INPATIENT_2',
+    query: 'SELECT_CATEGORY_INPATIENT2',
   },
   {
     code: 'E',
-    query: 'SELECT_CATEGORY_EMERGENCY_1',
+    query: 'SELECT_CATEGORY_EMERGENCY1',
   },
   {
     code: 'E',
-    query: 'SELECT_CATEGORY_EMERGENCY_2',
+    query: 'SELECT_CATEGORY_EMERGENCY2',
   },
 ];
 
