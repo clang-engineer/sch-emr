@@ -2,3 +2,8 @@ sql_id;name;type
 1;ptNo;STRING
 2;ptNo;STRING
 2;term;INTEGER
+
+101;ptNo;STRING
+101;inDate;STRING
+101;outDate;STRING
+

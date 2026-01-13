@@ -56,7 +56,11 @@ const RecordFinder = () => {
       axios
         .post('/api/ods', {
           key: m.query,
-          date: selectedChart.date,
+          map: {
+            ptNo: patient.ptNo,
+            inDate: selectedChart.inDate,
+            outDate: selectedChart.outDate,
+          },
         })
         .then(({ data }) => {
           const obj = data[0];

@@ -281,8 +281,8 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart 
                         sx={{
                           height: '20px',
                           fontSize: '0.7rem',
-                          bgcolor: chart.type === '외래' ? '#e3f2fd' : chart.type === '입원' ? '#fff3e0' : '#ffebee',
-                          color: chart.type === '외래' ? '#1976d2' : chart.type === '입원' ? '#f57c00' : '#d32f2f',
+                          bgcolor: chart.code === 'O' ? '#e3f2fd' : chart.code === 'I' ? '#fff3e0' : '#ffebee',
+                          color: chart.code === 'O' ? '#1976d2' : chart.code === 'I' ? '#f57c00' : '#d32f2f',
                           fontWeight: 600,
                         }}
                       />
