@@ -53,6 +53,7 @@ const FORM_QUERY_META: IForm[] = [
   { code: 'E', query: 'SELECT_FORM_E' },
   { code: 'F', query: 'SELECT_FORM_F' },
   { code: 'G', query: 'SELECT_FORM_G' },
+  { code: 'H', query: 'SELECT_FORM_H' },
 ];
 
 export { FORM_QUERY_META, CATEGORY_QUERY_META };

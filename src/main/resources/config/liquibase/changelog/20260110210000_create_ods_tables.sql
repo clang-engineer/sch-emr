@@ -1,4 +1,4 @@
-﻿--liquibase formatted sql
+--liquibase formatted sql
 
 --changeset developer:20260110210000-0
 CREATE SCHEMA IF NOT EXISTS ods;
@@ -50,56 +50,56 @@ INSERT INTO ods.tbl_patient (id, pt_no, name, sex, age, resident_no1, resident_n
 INSERT INTO ods.tbl_patient (id, pt_no, name, sex, age, resident_no1, resident_no2) VALUES (10, 'P2024010', '송하나', '여', 61, '630730', '2123456');
 
 --changeset developer:20260110210000-6-data context:faker
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (1, 'P2024001', '외래', 'O', '2026-01-15', NULL, '내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (2, 'P2024001', '외래', 'O', '2026-02-20', NULL, '내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (3, 'P2024002', '외래', 'O', '2026-01-08', NULL, '산부인과', '박의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (4, 'P2024003', '응급', 'E', '2026-01-22', NULL, '정형외과', '이의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (5, 'P2024004', '외래', 'O', '2026-02-05', NULL, '피부과', '최의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (6, 'P2024005', '입원', 'I', '2026-01-10', NULL, '신경과', '정의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (7, 'P2024005', '입원', 'I', '2026-01-12', NULL, '신경과', '정의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (8, 'P2024006', '외래', 'O', '2026-02-14', NULL, '안과', '강의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (9, 'P2024007', '응급', 'E', '2026-01-18', NULL, '외과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (10, 'P2024008', '외래', 'O', '2026-02-01', NULL, '소아과', '윤의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (11, 'P2024009', '외래', 'O', '2026-01-25', NULL, '이비인후과', '임의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (12, 'P2024010', '외래', 'O', '2026-02-10', NULL, '내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (13, 'P2024003', '외래', 'O', '2026-02-28', NULL, '정형외과', '이의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (14, 'P2024002', '외래', 'O', '2026-03-05', NULL, '산부인과', '박의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (15, 'P2024006', '외래', 'O', '2026-03-12', NULL, '안과', '강의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (16, 'P2024004', '입원', 'I', '2026-01-03', NULL, '외과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (17, 'P2024004', '입원', 'I', '2026-01-05', NULL, '외과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (18, 'P2024004', '입원', 'I', '2026-01-07', NULL, '외과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (19, 'P2024001', '응급', 'E', '2026-01-20', NULL, '내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (20, 'P2024007', '외래', 'O', '2026-02-03', NULL, '외과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (21, 'P2024005', '입원', 'I', '2026-01-20', NULL, '신경과', '정의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (22, 'P2024009', '응급', 'E', '2026-02-15', NULL, '이비인후과', '임의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (23, 'P2024010', '입원', 'I', '2026-01-12', NULL, '내분비내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (24, 'P2024008', '외래', 'O', '2026-01-28', NULL, '소아과', '윤의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (25, 'P2024003', '외래', 'O', '2026-01-05', NULL, '정형외과', '이의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (26, 'P2024006', '외래', 'O', '2026-01-18', NULL, '안과', '강의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (27, 'P2024002', '외래', 'O', '2026-01-25', NULL, '산부인과', '박의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (28, 'P2024007', '응급', 'E', '2026-01-12', NULL, '응급의학과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (29, 'P2024008', '외래', 'O', '2026-01-15', NULL, '소아과', '윤의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (30, 'P2024009', '외래', 'O', '2026-01-30', NULL, '이비인후과', '임의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (31, 'P2024010', '외래', 'O', '2026-01-22', NULL, '내분비내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (32, 'P2024001', '외래', 'O', '2026-01-28', NULL, '심장내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (33, 'P2024004', '외래', 'O', '2026-01-20', NULL, '피부과', '최의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (34, 'P2024005', '입원', 'I', '2026-02-05', NULL, '신경과', '정의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (35, 'P2024006', '외래', 'O', '2026-01-22', NULL, '안과', '강의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (36, 'P2024003', '외래', 'O', '2026-02-10', NULL, '재활의학과', '이의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (37, 'P2024007', '외래', 'O', '2026-01-25', NULL, '외과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (38, 'P2024002', '외래', 'O', '2026-02-12', NULL, '산부인과', '박의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (39, 'P2024008', '외래', 'O', '2026-02-08', NULL, '소아과', '윤의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (40, 'P2024009', '응급', 'E', '2026-02-20', NULL, '응급의학과', '임의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (41, 'P2024010', '입원', 'I', '2026-02-15', NULL, '내분비내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (42, 'P2024001', '외래', 'O', '2026-02-18', NULL, '내과', '김의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (43, 'P2024004', '외래', 'O', '2026-02-22', NULL, '피부과', '최의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (44, 'P2024005', '입원', 'I', '2026-02-28', NULL, '신경과', '정의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (45, 'P2024006', '외래', 'O', '2026-02-25', NULL, '안과', '강의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (46, 'P2024003', '외래', 'O', '2026-02-18', NULL, '정형외과', '이의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (47, 'P2024007', '외래', 'O', '2026-02-20', NULL, '외과', '한의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (48, 'P2024002', '외래', 'O', '2026-02-28', NULL, '산부인과', '박의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (49, 'P2024008', '응급', 'E', '2026-02-22', NULL, '응급의학과', '윤의사');
-INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (50, 'P2024009', '외래', 'O', '2026-03-01', NULL, '이비인후과', '임의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (1, 'P2024001', '외래', 'O', '20260115', '20260115', '내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (2, 'P2024001', '외래', 'O', '20260220', '20260220', '내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (3, 'P2024002', '외래', 'O', '20260108', '20260108', '산부인과', '박의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (4, 'P2024003', '응급', 'E', '20260122', '20260122', '정형외과', '이의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (5, 'P2024004', '외래', 'O', '20260205', '20260205', '피부과', '최의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (6, 'P2024005', '입원', 'I', '20260110', '20260110', '신경과', '정의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (7, 'P2024005', '입원', 'I', '20260112', '20260112', '신경과', '정의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (8, 'P2024006', '외래', 'O', '20260214', '20260214', '안과', '강의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (9, 'P2024007', '응급', 'E', '20260118', '20260118', '외과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (10, 'P2024008', '외래', 'O', '20260201', '20260201', '소아과', '윤의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (11, 'P2024009', '외래', 'O', '20260125', '20260125', '이비인후과', '임의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (12, 'P2024010', '외래', 'O', '20260210', '20260210', '내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (13, 'P2024003', '외래', 'O', '20260228', '20260228', '정형외과', '이의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (14, 'P2024002', '외래', 'O', '20260305', '20260305', '산부인과', '박의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (15, 'P2024006', '외래', 'O', '20260312', '20260312', '안과', '강의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (16, 'P2024004', '입원', 'I', '20260103', '20260103', '외과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (17, 'P2024004', '입원', 'I', '20260105', '20260105', '외과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (18, 'P2024004', '입원', 'I', '20260107', '20260107', '외과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (19, 'P2024001', '응급', 'E', '20260120', '20260120', '내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (20, 'P2024007', '외래', 'O', '20260203', '20260203', '외과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (21, 'P2024005', '입원', 'I', '20260120', '20260120', '신경과', '정의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (22, 'P2024009', '응급', 'E', '20260215', '20260215', '이비인후과', '임의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (23, 'P2024010', '입원', 'I', '20260112', '20260112', '내분비내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (24, 'P2024008', '외래', 'O', '20260128', '20260128', '소아과', '윤의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (25, 'P2024003', '외래', 'O', '20260105', '20260105', '정형외과', '이의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (26, 'P2024006', '외래', 'O', '20260118', '20260118', '안과', '강의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (27, 'P2024002', '외래', 'O', '20260125', '20260125', '산부인과', '박의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (28, 'P2024007', '응급', 'E', '20260112', '20260112', '응급의학과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (29, 'P2024008', '외래', 'O', '20260115', '20260115', '소아과', '윤의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (30, 'P2024009', '외래', 'O', '20260130', '20260130', '이비인후과', '임의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (31, 'P2024010', '외래', 'O', '20260122', '20260122', '내분비내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (32, 'P2024001', '외래', 'O', '20260128', '20260128', '심장내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (33, 'P2024004', '외래', 'O', '20260120', '20260120', '피부과', '최의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (34, 'P2024005', '입원', 'I', '20260205', '20260205', '신경과', '정의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (35, 'P2024006', '외래', 'O', '20260122', '20260122', '안과', '강의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (36, 'P2024003', '외래', 'O', '20260210', '20260210', '재활의학과', '이의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (37, 'P2024007', '외래', 'O', '20260125', '20260125', '외과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (38, 'P2024002', '외래', 'O', '20260212', '20260212', '산부인과', '박의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (39, 'P2024008', '외래', 'O', '20260208', '20260208', '소아과', '윤의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (40, 'P2024009', '응급', 'E', '20260220', '20260220', '응급의학과', '임의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (41, 'P2024010', '입원', 'I', '20260215', '20260215', '내분비내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (42, 'P2024001', '외래', 'O', '20260218', '20260218', '내과', '김의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (43, 'P2024004', '외래', 'O', '20260222', '20260222', '피부과', '최의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (44, 'P2024005', '입원', 'I', '20260228', '20260228', '신경과', '정의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (45, 'P2024006', '외래', 'O', '20260225', '20260225', '안과', '강의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (46, 'P2024003', '외래', 'O', '20260218', '20260218', '정형외과', '이의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (47, 'P2024007', '외래', 'O', '20260220', '20260220', '외과', '한의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (48, 'P2024002', '외래', 'O', '20260228', '20260228', '산부인과', '박의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (49, 'P2024008', '응급', 'E', '20260222', '20260222', '응급의학과', '윤의사');
+INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (50, 'P2024009', '외래', 'O', '20260301', '20260301', '이비인후과', '임의사');
 
 --changeset developer:20260110210000-7-fix context:faker
 CREATE TABLE ods.tbl_category_intpatient1 (
@@ -124,6 +124,29 @@ CREATE TABLE ods.tbl_category_intpatient2 (
 
 );
 insert into ods.tbl_category_intpatient2 (e, f, g, h) values ('Y', 'Y', 'Y', 'Y');
+
+CREATE TABLE ods.tbl_category_outpatient1 (
+    n VARCHAR(1), -- 방사선
+    m VARCHAR(1), -- 미생물
+    l VARCHAR(1), -- 진검
+    p VARCHAR(1), -- 병리
+    pt_no varchar,
+    in_date varchar,
+    out_date varchar
+);
+insert into ods.tbl_category_outpatient1 (n, m, l, p) values ('Y', 'Y', 'Y', 'Y');
+
+CREATE TABLE ods.tbl_category_outpatient2 (
+    e VARCHAR(1), -- 영상
+    f VARCHAR(1), -- 내시경
+    g VARCHAR(1), -- 기능
+    h VARCHAR(1), -- 핵의학
+    pt_no varchar,
+    in_date varchar,
+    out_date varchar
+
+);
+insert into ods.tbl_category_outpatient2 (e, f, g, h) values ('Y', 'Y', 'Y', 'Y');
 
 
 
