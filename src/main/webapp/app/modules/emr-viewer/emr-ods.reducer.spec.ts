@@ -108,16 +108,17 @@ describe('Emr content reducer tests', () => {
 
     it('should set form list', () => {
       const payload = { data: [{ id: 'F1' }] };
+      const previousState = { ...initialState, forms: [{ id: 'F0' }] };
       expect(
-        reducer(undefined, {
+        reducer(previousState, {
           type: getFormList.fulfilled.type,
           payload,
         })
       ).toEqual({
-        ...initialState,
+        ...previousState,
         loading: false,
         updateSuccess: true,
-        forms: payload.data,
+        forms: [...previousState.forms, ...payload.data],
       });
     });
   });

@@ -29,16 +29,23 @@ export interface Chart {
   [key: string]: unknown;
 }
 
+// "INDXNM","FORMNM","ITEMINDXSEQ","SUPITEMINDXSEQ","CNT","EMRFLAG","RECKIND","SIGNNO","LISFLAG","LEVL","SECONDSORTNO","FIRSTSORTNO","THIRDSORTNO"
+// 핵의학검체검사 결과보고서,핵의학검체검사 결과보고서,152750,0,1,E,LIS,0,,1,8,102,99999999999
+// -,핵의학검체검사 결과보고서,152753,152750,1,E,LIS,10000000000800004098,,2,9999999999,9999999999,10
 export interface Form {
-  formNo?: string;
-  parentFormNo?: string;
-  ptNo?: string;
-  chartNo?: number;
-  name?: string;
-  type?: string;
-  recordData?: string;
-  createdAt?: string;
-  patientName?: string;
+  INDXNM?: string;
+  FORMNM?: string;
+  ITEMINDXSEQ?: string;
+  SUPITEMINDXSEQ?: number;
+  CNT?: string;
+  EMRFLAG?: string;
+  RECKIND?: string;
+  SIGNNO?: string;
+  LISFLAG?: string;
+  LEVL?: string;
+  SECONDSORTNO?: string;
+  FIRSTSORTNO?: string;
+  THIRDSORTNO?: string;
   [key: string]: unknown;
 }
 
@@ -99,14 +106,12 @@ export const getChartList = createAsyncThunk(
 );
 export const getFormList = createAsyncThunk(
   'emr-ods/fetch_form_list',
-  async ({ chart }: { chart: Chart }) => {
+  async ({ query }: { query: string }) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {
-      key: SELECT_FORM_LIST,
-      map: {
-        chartNo: chart.chartNo,
-      },
+      key: query,
+      map: null,
     };
     return axios.post<Form[]>(requestUrl, cleanEntity(payload));
   },
@@ -135,7 +140,7 @@ const emrOds = createSlice({
       })
       .addCase(getFormList.fulfilled, (state, action) => {
         state.loading = false;
-        state.forms = action.payload.data;
+        state.forms = [...state.forms, ...(action.payload.data ?? [])];
         state.updateSuccess = true;
       })
       .addMatcher(isPending(getPatientInfo, getChartList, getFormList), state => {

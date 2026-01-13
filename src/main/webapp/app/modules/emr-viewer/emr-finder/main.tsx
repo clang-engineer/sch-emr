@@ -66,7 +66,7 @@ const RecordFinder = () => {
           const obj = data[0];
           const keysWithY = Object.keys(obj).filter(key => obj[key] === 'Y');
           FORM_QUERY_META.filter(fm => keysWithY.includes(fm.code)).forEach(fm => {
-            console.log('Fetching form data for query:', fm.query);
+            dispatch(getFormList({ query: fm.query }));
           });
         });
     });
