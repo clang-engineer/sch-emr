@@ -7,7 +7,7 @@ import ChartList, { ChartListHeader } from './chart-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { Chart, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 const RecordFinder = () => {
   const dispatch = useAppDispatch();
@@ -15,14 +15,14 @@ const RecordFinder = () => {
   const patient = useAppSelector(state => state.emrContent.patient);
   const { patientExpanded, setPatientExpanded, patientSectionRef, recordHeight, formHeight, handleRecordResize } = useRecordFinderLayout();
 
-  const [selectedChartNos, setSelectedChartNos] = React.useState<string[]>([]);
+  const [selectedChart, setSelectedChart] = React.useState<Chart | null>(null);
   const [termFilter, setTermFilter] = React.useState<number>(100);
 
   React.useEffect(() => {
     if (!patient?.ptNo) {
       return;
     }
-    setSelectedChartNos([]);
+    setSelectedChart(null);
     setTermFilter(100);
   }, [patient?.ptNo]);
 
@@ -43,12 +43,10 @@ const RecordFinder = () => {
     dispatch(getPatientInfo(ptNo));
   };
 
-  const handleChartSelectionChange = (chartNos: string[]) => {
-    setSelectedChartNos(chartNos);
-    if (!chartNos.length) {
-      return;
-    }
-    dispatch(getFormList({ chartNos }));
+  const handleChartSelectionChange = (chart: Chart) => {
+    setSelectedChart(chart);
+
+    dispatch(getFormList({ chart }));
   };
 
   return (
@@ -86,17 +84,17 @@ const RecordFinder = () => {
             disabledMessage="환자 입력 후 이용 가능"
             headerContent={<ChartListHeader termFilter={termFilter} onTermFilterChange={setTermFilter} disabled={!patient?.ptNo} />}
           >
-            <ChartList onSelectionChange={handleChartSelectionChange} selectedChartNos={selectedChartNos} />
+            <ChartList onSelectionChange={handleChartSelectionChange} selectedChart={selectedChart} />
           </ResizableSection>
           <ResizableSection
             title="서식 목록"
             color="#0097a7"
             height={formHeight}
             isLast
-            disabled={selectedChartNos.length === 0}
+            disabled={!selectedChart}
             disabledMessage="기록 선택 후 이용 가능"
           >
-            <FormList selectedChartNos={selectedChartNos} />
+            <FormList selectedChart={selectedChart} />
           </ResizableSection>
         </>
       )}

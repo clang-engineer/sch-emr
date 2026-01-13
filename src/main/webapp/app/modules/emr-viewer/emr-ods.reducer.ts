@@ -19,7 +19,7 @@ export interface Patient {
 
 export interface Chart {
   chartNo: string;
-  type: string;
+  label: string;
   code: string;
   inDate?: string;
   outDate?: number;
@@ -99,13 +99,13 @@ export const getChartList = createAsyncThunk(
 );
 export const getFormList = createAsyncThunk(
   'emr-ods/fetch_form_list',
-  async ({ chartNos }: { chartNos: Array<string | number> }) => {
+  async ({ chart }: { chart: Chart }) => {
     const requestUrl = `${apiUrl}`;
 
     const payload = {
       key: SELECT_FORM_LIST,
       map: {
-        chartNos,
+        chartNo: chart.chartNo,
       },
     };
     return axios.post<Form[]>(requestUrl, cleanEntity(payload));

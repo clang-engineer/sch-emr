@@ -3,6 +3,7 @@ import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typogr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from 'app/config/store';
 import EmptyState from '../empty-state';
+import { Chart, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 interface FormNode {
   id: string;
@@ -99,21 +100,21 @@ const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onS
 };
 
 interface FormListProps {
-  selectedChartNos?: string[];
+  selectedChart?: Chart;
 }
 
-const FormList: React.FC<FormListProps> = ({ selectedChartNos = [] }) => {
+const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
   const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>(['1', '2', '3', '4', '5']);
   const { forms, loading } = useAppSelector(state => state.emrContent);
 
   const formData = useMemo<FormNode[]>(() => {
-    if (!forms.length || selectedChartNos.length === 0) {
+    if (!forms.length || !selectedChart) {
       return [];
     }
 
     const normalized = forms
-      .filter(form => (form.chartNo ? selectedChartNos.includes(form.chartNo) : false))
+      .filter(form => (form.chartNo ? selectedChart.chartNo === form.chartNo : false))
       .map(form => ({
         id: String(form.formNo ?? ''),
         parentId: form.parentFormNo ? String(form.parentFormNo) : null,
@@ -155,7 +156,7 @@ const FormList: React.FC<FormListProps> = ({ selectedChartNos = [] }) => {
     sortNodes(roots);
 
     return roots;
-  }, [forms, selectedChartNos]);
+  }, [forms, selectedChart]);
 
   const handleSelect = (nodeId: string) => {
     setSelected(nodeId);

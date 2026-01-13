@@ -109,11 +109,11 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ termFilter, on
 };
 
 interface ChartListProps {
-  onSelectionChange?: (chartNos: string[]) => void;
-  selectedChartNos?: string[];
+  onSelectionChange?: (chart: Chart) => void;
+  selectedChart?: Chart;
 }
 
-const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartNos = [] }) => {
+const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart }) => {
   const { loading, patient } = useAppSelector(state => state.emrContent);
 
   const charts = useAppSelector<Chart[]>(state => state.emrContent.charts);
@@ -150,36 +150,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
     return true;
   });
 
-  const isSelected = (chartNo?: string) => (chartNo ? selectedChartNos.includes(chartNo) : false);
-
-  const updateSelection = (nextSelected: string[]) => {
-    onSelectionChange?.(nextSelected);
-  };
-
-  const handleRowClick = (chartNo?: string) => {
-    if (!chartNo) {
-      return;
-    }
-    const alreadySelected = selectedChartNos.includes(chartNo);
-    const nextSelected = alreadySelected ? selectedChartNos.filter(no => no !== chartNo) : [...selectedChartNos, chartNo];
-    updateSelection(nextSelected);
-  };
-
-  const chartNosInView = filteredCharts.map(chart => chart.chartNo).filter((chartNo): chartNo is string => Boolean(chartNo));
-
-  const handleToggleAll = () => {
-    const chartNos = chartNosInView;
-    if (chartNos.length === 0) {
-      updateSelection([]);
-      return;
-    }
-    const nextSelected = chartNos.every(chartNo => selectedChartNos.includes(chartNo)) ? [] : chartNos;
-    updateSelection(nextSelected);
-  };
-
-  const selectedInView = chartNosInView.filter(chartNo => selectedChartNos.includes(chartNo));
-  const isAllSelected = selectedInView.length > 0 && selectedInView.length === chartNosInView.length;
-  const isSomeSelected = selectedInView.length > 0 && selectedInView.length < filteredCharts.length;
+  const isSelected = (chart: Chart) => chart?.chartNo === selectedChart?.chartNo;
 
   const toggleButtonStyle = {
     py: 0.5,
@@ -255,15 +226,6 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
           <Table stickyHeader size="small" sx={{ '& .MuiTableCell-root': { fontSize: '0.75rem' } }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ bgcolor: '#f8f9fa', py: 0.6, width: '36px' }}>
-                  <Checkbox
-                    size="small"
-                    checked={isAllSelected}
-                    indeterminate={isSomeSelected}
-                    onChange={handleToggleAll}
-                    inputProps={{ 'aria-label': '기록 전체 선택' }}
-                  />
-                </TableCell>
                 <TableCell
                   sx={{ bgcolor: '#f8f9fa', fontWeight: 600, color: '#37474f', py: 0.6, fontSize: '0.7rem', whiteSpace: 'nowrap' }}
                 >
@@ -305,25 +267,16 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChartN
                     hover
                     sx={{
                       cursor: 'pointer',
-                      bgcolor: isSelected(chart.chartNo) ? '#e3f2fd' : 'transparent',
-                      '&:hover': { bgcolor: isSelected(chart.chartNo) ? '#e3f2fd' : '#f5f5f5' },
+                      bgcolor: isSelected(chart) ? '#e3f2fd' : 'transparent',
+                      '&:hover': { bgcolor: isSelected(chart) ? '#e3f2fd' : '#f5f5f5' },
                     }}
                     onClick={() => {
-                      handleRowClick(chart.chartNo);
+                      onSelectionChange(chart);
                     }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        size="small"
-                        checked={isSelected(chart.chartNo)}
-                        onClick={event => event.stopPropagation()}
-                        onChange={() => handleRowClick(chart.chartNo)}
-                        inputProps={{ 'aria-label': `기록 선택 ${chart.chartNo ?? ''}` }}
-                      />
-                    </TableCell>
                     <TableCell sx={{ py: 0.8 }}>
                       <Chip
-                        label={chart.type}
+                        label={chart.label}
                         size="small"
                         sx={{
                           height: '20px',
