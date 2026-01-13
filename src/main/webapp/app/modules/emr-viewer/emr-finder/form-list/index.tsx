@@ -185,11 +185,11 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
 
     const sortNodes = (items: FormNode[]) => {
       items.sort((a, b) => {
-        if (a.sortKeys?.second !== undefined || b.sortKeys?.second !== undefined) {
-          return (a.sortKeys?.second ?? Number.MAX_SAFE_INTEGER) - (b.sortKeys?.second ?? Number.MAX_SAFE_INTEGER);
-        }
         if (a.sortKeys?.first !== undefined || b.sortKeys?.first !== undefined) {
           return (a.sortKeys?.first ?? Number.MAX_SAFE_INTEGER) - (b.sortKeys?.first ?? Number.MAX_SAFE_INTEGER);
+        }
+        if (a.sortKeys?.second !== undefined || b.sortKeys?.second !== undefined) {
+          return (a.sortKeys?.second ?? Number.MAX_SAFE_INTEGER) - (b.sortKeys?.second ?? Number.MAX_SAFE_INTEGER);
         }
         if (a.sortKeys?.third !== undefined || b.sortKeys?.third !== undefined) {
           return (a.sortKeys?.third ?? Number.MAX_SAFE_INTEGER) - (b.sortKeys?.third ?? Number.MAX_SAFE_INTEGER);
