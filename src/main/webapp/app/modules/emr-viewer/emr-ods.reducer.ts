@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } fro
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
+import { CATEGORY_QUERY_META, FORM_QUERY_META } from './emr-finder/emr-finder.constant';
 
 export interface Patient {
   id?: number;
@@ -55,6 +56,7 @@ interface EmrOdsState {
   patient: Patient | null;
   charts: Chart[];
   forms: Form[];
+  categories: Record<string, string>[];
   updateSuccess: boolean;
 }
 
@@ -64,6 +66,7 @@ const initialState: EmrOdsState = {
   patient: null,
   charts: [],
   forms: [],
+  categories: [],
   updateSuccess: false,
 };
 
@@ -118,6 +121,45 @@ export const getFormList = createAsyncThunk(
   { serializeError: serializeAxiosError }
 );
 
+export const fetchCategoryForms = createAsyncThunk(
+  'emr-ods/fetch_category_forms',
+  async ({ chart, ptNo }: { chart: Chart; ptNo: string }) => {
+    const categoryMatches = CATEGORY_QUERY_META.filter(m => m.code.toLowerCase() === chart.code.toLowerCase());
+    const categoryData = await Promise.all(
+      categoryMatches.map(async meta => {
+        const payload = {
+          key: meta.query,
+          map: {
+            ptNo,
+            inDate: chart.inDate,
+            outDate: chart.outDate,
+          },
+        };
+        const { data } = await axios.post<Record<string, string>[]>(apiUrl, cleanEntity(payload));
+        return { query: meta.query, data: data?.[0] ?? {} };
+      })
+    );
+
+    const keysWithY = new Set(categoryData.flatMap(({ data }) => Object.keys(data).filter(key => data[key] === 'Y')));
+    const formQueries = FORM_QUERY_META.filter(meta => keysWithY.has(meta.code));
+    const formResponses = await Promise.all(
+      formQueries.map(meta => {
+        const payload = {
+          key: meta.query,
+          map: null,
+        };
+        return axios.post<Form[]>(apiUrl, cleanEntity(payload));
+      })
+    );
+
+    return {
+      categoryData,
+      forms: formResponses.flatMap(response => response.data ?? []),
+    };
+  },
+  { serializeError: serializeAxiosError }
+);
+
 const emrOds = createSlice({
   name: 'emr-ods',
   initialState,
@@ -125,20 +167,22 @@ const emrOds = createSlice({
     reset() {
       return initialState;
     },
-    clearForms(state) {
-      state.forms = [];
-    },
   },
   extraReducers(builder) {
     builder
       .addCase(getPatientInfo.fulfilled, (state, action) => {
         state.loading = false;
         state.patient = action.payload.data?.[0] ?? null;
+        state.charts = [];
+        state.forms = [];
+        state.categories = [];
         state.updateSuccess = true;
       })
       .addCase(getChartList.fulfilled, (state, action) => {
         state.loading = false;
         state.charts = action.payload.data;
+        state.forms = [];
+        state.categories = [];
         state.updateSuccess = true;
       })
       .addCase(getFormList.fulfilled, (state, action) => {
@@ -146,22 +190,28 @@ const emrOds = createSlice({
         state.forms = [...state.forms, ...(action.payload.data ?? [])];
         state.updateSuccess = true;
       })
-      .addMatcher(isPending(getPatientInfo, getChartList, getFormList), state => {
+      .addCase(fetchCategoryForms.fulfilled, (state, action) => {
+        state.loading = false;
+        state.forms = [...state.forms, ...(action.payload.forms ?? [])];
+        state.categories = action.payload.categoryData.map(item => item.data);
+        state.updateSuccess = true;
+      })
+      .addMatcher(isPending(getPatientInfo, getChartList, getFormList, fetchCategoryForms), state => {
         state.loading = true;
         state.errorMessage = null;
         state.updateSuccess = false;
       })
-      .addMatcher(isRejected(getPatientInfo, getChartList, getFormList), (state, action) => {
+      .addMatcher(isRejected(getPatientInfo, getChartList, getFormList, fetchCategoryForms), (state, action) => {
         state.loading = false;
         state.updateSuccess = false;
         state.errorMessage = action.error.message ?? null;
       })
-      .addMatcher(isFulfilled(getPatientInfo, getChartList, getFormList), state => {
+      .addMatcher(isFulfilled(getPatientInfo, getChartList, getFormList, fetchCategoryForms), state => {
         state.loading = false;
       });
   },
 });
 
-export const { reset, clearForms } = emrOds.actions;
+export const { reset } = emrOds.actions;
 
 export default emrOds.reducer;

@@ -7,9 +7,7 @@ import ChartList, { ChartListHeader } from './chart-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { Chart, clearForms, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
-import axios from 'axios';
-import { CATEGORY_QUERY_META, FORM_QUERY_META } from './emr-finder.constant';
+import { Chart, fetchCategoryForms, getChartList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 const RecordFinder = () => {
   const dispatch = useAppDispatch();
@@ -47,32 +45,16 @@ const RecordFinder = () => {
 
   const handleChartSelectionChange = (chart: Chart) => {
     setSelectedChart(chart);
-    dispatch(clearForms());
 
-    fetchFormData(chart);
+    syncCategoryForm(chart);
   };
 
-  const fetchFormData = async (c: Chart) => {
+  const syncCategoryForm = async (c: Chart) => {
     if (!patient?.ptNo) {
       return;
     }
 
-    const categoryMatches = CATEGORY_QUERY_META.filter(m => m.code.toLowerCase() === c.code.toLowerCase());
-    await Promise.all(
-      categoryMatches.map(async meta => {
-        const { data } = await axios.post('/api/ods', {
-          key: meta.query,
-          map: {
-            ptNo: patient.ptNo,
-            inDate: c.inDate,
-            outDate: c.outDate,
-          },
-        });
-        const obj = data?.[0] ?? {};
-        const keysWithY = Object.keys(obj).filter(key => obj[key] === 'Y');
-        await Promise.all(FORM_QUERY_META.filter(fm => keysWithY.includes(fm.code)).map(fm => dispatch(getFormList({ query: fm.query }))));
-      })
-    );
+    await dispatch(fetchCategoryForms({ chart: c, ptNo: patient.ptNo }));
   };
 
   return (

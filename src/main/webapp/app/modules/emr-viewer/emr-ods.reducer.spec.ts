@@ -3,7 +3,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import reducer, { clearForms, getChartList, getPatientInfo, getFormList, reset } from './emr-ods.reducer';
+import reducer, { getChartList, getPatientInfo, getFormList, reset } from './emr-ods.reducer';
 
 describe('Emr content reducer tests', () => {
   const initialState = {
@@ -12,6 +12,7 @@ describe('Emr content reducer tests', () => {
     patient: null,
     charts: [],
     forms: [],
+    categories: [],
     updateSuccess: false,
   };
 
@@ -54,13 +55,6 @@ describe('Emr content reducer tests', () => {
         ...initialState,
       });
     });
-
-    it('should clear forms', () => {
-      expect(reducer({ ...initialState, forms: [{ id: 'F1' }] }, clearForms())).toEqual({
-        ...initialState,
-        forms: [],
-      });
-    });
   });
 
   describe('Failures', () => {
@@ -95,6 +89,9 @@ describe('Emr content reducer tests', () => {
         loading: false,
         updateSuccess: true,
         patient: payload.data[0],
+        charts: [],
+        forms: [],
+        categories: [],
       });
     });
 
@@ -110,6 +107,8 @@ describe('Emr content reducer tests', () => {
         loading: false,
         updateSuccess: true,
         charts: payload.data,
+        forms: [],
+        categories: [],
       });
     });
 
