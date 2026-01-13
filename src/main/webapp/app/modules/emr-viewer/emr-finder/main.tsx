@@ -48,18 +48,18 @@ const RecordFinder = () => {
   const handleChartSelectionChange = (chart: Chart) => {
     setSelectedChart(chart);
 
-    fetchFormData();
+    fetchFormData(chart);
   };
 
-  const fetchFormData = () => {
-    CATEGORY_QUERY_META.filter(m => m.code.toLowerCase() === selectedChart.code.toLowerCase()).forEach(m => {
+  const fetchFormData = (c: Chart) => {
+    CATEGORY_QUERY_META.filter(m => m.code.toLowerCase() === c.code.toLowerCase()).forEach(m => {
       axios
         .post('/api/ods', {
           key: m.query,
           map: {
             ptNo: patient.ptNo,
-            inDate: selectedChart.inDate,
-            outDate: selectedChart.outDate,
+            inDate: c.inDate,
+            outDate: c.outDate,
           },
         })
         .then(({ data }) => {
