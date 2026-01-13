@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } fro
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
-import { CATEGORY_QUERY_META, FORM_QUERY_META } from './emr-finder/emr-finder.constant';
+import { CATEGORY_QUERY_META, FORM_QUERY_DEFAULT, FORM_QUERY_ADDITIONAL } from './emr-finder/emr-finder.constant';
 
 export interface Patient {
   id?: number;
@@ -140,8 +140,25 @@ export const fetchCategoryForms = createAsyncThunk(
       })
     );
 
+    const defaultMatch = FORM_QUERY_DEFAULT.find(d => d.code.toLowerCase() === chart.code.toLowerCase());
+    const defaultForms = defaultMatch
+      ? (
+          await axios.post<Form[]>(
+            apiUrl,
+            cleanEntity({
+              key: defaultMatch.query,
+              map: {
+                ptNo,
+                inDate: chart.inDate,
+                outDate: chart.outDate,
+              },
+            })
+          )
+        ).data ?? []
+      : [];
+
     const keysWithY = new Set(categoryData.flatMap(({ data }) => Object.keys(data).filter(key => data[key] === 'Y')));
-    const formQueries = FORM_QUERY_META.filter(meta => keysWithY.has(meta.code));
+    const formQueries = FORM_QUERY_ADDITIONAL.filter(meta => keysWithY.has(meta.code));
     const formResponses = await Promise.all(
       formQueries.map(meta => {
         const payload = {
@@ -154,7 +171,8 @@ export const fetchCategoryForms = createAsyncThunk(
 
     return {
       categoryData,
-      forms: formResponses.flatMap(response => response.data ?? []),
+      // forms: formResponses.flatMap(response => response.data ?? []),
+      forms: [...defaultForms, ...formResponses.flatMap(response => response.data ?? [])],
     };
   },
   { serializeError: serializeAxiosError }

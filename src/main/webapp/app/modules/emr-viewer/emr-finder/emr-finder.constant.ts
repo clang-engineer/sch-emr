@@ -30,6 +30,11 @@ const CATEGORY_QUERY_META: ICategory[] = [
   },
 ];
 
+const FORM_QUERY_DEFAULT: ICategory[] = [
+  { code: 'I', query: 'SELECT_DEFAULT_INPATIENT_FORM' },
+  { code: 'O', query: 'SELECT_DEFAULT_OUTPATIENT_FORM' },
+];
+
 // SELECT MAX(decode(a, 'N', 'Y', 'N')) n		-- 방사면역
 // 	     , MAX(decode(b, 'M', 'Y', 'N')) m		-- 미생물
 // 	     , MAX(decode(c, 'L', 'Y', 'N')) l		-- 진검
@@ -45,7 +50,7 @@ interface IForm {
   query: string;
 }
 
-const FORM_QUERY_META: IForm[] = [
+const FORM_QUERY_ADDITIONAL: IForm[] = [
   { code: 'N', query: 'SELECT_FORM_N' },
   { code: 'M', query: 'SELECT_FORM_M' },
   { code: 'L', query: 'SELECT_FORM_L' },
@@ -56,4 +61,4 @@ const FORM_QUERY_META: IForm[] = [
   { code: 'H', query: 'SELECT_FORM_H' },
 ];
 
-export { FORM_QUERY_META, CATEGORY_QUERY_META };
+export { CATEGORY_QUERY_META, FORM_QUERY_DEFAULT, FORM_QUERY_ADDITIONAL };
