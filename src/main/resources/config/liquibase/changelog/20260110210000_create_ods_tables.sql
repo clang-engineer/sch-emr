@@ -31,34 +31,11 @@ CREATE TABLE ods.tbl_chart (
     CONSTRAINT pk_tbl_chart PRIMARY KEY (chart_no)
 );
 
---changeset developer:20260110210000-3
-CREATE TABLE ods.tbl_form (
-    form_no VARCHAR(50) NOT NULL,
-    parent_form_no VARCHAR(50),
-    pt_no VARCHAR(50) NOT NULL,
-    chart_no BIGINT NOT NULL,
-    name VARCHAR(200) NOT NULL,
-    type VARCHAR(20) NOT NULL,
-    record_data TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT pk_tbl_form PRIMARY KEY (form_no)
-);
-
 --changeset developer:20260110210000-4
 ALTER TABLE ods.tbl_chart
     ADD CONSTRAINT fk_tbl_chart__pt_no
     FOREIGN KEY (pt_no)
     REFERENCES ods.tbl_patient (pt_no);
-
-ALTER TABLE ods.tbl_form
-    ADD CONSTRAINT fk_tbl_form__pt_no
-    FOREIGN KEY (pt_no)
-    REFERENCES ods.tbl_patient (pt_no);
-
-ALTER TABLE ods.tbl_form
-    ADD CONSTRAINT fk_tbl_form__chart_no
-    FOREIGN KEY (chart_no)
-    REFERENCES ods.tbl_chart (chart_no);
 
 --changeset developer:20260110210000-5-data context:faker
 INSERT INTO ods.tbl_patient (id, pt_no, name, sex, age, resident_no1, resident_no2) VALUES (1, 'P2024001', '김철수', '남', 45, '701215', '1234567');
@@ -124,69 +101,20 @@ INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, depa
 INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (49, 'P2024008', '응급', 'E', '2026-02-22', NULL, '응급의학과', '윤의사');
 INSERT INTO ods.tbl_chart (chart_no, pt_no, label, code, in_date, out_date, department, doctor) VALUES (50, 'P2024009', '외래', 'O', '2026-03-01', NULL, '이비인후과', '임의사');
 
---changeset developer:20260110210000-7-data context:faker
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('1', NULL, 'P2024001', 1, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('1-1', '1', 'P2024001', 1, '초진기록지', 'form', '주호소: 고혈압. 현병력: 1개월 전부터 두통 및 어지러움 호소.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('1-2', '1', 'P2024001', 1, '경과기록지', 'form', '2024-01-15: 혈압 140/90, 약물 처방 시작.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('1-3', '1', 'P2024001', 1, '검사결과', 'form', '혈액검사: 정상 범위. 소변검사: 이상 없음.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('2', NULL, 'P2024001', 2, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('2-1', '2', 'P2024001', 2, '경과기록지', 'form', '2024-02-20: 혈압 130/85, 약물 복용 순응도 양호.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('2-2', '2', 'P2024001', 2, '검사결과', 'form', '혈압 재측정: 130/85, 목표 범위 내 유지.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('3', NULL, 'P2024002', 3, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('3-1', '3', 'P2024002', 3, '초진기록지', 'form', '주호소: 임신 20주. 현병력: 산전 정기 검진 목적.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('3-2', '3', 'P2024002', 3, '검사결과', 'form', '초음파 검사: 태아 정상 발달. 체중 증가 적절.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('3-3', '3', 'P2024002', 3, '처방전', 'form', '엽산제, 철분제 처방.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('4', NULL, 'P2024003', 4, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('4-1', '4', 'P2024003', 4, '초진기록지', 'form', '주호소: 우측 발목 통증. 현병력: 계단에서 넘어짐.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('4-2', '4', 'P2024003', 4, '검사결과', 'form', 'X-ray: 골절 없음. 발목 염좌 진단.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('4-3', '4', 'P2024003', 4, '처방전', 'form', '소염진통제, 파스 처방. 안정 권고.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('5', NULL, 'P2024004', 5, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('5-1', '5', 'P2024004', 5, '초진기록지', 'form', '주호소: 아토피 피부염. 현병력: 1주일 전부터 가려움 악화.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('5-2', '5', 'P2024004', 5, '검사결과', 'form', '피부 검사: 아토피 피부염 확진.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('5-3', '5', 'P2024004', 5, '처방전', 'form', '스테로이드 연고, 항히스타민제 처방.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('6', NULL, 'P2024005', 6, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('6-1', '6', 'P2024005', 6, '초진기록지', 'form', '주호소: 좌측 상지 마비. 현병력: 금일 오전 갑자기 발생.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('6-2', '6', 'P2024005', 6, '검사결과', 'form', '신경학적 검사 이상 소견. MRI 예정.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('6-3', '6', 'P2024005', 6, '입원기록', 'form', '2024-01-10 입원. 뇌졸중 의심하 검사 진행.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('7', NULL, 'P2024005', 7, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('7-1', '7', 'P2024005', 7, '경과기록지', 'form', '2024-01-12: MRI 시행. 경미한 뇌경색 확인.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('7-2', '7', 'P2024005', 7, '검사결과', 'form', 'MRI: 좌측 중대뇌동맥 영역 경색.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('7-3', '7', 'P2024005', 7, '처방전', 'form', '항혈전제, 혈압강하제 투여 중.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('8', NULL, 'P2024006', 8, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('8-1', '8', 'P2024006', 8, '수술기록', 'form', '백내장 수술. 좌안 인공수정체 삽입술 시행.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('8-2', '8', 'P2024006', 8, '경과기록지', 'form', '수술 후 1주: 회복 양호, 시력 개선 확인.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('8-3', '8', 'P2024006', 8, '처방전', 'form', '항생제 점안액, 소염제 처방.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('9', NULL, 'P2024007', 9, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('9-1', '9', 'P2024007', 9, '응급기록', 'form', '급성 복통으로 응급실 내원. 충수염 의심.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('9-2', '9', 'P2024007', 9, '검사결과', 'form', 'CT: 급성 충수염 소견.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('9-3', '9', 'P2024007', 9, '수술기록', 'form', '응급 충수절제술 시행. 수술 성공적.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('10', NULL, 'P2024008', 10, '진료기록', 'folder', NULL);
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('10-1', '10', 'P2024008', 10, '초진기록지', 'form', '주호소: 발열, 기침. 현병력: 3일 전부터 증상 시작.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('10-2', '10', 'P2024008', 10, '검사결과', 'form', '청진: 정상. 인후 발적 소견.');
-INSERT INTO ods.tbl_form (form_no, parent_form_no, pt_no, chart_no, name, type, record_data) VALUES ('10-3', '10', 'P2024008', 10, '처방전', 'form', '해열제, 기침약, 항생제 처방.');
-
 --changeset developer:20260110210000-7-fix context:faker
-UPDATE ods.tbl_form SET parent_form_no = NULL WHERE parent_form_no = '';
-
---changeset developer:20260110210000-8
-ALTER TABLE ods.tbl_form
-    ADD CONSTRAINT fk_tbl_form__parent_form_no
-    FOREIGN KEY (parent_form_no)
-    REFERENCES ods.tbl_form (form_no);
-
-CREATE TABLE ods.tbl_category_outpatient1 (
+CREATE TABLE ods.tbl_category_intpatient1 (
     n VARCHAR(1), -- 방사선
     m VARCHAR(1), -- 미생물
     l VARCHAR(1), -- 진검
     p VARCHAR(1) -- 병리
 );
-insert into ods.tbl_category_outpatient1 (n, m, l, p) values ('Y', 'Y', 'Y', 'Y');
+insert into ods.tbl_category_intpatient1 (n, m, l, p) values ('Y', 'Y', 'Y', 'Y');
 
-CREATE TABLE ods.tbl_category_outpatient2 (
+CREATE TABLE ods.tbl_category_intpatient2 (
     e VARCHAR(1), -- 영상
     f VARCHAR(1), -- 내시경
     g VARCHAR(1), -- 기능
     h VARCHAR(1) -- 핵의학
 );
-insert into ods.tbl_category_outpatient2 (e, f, g, h) values ('Y', 'Y', 'Y', 'Y');
+insert into ods.tbl_category_intpatient2 (e, f, g, h) values ('Y', 'Y', 'Y', 'Y');
 
