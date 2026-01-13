@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Box, Collapse, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from 'app/config/store';
 import EmptyState from '../empty-state';
@@ -225,12 +225,36 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     return roots;
   }, [forms, selectedChart]);
 
+  const allFolderIds = useMemo(() => {
+    const ids: string[] = [];
+    const walk = (nodes: FormNode[]) => {
+      nodes.forEach(node => {
+        if (node.type === 'folder') {
+          ids.push(node.id);
+          if (node.children?.length) {
+            walk(node.children);
+          }
+        }
+      });
+    };
+    walk(formData);
+    return ids;
+  }, [formData]);
+
   const handleSelect = (nodeId: string) => {
     setSelected(nodeId);
   };
 
   const handleToggle = (nodeId: string) => {
     setExpanded(prev => (prev.includes(nodeId) ? prev.filter(id => id !== nodeId) : [...prev, nodeId]));
+  };
+
+  const handleExpandAll = () => {
+    setExpanded(allFolderIds);
+  };
+
+  const handleCollapseAll = () => {
+    setExpanded([]);
   };
 
   const showEmpty = !loading && formData.length === 0;
@@ -241,20 +265,38 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
       {showEmpty ? (
         <EmptyState icon="file-alt" title="서식 없음" description="선택된 기록의 서식이 없습니다." />
       ) : (
-        <Box sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px', bgcolor: '#fff' }}>
-          <List component="nav" disablePadding>
-            {formData.map(node => (
-              <TreeItemComponent
-                key={node.id}
-                node={node}
-                level={0}
-                selected={selected}
-                onSelect={handleSelect}
-                expanded={expanded}
-                onToggle={handleToggle}
-              />
-            ))}
-          </List>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+          <Box sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px', bgcolor: '#fff' }}>
+            <List component="nav" disablePadding>
+              {formData.map(node => (
+                <TreeItemComponent
+                  key={node.id}
+                  node={node}
+                  level={0}
+                  selected={selected}
+                  onSelect={handleSelect}
+                  expanded={expanded}
+                  onToggle={handleToggle}
+                />
+              ))}
+            </List>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 0.5, mt: 0.5 }}>
+            <Tooltip title="전체 열기" placement="top">
+              <span>
+                <IconButton size="small" onClick={handleExpandAll} disabled={allFolderIds.length === 0}>
+                  <FontAwesomeIcon icon={['fas', 'angles-down']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="전체 닫기" placement="top">
+              <span>
+                <IconButton size="small" onClick={handleCollapseAll} disabled={allFolderIds.length === 0}>
+                  <FontAwesomeIcon icon={['fas', 'angles-up']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </Box>
         </Box>
       )}
     </Box>

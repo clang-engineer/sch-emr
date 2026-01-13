@@ -59,6 +59,8 @@ import { faCaretRight } from '@fortawesome/pro-solid-svg-icons/faCaretRight';
 import { faRightFromBracket } from '@fortawesome/pro-solid-svg-icons/faRightFromBracket';
 import { faBookMedical } from '@fortawesome/pro-solid-svg-icons/faBookMedical';
 import { faBookOpen } from '@fortawesome/pro-solid-svg-icons/faBookOpen';
+import { faAnglesDown } from '@fortawesome/pro-solid-svg-icons/faAnglesDown';
+import { faAnglesUp } from '@fortawesome/pro-solid-svg-icons/faAnglesUp';
 
 export const loadIcons = () => {
   library.add(
@@ -119,6 +121,8 @@ export const loadIcons = () => {
     faCaretRight as any,
     faRightFromBracket as any,
     faBookMedical as any,
-    faBookOpen as any
+    faBookOpen as any,
+    faAnglesDown as any,
+    faAnglesUp as any
   );
 };
