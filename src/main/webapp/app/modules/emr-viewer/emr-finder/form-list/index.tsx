@@ -9,6 +9,7 @@ interface FormNode {
   id: string;
   name: string;
   type: 'folder' | 'form';
+  date?: string;
   sortKeys?: {
     first?: number;
     second?: number;
@@ -89,11 +90,19 @@ const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onS
         </ListItemIcon>
         <ListItemText
           primary={node.name}
+          secondary={node.type === 'form' ? node.date ?? '' : undefined}
           primaryTypographyProps={{
             sx: {
               fontSize: '0.8rem',
               color: '#37474f',
               fontWeight: node.type === 'folder' ? 600 : 400,
+            },
+          }}
+          secondaryTypographyProps={{
+            sx: {
+              fontSize: '0.7rem',
+              color: '#90a4ae',
+              lineHeight: 1.2,
             },
           }}
         />
@@ -145,6 +154,7 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
             parentId: form.SUPITEMINDXSEQ && form.SUPITEMINDXSEQ !== 0 ? String(form.SUPITEMINDXSEQ) : null,
             name: form.INDXNM && form.INDXNM !== '-' ? form.INDXNM : form.FORMNM ?? '',
             type: form.LEVL === '1' || form.LEVL === 1 ? 'folder' : 'form',
+            date: form.RECDD ?? '',
             sortKeys: {
               first: parseSort(form.FIRSTSORTNO),
               second: parseSort(form.SECONDSORTNO),
@@ -158,12 +168,20 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
               parentId: form.parentFormNo ? String(form.parentFormNo) : null,
               name: form.name ?? '',
               type: form.type === 'folder' ? 'folder' : 'form',
+              date: (form as { RECDD?: string }).RECDD ?? '',
             }))
     ).filter(form => form.id && form.name);
 
     const nodes = new Map<string, FormNode>();
     normalized.forEach(form => {
-      nodes.set(form.id, { id: form.id, name: form.name, type: form.type, sortKeys: form.sortKeys, children: [] });
+      nodes.set(form.id, {
+        id: form.id,
+        name: form.name,
+        type: form.type,
+        date: form.date,
+        sortKeys: form.sortKeys,
+        children: [],
+      });
     });
 
     const roots: FormNode[] = [];

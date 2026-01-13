@@ -41,6 +41,7 @@ export interface Form {
   CNT?: string;
   EMRFLAG?: string;
   RECKIND?: string;
+  RECDD?: string;
   SIGNNO?: string;
   LISFLAG?: string;
   LEVL?: string;
