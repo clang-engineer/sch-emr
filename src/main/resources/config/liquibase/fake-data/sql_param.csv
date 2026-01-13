@@ -7,3 +7,22 @@ sql_id;name;type
 101;inDate;STRING
 101;outDate;STRING
 
+102;ptNo;STRING
+102;inDate;STRING
+102;outDate;STRING
+
+103;ptNo;STRING
+103;inDate;STRING
+103;outDate;STRING
+
+104;ptNo;STRING
+104;inDate;STRING
+104;outDate;STRING
+
+105;ptNo;STRING
+105;inDate;STRING
+105;outDate;STRING
+
+106;ptNo;STRING
+106;inDate;STRING
+106;outDate;STRING
