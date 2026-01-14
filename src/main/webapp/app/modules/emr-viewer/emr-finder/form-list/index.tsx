@@ -1,9 +1,21 @@
-import React, { useMemo, useState } from 'react';
-import { Box, Collapse, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Box,
+  Collapse,
+  IconButton,
+  InputAdornment,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from 'app/config/store';
 import EmptyState from '../empty-state';
-import { Chart, getChartList, getFormList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { Chart } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 interface FormNode {
   id: string;
@@ -135,6 +147,7 @@ interface FormListProps {
 const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
   const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>(['1', '2', '3', '4', '5']);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const { forms, loading } = useAppSelector(state => state.emrContent);
 
   const formData = useMemo<FormNode[]>(() => {
@@ -225,6 +238,34 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     return roots;
   }, [forms, selectedChart]);
 
+  useEffect(() => {
+    setSearchTerm('');
+  }, [selectedChart?.chartNo]);
+
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const filteredFormData = useMemo<FormNode[]>(() => {
+    if (!normalizedSearch) {
+      return formData;
+    }
+
+    const filterNodes = (nodes: FormNode[]): FormNode[] =>
+      nodes.reduce<FormNode[]>((acc, node) => {
+        const nameMatch = node.name.toLowerCase().includes(normalizedSearch);
+        const dateMatch = node.date ? String(node.date).toLowerCase().includes(normalizedSearch) : false;
+        const filteredChildren = node.children ? filterNodes(node.children) : [];
+        if (nameMatch || dateMatch || filteredChildren.length > 0) {
+          acc.push({
+            ...node,
+            children: filteredChildren,
+          });
+        }
+        return acc;
+      }, []);
+
+    return filterNodes(formData);
+  }, [formData, normalizedSearch]);
+
   const allFolderIds = useMemo(() => {
     const ids: string[] = [];
     const walk = (nodes: FormNode[]) => {
@@ -240,6 +281,22 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     walk(formData);
     return ids;
   }, [formData]);
+
+  const filteredFolderIds = useMemo(() => {
+    const ids: string[] = [];
+    const walk = (nodes: FormNode[]) => {
+      nodes.forEach(node => {
+        if (node.type === 'folder') {
+          ids.push(node.id);
+          if (node.children?.length) {
+            walk(node.children);
+          }
+        }
+      });
+    };
+    walk(filteredFormData);
+    return ids;
+  }, [filteredFormData]);
 
   const handleSelect = (nodeId: string) => {
     setSelected(nodeId);
@@ -257,48 +314,103 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     setExpanded([]);
   };
 
-  const showEmpty = !loading && formData.length === 0;
+  const showEmpty = !loading && filteredFormData.length === 0;
+  const effectiveExpanded = normalizedSearch ? filteredFolderIds : expanded;
+  const effectiveFolderIds = normalizedSearch ? filteredFolderIds : allFolderIds;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* 트리 영역 */}
-      {showEmpty ? (
-        <EmptyState icon="file-alt" title="서식 없음" description="선택된 기록의 서식이 없습니다." />
-      ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
-          <Box sx={{ flex: 1, overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '4px', bgcolor: '#fff' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+        <Box
+          sx={{
+            flex: 1,
+            overflow: 'auto',
+            border: '1px solid #e0e0e0',
+            borderRadius: '4px',
+            bgcolor: '#fff',
+            mb: 0.4,
+          }}
+        >
+          {showEmpty ? (
+            <Box sx={{ p: 2 }}>
+              <EmptyState
+                icon="file-alt"
+                title={normalizedSearch ? '검색 결과 없음' : '서식 없음'}
+                description={normalizedSearch ? '검색어에 맞는 서식이 없습니다.' : '선택된 기록의 서식이 없습니다.'}
+              />
+            </Box>
+          ) : (
             <List component="nav" disablePadding>
-              {formData.map(node => (
+              {filteredFormData.map(node => (
                 <TreeItemComponent
                   key={node.id}
                   node={node}
                   level={0}
                   selected={selected}
                   onSelect={handleSelect}
-                  expanded={expanded}
+                  expanded={effectiveExpanded}
                   onToggle={handleToggle}
                 />
               ))}
             </List>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 0.5, mt: 0.5 }}>
-            <Tooltip title="전체 열기" placement="top">
-              <span>
-                <IconButton size="small" onClick={handleExpandAll} disabled={allFolderIds.length === 0}>
-                  <FontAwesomeIcon icon={['fas', 'angles-down']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
-                </IconButton>
-              </span>
-            </Tooltip>
-            <Tooltip title="전체 닫기" placement="top">
-              <span>
-                <IconButton size="small" onClick={handleCollapseAll} disabled={allFolderIds.length === 0}>
-                  <FontAwesomeIcon icon={['fas', 'angles-up']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
-                </IconButton>
-              </span>
-            </Tooltip>
-          </Box>
+          )}
         </Box>
-      )}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <TextField
+            size="small"
+            fullWidth
+            placeholder="서식 검색"
+            value={searchTerm}
+            onChange={event => setSearchTerm(event.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FontAwesomeIcon icon={['fas', 'search']} style={{ fontSize: '0.8rem', color: '#90a4ae' }} />
+                </InputAdornment>
+              ),
+              endAdornment: searchTerm ? (
+                <InputAdornment position="end">
+                  <IconButton size="small" onClick={() => setSearchTerm('')} aria-label="검색어 지우기">
+                    <FontAwesomeIcon icon={['fas', 'times-circle']} style={{ fontSize: '0.8rem', color: '#90a4ae' }} />
+                  </IconButton>
+                </InputAdornment>
+              ) : undefined,
+            }}
+            sx={{
+              '& .MuiInputBase-root': {
+                height: 28,
+                fontSize: '0.75rem',
+                px: 0.5,
+              },
+              '& .MuiInputBase-input': {
+                py: 0,
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'rgba(0,0,0,0.15)',
+              },
+            }}
+          />
+          <Tooltip title="전체 열기" placement="top">
+            <span>
+              <IconButton size="small" onClick={handleExpandAll} disabled={effectiveFolderIds.length === 0 || normalizedSearch.length > 0}>
+                <FontAwesomeIcon icon={['fas', 'angles-down']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title="전체 닫기" placement="top">
+            <span>
+              <IconButton
+                size="small"
+                onClick={handleCollapseAll}
+                disabled={effectiveFolderIds.length === 0 || normalizedSearch.length > 0}
+              >
+                <FontAwesomeIcon icon={['fas', 'angles-up']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Box>
+      </Box>
     </Box>
   );
 };
