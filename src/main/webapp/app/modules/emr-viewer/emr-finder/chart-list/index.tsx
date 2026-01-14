@@ -22,7 +22,7 @@ import EmptyState from '../empty-state';
 import { Chart } from 'app/modules/emr-viewer/emr-ods.reducer';
 
 type DeptFilter = '수진과' | '작성과';
-type TypeFilter = '전체' | '외래' | '입원' | '응급';
+type TypeFilter = '전체' | 'O' | 'I' | 'E';
 
 interface ChartListHeaderProps {
   termFilter: number;
@@ -143,7 +143,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart 
       return false;
     }
     // 유형 필터
-    if (typeFilter !== '전체' && chart.type !== typeFilter) {
+    if (typeFilter !== '전체' && chart.code !== typeFilter) {
       return false;
     }
     // 추가 필터링 로직 (수진과/작성과는 현재 데이터에 없으므로 나중에 추가)
@@ -190,13 +190,13 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart 
               <ToggleButton value="전체" sx={toggleButtonStyle}>
                 전체
               </ToggleButton>
-              <ToggleButton value="외래" sx={toggleButtonStyle}>
+              <ToggleButton value="O" sx={toggleButtonStyle}>
                 외래
               </ToggleButton>
-              <ToggleButton value="입원" sx={toggleButtonStyle}>
+              <ToggleButton value="I" sx={toggleButtonStyle}>
                 입원
               </ToggleButton>
-              <ToggleButton value="응급" sx={toggleButtonStyle}>
+              <ToggleButton value="E" sx={toggleButtonStyle}>
                 응급
               </ToggleButton>
             </ToggleButtonGroup>
