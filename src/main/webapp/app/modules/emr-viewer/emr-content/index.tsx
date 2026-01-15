@@ -74,14 +74,29 @@ const EmrContent = () => {
       <FinderToggleButton />
 
       {/* 메인 콘텐츠 영역 */}
-      <Grid container spacing={2} p={5} justifyContent={'center'} flexDirection={'row'}>
+      <Grid
+        key={viewMode}
+        container
+        spacing={2}
+        p={5}
+        justifyContent={'center'}
+        flexDirection={'row'}
+        sx={{
+          animation: 'emrViewFadeIn 180ms ease-out',
+          '@keyframes emrViewFadeIn': {
+            from: { opacity: 0, transform: 'translateY(6px)' },
+            to: { opacity: 1, transform: 'translateY(0)' },
+          },
+        }}
+      >
         {displayItems.length > 0 ? (
-          displayItems.map(item => (
+          displayItems.map((item, index) => (
             <Grid
               key={item.id}
               size={gridSize}
               sx={{
                 maxWidth: viewMode === 1 ? (drawerOpen ? '100%' : '60vw') : '100%',
+                transition: 'flex-basis 220ms ease, max-width 220ms ease, width 220ms ease',
               }}
             >
               <Paper
@@ -90,6 +105,12 @@ const EmrContent = () => {
                   p: 2,
                   border: '1px solid #e0e0e0',
                   borderRadius: 2,
+                  animation: 'emrCardIn 220ms ease-out both',
+                  animationDelay: `${index * 30}ms`,
+                  '@keyframes emrCardIn': {
+                    from: { opacity: 0, transform: 'translateY(6px)' },
+                    to: { opacity: 1, transform: 'translateY(0)' },
+                  },
                 }}
                 dangerouslySetInnerHTML={{ __html: item.html }}
               />
