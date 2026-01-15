@@ -37,7 +37,6 @@ const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' && prop
         duration: theme.transitions.duration.shorter + 200,
       }),
       width: `calc(100vw - 48px - 40px)`,
-      marginLeft: `-${finderwidth - 20}px`,
     }),
     ...(open && {
       transition: theme.transitions.create('margin', {

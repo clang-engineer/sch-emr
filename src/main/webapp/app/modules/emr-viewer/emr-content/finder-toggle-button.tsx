@@ -16,8 +16,19 @@ const FinderToggleButton = () => {
     dispatch(openDrawer(isCollapsed));
   };
 
+  const left = React.useMemo(() => {
+    let result = finderWidth;
+
+    if (drawerOpen) {
+      result += 68;
+    } else {
+      result += 48;
+    }
+    return result;
+  }, [finderWidth, drawerOpen]);
+
   return (
-    <Box position={'fixed'} top={68} left={finderWidth + 68} display={'flex'} flexDirection={'column'} sx={{ zIndex: 10 }}>
+    <Box position={'fixed'} top={58} left={left} display={'flex'} flexDirection={'column'} sx={{ zIndex: 10 }}>
       <Tooltip title={isCollapsed ? '기록지 목록 조회 화면을 펼칩니다.' : '기록지 목록 조회 화면을 접습니다.'} placement={'right'}>
         <IconButton onClick={toggleSidebar}>{isCollapsed ? <IconLayoutSidebarLeftExpand /> : <IconLayoutSidebarLeftCollapse />}</IconButton>
       </Tooltip>
