@@ -7,7 +7,7 @@ import ChartList, { ChartListHeader } from './chart-list';
 import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { Chart, fetchCategoryForms, getChartList, getPatientInfo } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { Chart, fetchCategoryForms, getChartList, getPatientInfo } from 'app/modules/emr-viewer/emr-finder.reducer';
 
 const RecordFinder = () => {
   const dispatch = useAppDispatch();

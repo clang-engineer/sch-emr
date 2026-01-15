@@ -15,7 +15,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from 'app/config/store';
 import EmptyState from '../empty-state';
-import { Chart } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { Chart } from 'app/modules/emr-viewer/emr-finder.reducer';
 
 interface FormNode {
   id: string;

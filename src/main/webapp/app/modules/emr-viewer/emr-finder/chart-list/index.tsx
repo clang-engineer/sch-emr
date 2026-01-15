@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { useAppSelector } from 'app/config/store';
 import EmptyState from '../empty-state';
-import { Chart } from 'app/modules/emr-viewer/emr-ods.reducer';
+import { Chart } from 'app/modules/emr-viewer/emr-finder.reducer';
 
 type DeptFilter = '수진과' | '작성과';
 type TypeFilter = '전체' | 'O' | 'I' | 'E';

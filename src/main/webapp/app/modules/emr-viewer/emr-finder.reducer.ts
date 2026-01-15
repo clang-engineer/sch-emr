@@ -179,7 +179,7 @@ export const fetchCategoryForms = createAsyncThunk(
   { serializeError: serializeAxiosError }
 );
 
-const emrOds = createSlice({
+const emrFinder = createSlice({
   name: 'emr-ods',
   initialState,
   reducers: {
@@ -238,6 +238,6 @@ const emrOds = createSlice({
   },
 });
 
-export const { reset } = emrOds.actions;
+export const { reset } = emrFinder.actions;
 
-export default emrOds.reducer;
+export default emrFinder.reducer;
