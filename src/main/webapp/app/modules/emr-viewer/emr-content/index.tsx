@@ -5,131 +5,8 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
 import { openDrawer } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ArticleHtmlList from './article-html-list';
 
-// 환자 기록 카드 컴포넌트
-interface RecordCardProps {
-  record?: {
-    id: string;
-    patientName: string;
-    patientId: string;
-    recordType: string;
-    recordDate: string;
-    department: string;
-    doctor: string;
-    status?: string;
-  };
-}
-
-const RecordCard: React.FC<RecordCardProps> = ({ record }) => {
-  if (!record) return null;
-
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'completed':
-        return '#4caf50';
-      case 'pending':
-        return '#ff9800';
-      case 'review':
-        return '#2196f3';
-      default:
-        return '#9e9e9e';
-    }
-  };
-
-  const getStatusLabel = (status?: string) => {
-    switch (status) {
-      case 'completed':
-        return '완료';
-      case 'pending':
-        return '대기';
-      case 'review':
-        return '검토중';
-      default:
-        return '미확인';
-    }
-  };
-
-  return (
-    <Paper
-      elevation={0}
-      sx={{
-        border: '1px solid #e0e0e0',
-        borderRadius: '8px',
-        overflow: 'hidden',
-        transition: 'all 0.2s',
-        cursor: 'pointer',
-        '&:hover': {
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          borderColor: '#1976d2',
-          transform: 'translateY(-2px)',
-        },
-      }}
-    >
-      <Box sx={{ p: 2 }}>
-        {/* 헤더 영역 */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Avatar sx={{ width: 40, height: 40, bgcolor: '#1976d2', fontSize: '0.9rem' }}>{record.patientName.charAt(0)}</Avatar>
-            <Box>
-              <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 600, color: '#37474f', lineHeight: 1.3 }}>
-                {record.patientName}
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: '0.75rem', color: '#78909c' }}>
-                {record.patientId}
-              </Typography>
-            </Box>
-          </Box>
-          {record.status && (
-            <Chip
-              label={getStatusLabel(record.status)}
-              size="small"
-              sx={{
-                bgcolor: getStatusColor(record.status),
-                color: '#fff',
-                fontWeight: 600,
-                fontSize: '0.7rem',
-                height: '22px',
-              }}
-            />
-          )}
-        </Box>
-
-        {/* 구분선 */}
-        <Box sx={{ height: '1px', bgcolor: '#f0f0f0', my: 1.5 }} />
-
-        {/* 정보 영역 */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <FontAwesomeIcon icon={['fas', 'file-medical']} style={{ fontSize: '0.85rem', color: '#0288d1', width: '16px' }} />
-            <Typography variant="body2" sx={{ fontSize: '0.85rem', color: '#546e7a', fontWeight: 500 }}>
-              {record.recordType}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <FontAwesomeIcon icon={['fas', 'calendar-alt']} style={{ fontSize: '0.85rem', color: '#0288d1', width: '16px' }} />
-            <Typography variant="body2" sx={{ fontSize: '0.85rem', color: '#546e7a' }}>
-              {record.recordDate}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <FontAwesomeIcon icon={['fas', 'hospital']} style={{ fontSize: '0.85rem', color: '#0288d1', width: '16px' }} />
-            <Typography variant="body2" sx={{ fontSize: '0.85rem', color: '#546e7a' }}>
-              {record.department}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <FontAwesomeIcon icon={['fas', 'user-md']} style={{ fontSize: '0.85rem', color: '#0288d1', width: '16px' }} />
-            <Typography variant="body2" sx={{ fontSize: '0.85rem', color: '#546e7a' }}>
-              {record.doctor}
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-    </Paper>
-  );
-};
-
-// 빈 상태 컴포넌트
 const EmptyState: React.FC = () => {
   return (
     <Box
@@ -158,9 +35,7 @@ const RecordViewer = () => {
 
   const { drawerOpen } = useAppSelector(state => state.emrLayout);
   const finderWidth = drawerOpen ? finderWidthNarrow : finderWidthCollapsed;
-
-  // 임시 데이터 (나중에 실제 데이터로 교체)
-  const [records, setRecords] = React.useState<RecordCardProps['record'][]>([]);
+  const htmlItems = useAppSelector(state => state.emrContent.items);
 
   const isCollapsed = !drawerOpen;
 
@@ -196,20 +71,12 @@ const RecordViewer = () => {
             overflowY: 'auto',
           }}
         >
-          {records.length === 0 ? (
-            <EmptyState />
+          {htmlItems.length > 0 ? (
+            <Box sx={{ width: '100%', maxWidth: '800px' }}>
+              <ArticleHtmlList items={htmlItems} emptyMessage="표시할 기사가 없습니다." />
+            </Box>
           ) : (
-            records.map(record => (
-              <Box
-                key={record.id}
-                sx={{
-                  width: '100%',
-                  maxWidth: '800px',
-                }}
-              >
-                <RecordCard record={record} />
-              </Box>
-            ))
+            <EmptyState />
           )}
         </Box>
       </Box>
