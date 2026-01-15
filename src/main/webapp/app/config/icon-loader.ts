@@ -64,8 +64,8 @@ import { faBookMedical } from '@fortawesome/pro-solid-svg-icons/faBookMedical';
 import { faBookOpen } from '@fortawesome/pro-solid-svg-icons/faBookOpen';
 import { faAnglesDown } from '@fortawesome/pro-solid-svg-icons/faAnglesDown';
 import { faAnglesUp } from '@fortawesome/pro-solid-svg-icons/faAnglesUp';
-import { faTripleChevronsLeft as faTripleChevronsLeftDuotone } from '@fortawesome/pro-duotone-svg-icons/faTripleChevronsLeft';
-import { faTripleChevronsRight as faTripleChevronsRightDuotone } from '@fortawesome/pro-duotone-svg-icons/faTripleChevronsRight';
+import { faChevronsLeft as faChevronsLeftDuotone } from '@fortawesome/pro-duotone-svg-icons/faChevronsLeft';
+import { faChevronsRight as faChevronsRightDuotone } from '@fortawesome/pro-duotone-svg-icons/faChevronsRight';
 
 export const loadIcons = () => {
   library.add(
@@ -132,7 +132,7 @@ export const loadIcons = () => {
     faBookOpen as any,
     faAnglesDown as any,
     faAnglesUp as any,
-    faTripleChevronsLeftDuotone as any,
-    faTripleChevronsRightDuotone as any
+    faChevronsLeftDuotone as any,
+    faChevronsRightDuotone as any
   );
 };

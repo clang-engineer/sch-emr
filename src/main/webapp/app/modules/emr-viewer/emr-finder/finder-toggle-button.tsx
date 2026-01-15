@@ -21,26 +21,23 @@ const FinderToggleButton = () => {
         onClick={toggleSidebar}
         sx={{
           position: 'absolute',
-          top: '35%',
+          top: '40%',
           right: -32,
           transform: 'translateY(-50%)',
           width: 32,
           height: 48,
           borderRadius: '0 12px 12px 0',
-          backgroundColor: '#f3f6ff',
+          background: 'linear-gradient(180deg, #f7f9ff 0%, #eef3ff 100%)',
           color: '#3f51b5',
           border: '0',
-          boxShadow: 'inset 0 0 0 1px rgba(63, 81, 181, 0.12)',
+          boxShadow: 'inset 0 0 0 1px rgba(63, 81, 181, 0.08)',
           zIndex: 0,
           '&:hover': {
-            backgroundColor: '#e7ecfb',
+            background: 'linear-gradient(180deg, #f1f5ff 0%, #e6edff 100%)',
           },
         }}
       >
-        <FontAwesomeIcon
-          icon={(isCollapsed ? ['fad', 'triple-chevrons-right'] : ['fad', 'triple-chevrons-left']) as unknown as IconProp}
-          size={'xs'}
-        />
+        <FontAwesomeIcon icon={(isCollapsed ? ['fad', 'chevrons-right'] : ['fad', 'chevrons-left']) as unknown as IconProp} size={'xs'} />
       </IconButton>
     </Tooltip>
   );
