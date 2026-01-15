@@ -71,7 +71,7 @@ const EmrContent = () => {
         key={viewMode}
         container
         spacing={2}
-        p={5}
+        p={3}
         justifyContent={'center'}
         flexDirection={'row'}
         sx={{
