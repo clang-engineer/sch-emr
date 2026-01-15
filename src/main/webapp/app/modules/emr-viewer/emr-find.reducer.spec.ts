@@ -3,11 +3,15 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import reducer, { getChartList, getPatientInfo, getFormList, reset } from './emr-ods.reducer';
+import reducer, { getChartList, getPatientInfo, getFormList, reset } from './emr-finder.reducer';
 
 describe('Emr content reducer tests', () => {
   const initialState = {
-    loading: false,
+    loading: {
+      patient: false,
+      chart: false,
+      form: false,
+    },
     errorMessage: null,
     patient: null,
     charts: [],
@@ -18,7 +22,11 @@ describe('Emr content reducer tests', () => {
 
   function testInitialState(state) {
     expect(state).toMatchObject({
-      loading: false,
+      loading: {
+        patient: false,
+        chart: false,
+        form: false,
+      },
       errorMessage: null,
       updateSuccess: false,
     });
@@ -40,18 +48,47 @@ describe('Emr content reducer tests', () => {
   });
 
   describe('Requests', () => {
-    it('should set state to loading', () => {
-      testMultipleTypes([getPatientInfo.pending.type, getChartList.pending.type, getFormList.pending.type], {}, state => {
-        expect(state).toMatchObject({
-          errorMessage: null,
-          updateSuccess: false,
-          loading: true,
-        });
+    it('should set patient loading', () => {
+      const state = reducer(undefined, { type: getPatientInfo.pending.type });
+      expect(state).toMatchObject({
+        errorMessage: null,
+        updateSuccess: false,
+        loading: {
+          patient: true,
+          chart: false,
+          form: false,
+        },
+      });
+    });
+
+    it('should set chart loading', () => {
+      const state = reducer(undefined, { type: getChartList.pending.type });
+      expect(state).toMatchObject({
+        errorMessage: null,
+        updateSuccess: false,
+        loading: {
+          patient: false,
+          chart: true,
+          form: false,
+        },
+      });
+    });
+
+    it('should set form loading', () => {
+      const state = reducer(undefined, { type: getFormList.pending.type });
+      expect(state).toMatchObject({
+        errorMessage: null,
+        updateSuccess: false,
+        loading: {
+          patient: false,
+          chart: false,
+          form: true,
+        },
       });
     });
 
     it('should reset the state', () => {
-      expect(reducer({ ...initialState, loading: true }, reset())).toEqual({
+      expect(reducer({ ...initialState, loading: { patient: true, chart: true, form: true } }, reset())).toEqual({
         ...initialState,
       });
     });
@@ -66,7 +103,11 @@ describe('Emr content reducer tests', () => {
           expect(state).toMatchObject({
             errorMessage: 'error message',
             updateSuccess: false,
-            loading: false,
+            loading: {
+              patient: false,
+              chart: false,
+              form: false,
+            },
           });
         },
         {
@@ -86,7 +127,11 @@ describe('Emr content reducer tests', () => {
         })
       ).toEqual({
         ...initialState,
-        loading: false,
+        loading: {
+          patient: false,
+          chart: false,
+          form: false,
+        },
         updateSuccess: true,
         patient: payload.data[0],
         charts: [],
@@ -104,7 +149,11 @@ describe('Emr content reducer tests', () => {
         })
       ).toEqual({
         ...initialState,
-        loading: false,
+        loading: {
+          patient: false,
+          chart: false,
+          form: false,
+        },
         updateSuccess: true,
         charts: payload.data,
         forms: [],
@@ -122,7 +171,11 @@ describe('Emr content reducer tests', () => {
         })
       ).toEqual({
         ...previousState,
-        loading: false,
+        loading: {
+          patient: false,
+          chart: false,
+          form: false,
+        },
         updateSuccess: true,
         forms: [...previousState.forms, ...payload.data],
       });
@@ -148,14 +201,14 @@ describe('Emr content reducer tests', () => {
 
     it('dispatches FETCH_CHART_LIST actions', async () => {
       const expectedActions = [{ type: getChartList.pending.type }, { type: getChartList.fulfilled.type, payload: resolvedObject }];
-      await store.dispatch(getChartList({ ptNo: 'P100', startDate: '2024-01-01', endDate: '2024-01-01' }));
+      await store.dispatch(getChartList({ ptNo: 'P100', term: '100' }));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches FETCH_FORM_LIST actions', async () => {
       const expectedActions = [{ type: getFormList.pending.type }, { type: getFormList.fulfilled.type, payload: resolvedObject }];
-      await store.dispatch(getFormList({ chartNos: [123] }));
+      await store.dispatch(getFormList({ query: 'FORM_QUERY' }));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });

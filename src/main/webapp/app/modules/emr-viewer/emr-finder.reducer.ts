@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
@@ -52,7 +52,11 @@ export interface Form {
 }
 
 interface EmrOdsState {
-  loading: boolean;
+  loading: {
+    patient: boolean;
+    chart: boolean;
+    form: boolean;
+  };
   errorMessage: string | null;
   patient: Patient | null;
   charts: Chart[];
@@ -62,7 +66,11 @@ interface EmrOdsState {
 }
 
 const initialState: EmrOdsState = {
-  loading: false,
+  loading: {
+    patient: false,
+    chart: false,
+    form: false,
+  },
   errorMessage: null,
   patient: null,
   charts: [],
@@ -189,51 +197,77 @@ const emrFinder = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(getPatientInfo.pending, state => {
+        state.loading.patient = true;
+        state.errorMessage = null;
+        state.updateSuccess = false;
+      })
       .addCase(getPatientInfo.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.patient = false;
+        state.errorMessage = null;
         state.patient = action.payload.data?.[0] ?? null;
         state.charts = [];
         state.forms = [];
         state.categories = [];
         state.updateSuccess = true;
       })
+      .addCase(getPatientInfo.rejected, (state, action) => {
+        state.loading.patient = false;
+        state.updateSuccess = false;
+        state.errorMessage = action.error.message ?? null;
+      })
+      .addCase(getChartList.pending, state => {
+        state.loading.chart = true;
+        state.errorMessage = null;
+        state.updateSuccess = false;
+      })
       .addCase(getChartList.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.chart = false;
+        state.errorMessage = null;
         state.charts = action.payload.data;
         state.forms = [];
         state.categories = [];
         state.updateSuccess = true;
       })
+      .addCase(getChartList.rejected, (state, action) => {
+        state.loading.chart = false;
+        state.updateSuccess = false;
+        state.errorMessage = action.error.message ?? null;
+      })
+      .addCase(getFormList.pending, state => {
+        state.loading.form = true;
+        state.errorMessage = null;
+        state.updateSuccess = false;
+      })
       .addCase(getFormList.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.form = false;
+        state.errorMessage = null;
         state.forms = [...state.forms, ...(action.payload.data ?? [])];
         state.updateSuccess = true;
       })
+      .addCase(getFormList.rejected, (state, action) => {
+        state.loading.form = false;
+        state.updateSuccess = false;
+        state.errorMessage = action.error.message ?? null;
+      })
       .addCase(fetchCategoryForms.pending, state => {
-        state.loading = true;
+        state.loading.form = true;
         state.errorMessage = null;
         state.updateSuccess = false;
         state.forms = [];
         state.categories = [];
       })
       .addCase(fetchCategoryForms.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.form = false;
+        state.errorMessage = null;
         state.forms = [...state.forms, ...(action.payload.forms ?? [])];
         state.categories = action.payload.categoryData.map(item => item.data);
         state.updateSuccess = true;
       })
-      .addMatcher(isPending(getPatientInfo, getChartList, getFormList), state => {
-        state.loading = true;
-        state.errorMessage = null;
-        state.updateSuccess = false;
-      })
-      .addMatcher(isRejected(getPatientInfo, getChartList, getFormList, fetchCategoryForms), (state, action) => {
-        state.loading = false;
+      .addCase(fetchCategoryForms.rejected, (state, action) => {
+        state.loading.form = false;
         state.updateSuccess = false;
         state.errorMessage = action.error.message ?? null;
-      })
-      .addMatcher(isFulfilled(getPatientInfo, getChartList, getFormList, fetchCategoryForms), state => {
-        state.loading = false;
       });
   },
 });

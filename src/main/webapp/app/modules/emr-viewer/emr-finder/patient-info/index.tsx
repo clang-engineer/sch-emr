@@ -75,7 +75,9 @@ export const PatientSearch: React.FC<PatientSearchProps> = ({ onSearch }) => {
 };
 
 const PatientInfo = () => {
-  const { patient, loading } = useAppSelector(state => state.emrContent);
+  const { patient, loading: loadingState } = useAppSelector(state => state.emrContent);
+  const patientLoading = loadingState.patient;
+  const loading = patientLoading;
 
   const patientNumber = patient?.ptNo ?? '-';
   const patientName = patient?.name ?? '-';

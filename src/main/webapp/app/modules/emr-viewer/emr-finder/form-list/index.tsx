@@ -148,7 +148,8 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
   const [selected, setSelected] = useState<string>('');
   const [expanded, setExpanded] = useState<string[]>(['1', '2', '3', '4', '5']);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { forms, loading } = useAppSelector(state => state.emrContent);
+  const { forms, loading: loadingState } = useAppSelector(state => state.emrContent);
+  const formLoading = loadingState.form;
 
   const formData = useMemo<FormNode[]>(() => {
     if (!forms.length || !selectedChart) {
@@ -314,7 +315,7 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     setExpanded([]);
   };
 
-  const showEmpty = !loading && filteredFormData.length === 0;
+  const showEmpty = !formLoading && filteredFormData.length === 0;
   const effectiveExpanded = normalizedSearch ? filteredFolderIds : expanded;
   const effectiveFolderIds = normalizedSearch ? filteredFolderIds : allFolderIds;
 

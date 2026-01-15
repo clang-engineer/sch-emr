@@ -114,7 +114,8 @@ interface ChartListProps {
 }
 
 const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart }) => {
-  const { loading, patient } = useAppSelector(state => state.emrContent);
+  const { loading: loadingState, patient } = useAppSelector(state => state.emrContent);
+  const chartLoading = loadingState.chart;
 
   const charts = useAppSelector<Chart[]>(state => state.emrContent.charts);
   const [deptFilter, setDeptFilter] = useState<DeptFilter>('수진과');
@@ -170,7 +171,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* 필터 영역 - 데이터가 있을 때만 표시 */}
-      {!loading && charts.length > 0 && (
+      {!chartLoading && charts.length > 0 && (
         <Box sx={{ mb: 1.5, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#546e7a', minWidth: 'fit-content' }}>구분</Typography>
@@ -205,7 +206,7 @@ const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart 
       )}
 
       {/* 테이블 영역 */}
-      {loading ? (
+      {chartLoading ? (
         <Box
           sx={{
             flex: 1,
