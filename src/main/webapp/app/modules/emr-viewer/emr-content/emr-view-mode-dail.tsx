@@ -1,23 +1,9 @@
 ﻿import React from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { useAppDispatch } from 'app/config/store';
 import { setViewMode } from '../emr-layout.reducer';
-
-type ViewMode = 1 | 2 | 4;
-
-type ViewModeAction = {
-  mode: ViewMode;
-  label: string;
-  icon: JSX.Element;
-};
-
-const VIEW_MODE_ACTIONS: ViewModeAction[] = [
-  { mode: 1, label: '1장 보기', icon: <FontAwesomeIcon icon={['fas', 'book-open']} size="sm" /> },
-  { mode: 2, label: '2장 보기', icon: <FontAwesomeIcon icon={['fas', 'columns']} size="sm" /> },
-  { mode: 4, label: '4장 보기', icon: <FontAwesomeIcon icon={['fas', 'grid']} size="sm" /> },
-];
+import { ViewMode, VIEW_MODE_ACTIONS } from 'app/modules/emr-viewer/view-mode';
 
 const dialSx = {
   position: 'fixed',
@@ -58,6 +44,7 @@ const actionSx = {
 
 const EmrViewModeDial = () => {
   const dispatch = useAppDispatch();
+  const gridIcon = VIEW_MODE_ACTIONS.find(action => action.mode === 4)?.icon ?? VIEW_MODE_ACTIONS[0].icon;
   const handleViewModeClick = React.useCallback(
     (mode: ViewMode) => {
       dispatch(setViewMode(mode));
@@ -66,12 +53,7 @@ const EmrViewModeDial = () => {
   );
 
   return (
-    <SpeedDial
-      ariaLabel="view mode"
-      sx={dialSx}
-      icon={<SpeedDialIcon icon={<FontAwesomeIcon icon={['fas', 'grid']} size="sm" />} />}
-      FabProps={{ size: 'small' }}
-    >
+    <SpeedDial ariaLabel="view mode" sx={dialSx} icon={<SpeedDialIcon icon={gridIcon} />} FabProps={{ size: 'small' }}>
       {VIEW_MODE_ACTIONS.map(action => (
         <SpeedDialAction
           key={action.mode}

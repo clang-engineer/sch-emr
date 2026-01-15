@@ -1,58 +1,11 @@
 import { Box, Grid, Paper } from '@mui/material';
 import { useAppSelector } from 'app/config/store';
 import * as React from 'react';
+import { cardAnimation, viewModeGridAnimation } from './animation';
 import EmrContentEmptyState from './emr-content-empty-state';
 import EmrViewModeDial from './emr-view-mode-dail';
 import FinderToggleButton from './finder-toggle-button';
-import { sampleArticleHtml } from './sample-article-html';
-
-const sampleHtmlItems = [
-  {
-    id: 'sample-1',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-12',
-  },
-  {
-    id: 'sample-2',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-13',
-  },
-  {
-    id: 'sample-3',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-13',
-  },
-  {
-    id: 'sample-1',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-12',
-  },
-  {
-    id: 'sample-2',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-13',
-  },
-  {
-    id: 'sample-3',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-13',
-  },
-  {
-    id: 'sample-1',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-12',
-  },
-  {
-    id: 'sample-2',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-13',
-  },
-  {
-    id: 'sample-3',
-    html: sampleArticleHtml,
-    createdAt: '2024-01-13',
-  },
-];
+import { sampleHtmlItems } from './sample-html-items';
 
 const EmrContent = () => {
   const htmlItems = useAppSelector(state => state.emrContent.items);
@@ -81,11 +34,7 @@ const EmrContent = () => {
         justifyContent={'center'}
         flexDirection={'row'}
         sx={{
-          animation: shouldAnimateViewMode ? 'emrViewFadeIn 180ms ease-out' : 'none',
-          '@keyframes emrViewFadeIn': {
-            from: { opacity: 0, transform: 'translateY(6px)' },
-            to: { opacity: 1, transform: 'translateY(0)' },
-          },
+          ...(shouldAnimateViewMode ? viewModeGridAnimation : {}),
         }}
       >
         {displayItems.length > 0 ? (
@@ -104,12 +53,7 @@ const EmrContent = () => {
                   p: 2,
                   border: '1px solid #e0e0e0',
                   borderRadius: 2,
-                  animation: shouldAnimateViewMode ? 'emrCardIn 220ms ease-out both' : 'none',
-                  animationDelay: shouldAnimateViewMode ? `${index * 30}ms` : '0ms',
-                  '@keyframes emrCardIn': {
-                    from: { opacity: 0, transform: 'translateY(6px)' },
-                    to: { opacity: 1, transform: 'translateY(0)' },
-                  },
+                  ...(shouldAnimateViewMode ? cardAnimation(index) : {}),
                 }}
                 dangerouslySetInnerHTML={{ __html: item.html }}
               />

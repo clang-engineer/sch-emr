@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { setViewMode } from 'app/modules/emr-viewer/emr-layout.reducer';
+import { VIEW_MODE_ACTIONS } from 'app/modules/emr-viewer/view-mode';
 
 import axios from 'axios';
 
@@ -87,21 +88,13 @@ const Header = () => {
 
         <Box display="flex" alignItems="center" gap={2}>
           <ToggleButtonGroup size="small" exclusive value={viewMode} onChange={handleViewModeChange} aria-label="emr view mode">
-            <Tooltip title="1-up">
-              <ToggleButton value={1} aria-label="view 1">
-                <FontAwesomeIcon icon={['fas', 'book-open']} size="sm" />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title="2-up">
-              <ToggleButton value={2} aria-label="view 2">
-                <FontAwesomeIcon icon={['fas', 'columns']} size="sm" />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title="4-up">
-              <ToggleButton value={4} aria-label="view 4">
-                <FontAwesomeIcon icon={['fas', 'grid']} size="sm" />
-              </ToggleButton>
-            </Tooltip>
+            {VIEW_MODE_ACTIONS.map(action => (
+              <Tooltip key={action.mode} title={action.label}>
+                <ToggleButton value={action.mode} aria-label={action.label}>
+                  {action.icon}
+                </ToggleButton>
+              </Tooltip>
+            ))}
           </ToggleButtonGroup>
           {user && (
             <Box display="flex" alignItems="center" gap={2}>
