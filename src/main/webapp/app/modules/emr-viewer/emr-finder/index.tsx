@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { Box, Drawer, useMediaQuery } from '@mui/material';
 // import { openDrawer } from 'store/slices/menu';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { openDrawer, setViewModeAction } from 'app/modules/emr-viewer/emr-layout.reducer';
+import { openDrawer } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
 import EmrFinder from './main';
 import CollapsedSidebar from './collapsed-sidebar';
@@ -24,7 +24,6 @@ const Sidebar = () => {
 
   const handleExpand = React.useCallback(() => {
     dispatch(openDrawer(true));
-    dispatch(setViewModeAction('single'));
   }, [dispatch]);
 
   const drawer = React.useMemo(

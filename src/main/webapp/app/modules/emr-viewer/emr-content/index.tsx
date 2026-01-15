@@ -157,7 +157,6 @@ const RecordViewer = () => {
   const dispatch = useAppDispatch();
 
   const { drawerOpen } = useAppSelector(state => state.emrLayout);
-  const { viewMode } = useAppSelector(state => state.emrLayout);
   const finderWidth = drawerOpen ? finderWidthNarrow : finderWidthCollapsed;
 
   // 임시 데이터 (나중에 실제 데이터로 교체)
@@ -184,15 +183,15 @@ const RecordViewer = () => {
         {/* 메인 콘텐츠 영역 */}
         <Box
           sx={{
-            ml: viewMode === 'single' ? 0 : '-4px',
+            ml: 0,
             width: `100%`,
             padding: `20px 28px`,
             display: 'flex',
             justifyContent: 'center',
             flexWrap: 'wrap',
             gap: 2,
-            flexDirection: viewMode === 'single' ? 'column' : 'row',
-            alignItems: viewMode === 'single' ? 'center' : 'stretch',
+            flexDirection: 'column',
+            alignItems: 'center',
             maxHeight: 'calc(100vh - 68px)',
             overflowY: 'auto',
           }}
@@ -204,8 +203,8 @@ const RecordViewer = () => {
               <Box
                 key={record.id}
                 sx={{
-                  width: viewMode === 'single' ? '100%' : 'calc(50% - 8px)',
-                  maxWidth: viewMode === 'single' ? '800px' : 'none',
+                  width: '100%',
+                  maxWidth: '800px',
                 }}
               >
                 <RecordCard record={record} />
