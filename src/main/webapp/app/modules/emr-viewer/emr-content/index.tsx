@@ -51,6 +51,8 @@ const EmrContent = () => {
                   p: 2,
                   border: '1px solid #e3e8f5',
                   borderRadius: 2,
+                  backgroundColor: '#fcfdff',
+                  boxShadow: '0 1px 4px rgba(15, 23, 42, 0.06)',
                   ...(shouldAnimateViewMode ? cardAnimation(index) : {}),
                 }}
                 dangerouslySetInnerHTML={{ __html: item.html }}

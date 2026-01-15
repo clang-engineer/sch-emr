@@ -137,7 +137,7 @@ export const ResizableSection: React.FC<ResizableSectionProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <Box ml={1.5} mt={isFirst ? 1.5 : 0.5} mb={0} sx={{ height: `${height}px`, display: 'flex', flexDirection: 'column' }}>
+      <Box ml={1} mr={1} mt={isFirst ? 1.5 : 0.5} mb={0} sx={{ height: `${height}px`, display: 'flex', flexDirection: 'column' }}>
         <Paper
           elevation={0}
           sx={{

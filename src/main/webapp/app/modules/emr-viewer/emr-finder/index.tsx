@@ -53,7 +53,7 @@ const Sidebar = () => {
             left: 0,
             width: finderWidth,
             height: '100vh',
-            backgroundColor: '#f5f6f8',
+            backgroundColor: '#f3f6ff',
             boxShadow: 'inset 2px 0 0 rgba(63, 81, 181, 0.2)',
             color: theme.palette.text.primary,
             borderRight: 'none',

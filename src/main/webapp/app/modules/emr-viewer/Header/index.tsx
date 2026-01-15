@@ -88,32 +88,7 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
         </Box>
 
         {!isCompact && (
-          <Box display="flex" alignItems="center" gap={2}>
-            <ToggleButtonGroup
-              size="small"
-              exclusive
-              value={viewMode}
-              onChange={handleViewModeChange}
-              aria-label="emr view mode"
-              sx={{
-                '& .MuiToggleButton-root': {
-                  color: iconColor,
-                },
-                '& .MuiToggleButton-root.Mui-selected': {
-                  color: iconColor,
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                },
-              }}
-            >
-              {VIEW_MODE_ACTIONS.map(action => (
-                <Tooltip key={action.mode} title={action.label}>
-                  <ToggleButton value={action.mode} aria-label={action.label}>
-                    {action.icon}
-                  </ToggleButton>
-                </Tooltip>
-              ))}
-            </ToggleButtonGroup>
-            <FinderToggleButton />
+          <Box display="flex" alignItems="center" gap={2} sx={{ flex: 1, justifyContent: 'flex-end' }}>
             {user && (
               <Box display="flex" alignItems="center" gap={2}>
                 <Backdrop sx={{ color: '#fff', zIndex: theme.zIndex.drawer + 2 }} open={loading}>
@@ -130,6 +105,33 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
                 </Typography>
               </Box>
             )}
+            <Box display="flex" alignItems="center" gap={1}>
+              <ToggleButtonGroup
+                size="small"
+                exclusive
+                value={viewMode}
+                onChange={handleViewModeChange}
+                aria-label="emr view mode"
+                sx={{
+                  '& .MuiToggleButton-root': {
+                    color: iconColor,
+                  },
+                  '& .MuiToggleButton-root.Mui-selected': {
+                    color: iconColor,
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  },
+                }}
+              >
+                {VIEW_MODE_ACTIONS.map(action => (
+                  <Tooltip key={action.mode} title={action.label}>
+                    <ToggleButton value={action.mode} aria-label={action.label}>
+                      {action.icon}
+                    </ToggleButton>
+                  </Tooltip>
+                ))}
+              </ToggleButtonGroup>
+              <FinderToggleButton />
+            </Box>
           </Box>
         )}
       </Toolbar>
