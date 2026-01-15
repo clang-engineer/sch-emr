@@ -57,9 +57,15 @@ const sampleHtmlItems = [
 const EmrContent = () => {
   const htmlItems = useAppSelector(state => state.emrContent.items);
   const { drawerOpen, viewMode } = useAppSelector(state => state.emrLayout);
+  const prevViewModeRef = React.useRef(viewMode);
+  const shouldAnimateViewMode = prevViewModeRef.current !== viewMode;
 
   const displayItems = htmlItems.length ? htmlItems : sampleHtmlItems;
   const gridSize = viewMode === 4 ? 3 : viewMode === 2 ? 6 : 12;
+
+  React.useEffect(() => {
+    prevViewModeRef.current = viewMode;
+  }, [viewMode]);
 
   return (
     <Box display={'flex'} justifyContent={'center'}>
@@ -75,7 +81,7 @@ const EmrContent = () => {
         justifyContent={'center'}
         flexDirection={'row'}
         sx={{
-          animation: 'emrViewFadeIn 180ms ease-out',
+          animation: shouldAnimateViewMode ? 'emrViewFadeIn 180ms ease-out' : 'none',
           '@keyframes emrViewFadeIn': {
             from: { opacity: 0, transform: 'translateY(6px)' },
             to: { opacity: 1, transform: 'translateY(0)' },
@@ -89,7 +95,7 @@ const EmrContent = () => {
               size={gridSize}
               sx={{
                 maxWidth: viewMode === 1 ? (drawerOpen ? '100%' : '60vw') : '100%',
-                transition: 'flex-basis 220ms ease, max-width 220ms ease, width 220ms ease',
+                transition: shouldAnimateViewMode ? 'flex-basis 220ms ease, max-width 220ms ease, width 220ms ease' : 'none',
               }}
             >
               <Paper
@@ -98,8 +104,8 @@ const EmrContent = () => {
                   p: 2,
                   border: '1px solid #e0e0e0',
                   borderRadius: 2,
-                  animation: 'emrCardIn 220ms ease-out both',
-                  animationDelay: `${index * 30}ms`,
+                  animation: shouldAnimateViewMode ? 'emrCardIn 220ms ease-out both' : 'none',
+                  animationDelay: shouldAnimateViewMode ? `${index * 30}ms` : '0ms',
                   '@keyframes emrCardIn': {
                     from: { opacity: 0, transform: 'translateY(6px)' },
                     to: { opacity: 1, transform: 'translateY(0)' },
