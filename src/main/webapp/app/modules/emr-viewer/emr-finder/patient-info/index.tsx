@@ -75,7 +75,7 @@ export const PatientSearch: React.FC<PatientSearchProps> = ({ onSearch }) => {
 };
 
 const PatientInfo = () => {
-  const { patient, loading: loadingState } = useAppSelector(state => state.emrContent);
+  const { patient, loading: loadingState } = useAppSelector(state => state.emrFinder);
   const patientLoading = loadingState.patient;
   const loading = patientLoading;
 

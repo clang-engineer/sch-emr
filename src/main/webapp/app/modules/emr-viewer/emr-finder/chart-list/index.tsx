@@ -114,10 +114,10 @@ interface ChartListProps {
 }
 
 const ChartList: React.FC<ChartListProps> = ({ onSelectionChange, selectedChart }) => {
-  const { loading: loadingState, patient } = useAppSelector(state => state.emrContent);
+  const { loading: loadingState, patient } = useAppSelector(state => state.emrFinder);
   const chartLoading = loadingState.chart;
 
-  const charts = useAppSelector<Chart[]>(state => state.emrContent.charts);
+  const charts = useAppSelector<Chart[]>(state => state.emrFinder.charts);
   const [deptFilter, setDeptFilter] = useState<DeptFilter>('수진과');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('전체');
 

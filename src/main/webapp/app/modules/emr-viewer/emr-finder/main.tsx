@@ -12,7 +12,7 @@ import { Chart, fetchCategoryForms, getChartList, getPatientInfo } from 'app/mod
 const RecordFinder = () => {
   const dispatch = useAppDispatch();
 
-  const patient = useAppSelector(state => state.emrContent.patient);
+  const patient = useAppSelector(state => state.emrFinder.patient);
   const { patientExpanded, setPatientExpanded, patientSectionRef, recordHeight, formHeight, handleRecordResize } = useRecordFinderLayout();
 
   const [selectedChart, setSelectedChart] = React.useState<Chart | null>(null);

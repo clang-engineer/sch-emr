@@ -14,7 +14,7 @@ import passwordReset from 'app/modules/account/password-reset/password-reset.red
 import sessions from 'app/modules/account/sessions/sessions.reducer';
 import entitiesReducers from 'app/entities/reducers';
 import emrLayout from 'app/modules/emr-viewer/emr-layout.reducer';
-import emrContent from 'app/modules/emr-viewer/emr-finder.reducer';
+import emrFinder from 'app/modules/emr-viewer/emr-finder.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer: ReducersMapObject = {
@@ -32,7 +32,7 @@ const rootReducer: ReducersMapObject = {
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   ...entitiesReducers,
   emrLayout,
-  emrContent,
+  emrFinder,
 };
 
 export default rootReducer;
