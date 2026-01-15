@@ -15,7 +15,28 @@ const FinderToggleButton = () => {
 
   return (
     <Tooltip title={isCollapsed ? 'Expand finder' : 'Collapse finder'} placement="left">
-      <IconButton size="small" onClick={toggleSidebar} sx={{ color: '#ffffff' }}>
+      <IconButton
+        size="small"
+        onClick={toggleSidebar}
+        sx={{
+          position: 'absolute',
+          top: '30%',
+          right: -26,
+          transform: 'translateY(-50%)',
+          width: 28,
+          height: 40,
+          borderRadius: '0 12px 12px 0',
+          backgroundColor: '#f3f6ff',
+          color: '#3f51b5',
+          border: '1px solid rgba(63, 81, 181, 0.2)',
+          borderLeft: 'none',
+          boxShadow: 'none',
+          zIndex: 0,
+          '&:hover': {
+            backgroundColor: '#e7ecfb',
+          },
+        }}
+      >
         {isCollapsed ? <IconLayoutSidebarLeftExpand size={18} /> : <IconLayoutSidebarLeftCollapse size={18} />}
       </IconButton>
     </Tooltip>

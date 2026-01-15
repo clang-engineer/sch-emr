@@ -7,13 +7,13 @@ import { Box, Drawer, useMediaQuery } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { openDrawer } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
-import EmrFinder from './main';
+import EmrFinderMainBody from './main';
 import CollapsedSidebar from './collapsed-sidebar';
 import Header from 'app/modules/emr-viewer/Header';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
-const Sidebar = () => {
+const EmrFinder = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -35,10 +35,10 @@ const Sidebar = () => {
   }, [dispatch]);
 
   const drawer = React.useMemo(() => {
-    const content = isCollapsed ? <CollapsedSidebar onExpand={handleExpand} /> : <EmrFinder />;
+    const content = isCollapsed ? <CollapsedSidebar onExpand={handleExpand} /> : <EmrFinderMainBody />;
 
     return (
-      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
         <Header variant={isCollapsed ? 'compact' : 'full'} />
         <Box sx={{ flex: 1, minHeight: 0 }}>{content}</Box>
       </Box>
@@ -76,4 +76,4 @@ const Sidebar = () => {
   );
 };
 
-export default React.memo(Sidebar);
+export default React.memo(EmrFinder);

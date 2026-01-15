@@ -8,8 +8,9 @@ import { AccordionSection, ResizableSection } from './sections/section-panels';
 import { useRecordFinderLayout } from './hooks/use-record-finder-layout';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { Chart, fetchCategoryForms, getChartList, getPatientInfo } from 'app/modules/emr-viewer/emr-finder.reducer';
+import FinderToggleButton from './finder-toggle-button';
 
-const RecordFinder = () => {
+const EmrFinderMainBody = () => {
   const dispatch = useAppDispatch();
 
   const patient = useAppSelector(state => state.emrFinder.patient);
@@ -67,48 +68,51 @@ const RecordFinder = () => {
         pb: 0,
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
+        position: 'relative',
       }}
     >
-      <AccordionSection
-        ref={patientSectionRef}
-        title="환자 정보"
-        color="#1976d2"
-        expanded={patientExpanded}
-        onChange={() => setPatientExpanded(prev => !prev)}
-        headerContent={<PatientSearch onSearch={handlePatientSearch} />}
-        contentHeight={140}
-      >
-        <PatientInfo />
-      </AccordionSection>
-      {recordHeight > 0 && (
-        <>
-          <ResizableSection
-            title="기록 목록"
-            color="#0288d1"
-            height={recordHeight}
-            isFirst
-            onResize={handleRecordResize}
-            disabled={!patient?.ptNo}
-            disabledMessage="환자 입력 후 이용 가능"
-            headerContent={<ChartListHeader termFilter={termFilter} onTermFilterChange={setTermFilter} disabled={!patient?.ptNo} />}
-          >
-            <ChartList onSelectionChange={handleChartSelectionChange} selectedChart={selectedChart} />
-          </ResizableSection>
-          <ResizableSection
-            title="서식 목록"
-            color="#0097a7"
-            height={formHeight}
-            isLast
-            disabled={!selectedChart}
-            disabledMessage="기록 선택 후 이용 가능"
-          >
-            <FormList selectedChart={selectedChart} />
-          </ResizableSection>
-        </>
-      )}
+      <FinderToggleButton />
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+        <AccordionSection
+          ref={patientSectionRef}
+          title="환자 정보"
+          color="#1976d2"
+          expanded={patientExpanded}
+          onChange={() => setPatientExpanded(prev => !prev)}
+          headerContent={<PatientSearch onSearch={handlePatientSearch} />}
+          contentHeight={140}
+        >
+          <PatientInfo />
+        </AccordionSection>
+        {recordHeight > 0 && (
+          <>
+            <ResizableSection
+              title="기록 목록"
+              color="#0288d1"
+              height={recordHeight}
+              isFirst
+              onResize={handleRecordResize}
+              disabled={!patient?.ptNo}
+              disabledMessage="환자 입력 후 이용 가능"
+              headerContent={<ChartListHeader termFilter={termFilter} onTermFilterChange={setTermFilter} disabled={!patient?.ptNo} />}
+            >
+              <ChartList onSelectionChange={handleChartSelectionChange} selectedChart={selectedChart} />
+            </ResizableSection>
+            <ResizableSection
+              title="서식 목록"
+              color="#0097a7"
+              height={formHeight}
+              isLast
+              disabled={!selectedChart}
+              disabledMessage="기록 선택 후 이용 가능"
+            >
+              <FormList selectedChart={selectedChart} />
+            </ResizableSection>
+          </>
+        )}
+      </Box>
     </Box>
   );
 };
 
-export default RecordFinder;
+export default EmrFinderMainBody;

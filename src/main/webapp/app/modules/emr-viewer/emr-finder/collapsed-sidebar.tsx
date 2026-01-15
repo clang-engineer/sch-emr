@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box, Tooltip } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import FinderToggleButton from './finder-toggle-button';
 
 interface CollapsedSidebarProps {
   onExpand: () => void;
@@ -46,6 +47,7 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
         },
       }}
     >
+      <FinderToggleButton />
       {/* 상단 힌트 */}
       <Box
         sx={{
