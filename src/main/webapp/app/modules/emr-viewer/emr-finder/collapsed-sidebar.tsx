@@ -13,8 +13,8 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
       sx={{
         width: '100%',
         height: '100%',
-        backgroundColor: '#ffffff',
-        borderRight: '2px solid #e3f2fd',
+        backgroundColor: '#f5f6f8',
+        borderRight: '2px solid rgba(63, 81, 181, 0.2)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -24,8 +24,8 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
         transition: 'all 0.3s ease',
         position: 'relative',
         '&:hover': {
-          backgroundColor: '#f8fbff',
-          borderRightColor: '#1976d2',
+          backgroundColor: '#eef1fb',
+          borderRightColor: '#3f51b5',
           '& .icon-container': {
             transform: 'scale(1.05)',
           },
@@ -37,7 +37,7 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
           top: 0,
           width: '2px',
           height: '100%',
-          background: 'linear-gradient(180deg, #1976d2 0%, #42a5f5 100%)',
+          background: 'linear-gradient(180deg, #3f51b5 0%, #5c6bc0 100%)',
           opacity: 0,
           transition: 'opacity 0.3s ease',
         },
@@ -51,7 +51,7 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
         sx={{
           width: '24px',
           height: '4px',
-          backgroundColor: '#90caf9',
+          backgroundColor: '#8d9ad1',
           borderRadius: '2px',
           mb: 1,
         }}
@@ -93,13 +93,13 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
               width: 40,
               height: 40,
               borderRadius: '10px',
-              backgroundColor: '#e3f2fd',
+              backgroundColor: '#e3e8f5',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#1976d2',
+              color: '#3f51b5',
               transition: 'all 0.2s ease',
-              border: '1px solid #bbdefb',
+              border: '1px solid #c0cae6',
             }}
           >
             <FontAwesomeIcon icon={['fas', 'filter']} size={'sm'} />
@@ -113,13 +113,13 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
               width: 40,
               height: 40,
               borderRadius: '10px',
-              backgroundColor: '#e3f2fd',
+              backgroundColor: '#e3e8f5',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#1976d2',
+              color: '#3f51b5',
               transition: 'all 0.2s ease',
-              border: '1px solid #bbdefb',
+              border: '1px solid #c0cae6',
             }}
           >
             <FontAwesomeIcon icon={['fas', 'list']} size={'sm'} />
@@ -143,12 +143,12 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ onExpand }) => {
           },
         }}
       >
-        <FontAwesomeIcon icon={['fas', 'chevron-right']} size={'sm'} style={{ color: '#1976d2' }} />
+        <FontAwesomeIcon icon={['fas', 'chevron-right']} size={'sm'} style={{ color: '#3f51b5' }} />
         <Box
           sx={{
             width: '2px',
             height: '20px',
-            backgroundColor: '#90caf9',
+            backgroundColor: '#8d9ad1',
             borderRadius: '1px',
           }}
         />

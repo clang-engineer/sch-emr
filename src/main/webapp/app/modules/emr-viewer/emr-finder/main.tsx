@@ -60,7 +60,8 @@ const RecordFinder = () => {
   return (
     <Box
       sx={{
-        height: 'calc(100vh - 48px)',
+        height: '100%',
+        flex: 1,
         pt: 0.5,
         px: 0.5,
         pb: 0,

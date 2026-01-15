@@ -15,12 +15,13 @@ interface AccordionSectionProps {
 export const AccordionSection = React.forwardRef<HTMLDivElement, AccordionSectionProps>(
   ({ title, color, children, expanded, onChange, headerContent, contentHeight }, ref) => {
     return (
-      <Box ref={ref} ml={1.5} mt={0.5} mb={0} sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box ref={ref} ml={1} mr={1} mt={0.5} mb={0} sx={{ display: 'flex', flexDirection: 'column' }}>
         <Paper
           elevation={0}
           sx={{
             border: '1px solid #e0e0e0',
             borderRadius: '4px',
+            backgroundColor: '#ffffff',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
@@ -143,7 +144,7 @@ export const ResizableSection: React.FC<ResizableSectionProps> = ({
             border: '1px solid',
             borderColor: '#e0e0e0',
             borderRadius: '4px',
-            bgcolor: '#fff',
+            bgcolor: '#ffffff',
             flex: 1,
             display: 'flex',
             flexDirection: 'column',

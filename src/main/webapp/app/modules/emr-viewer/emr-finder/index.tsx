@@ -9,6 +9,7 @@ import { openDrawer } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
 import EmrFinder from './main';
 import CollapsedSidebar from './collapsed-sidebar';
+import Header from 'app/modules/emr-viewer/Header';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -26,13 +27,19 @@ const Sidebar = () => {
     dispatch(openDrawer(true));
   }, [dispatch]);
 
-  const drawer = React.useMemo(
-    () => (isCollapsed ? <CollapsedSidebar onExpand={handleExpand} /> : <EmrFinder />),
-    [isCollapsed, handleExpand]
-  );
+  const drawer = React.useMemo(() => {
+    const content = isCollapsed ? <CollapsedSidebar onExpand={handleExpand} /> : <EmrFinder />;
+
+    return (
+      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Header variant={isCollapsed ? 'compact' : 'full'} />
+        <Box sx={{ flex: 1, minHeight: 0 }}>{content}</Box>
+      </Box>
+    );
+  }, [isCollapsed, handleExpand]);
 
   return (
-    <Box component="nav" sx={{ width: finderWidth, height: 'calc(100vh - 48px)', mt: '48px', ml: '48px' }} aria-label="record finder">
+    <Box component="nav" sx={{ width: finderWidth, height: '100vh', mt: 0 }} aria-label="record finder">
       <Drawer
         variant={matchUpMd ? 'persistent' : 'temporary'}
         anchor="left"
@@ -42,11 +49,12 @@ const Sidebar = () => {
           '& .MuiDrawer-paper': {
             zIndex: 1,
             position: 'fixed',
-            top: '48px',
-            left: '48px',
+            top: 0,
+            left: 0,
             width: finderWidth,
-            height: 'calc(100vh - 48px)',
-            backgroundColor: 'transparent',
+            height: '100vh',
+            backgroundColor: '#f5f6f8',
+            boxShadow: 'inset 2px 0 0 rgba(63, 81, 181, 0.2)',
             color: theme.palette.text.primary,
             borderRight: 'none',
             overflow: 'visible',

@@ -4,7 +4,6 @@ import * as React from 'react';
 import { cardAnimation, viewModeGridAnimation } from './animation';
 import EmrContentEmptyState from './emr-content-empty-state';
 import EmrViewModeDial from './emr-view-mode-dail';
-import FinderToggleButton from './finder-toggle-button';
 import { sampleHtmlItems } from './sample-html-items';
 
 const EmrContent = () => {
@@ -23,7 +22,6 @@ const EmrContent = () => {
   return (
     <Box display={'flex'} justifyContent={'center'}>
       {/* 사이드바 토글 버튼 */}
-      <FinderToggleButton />
 
       {/* 메인 콘텐츠 영역 */}
       <Grid
@@ -51,7 +49,7 @@ const EmrContent = () => {
                 elevation={0}
                 sx={{
                   p: 2,
-                  border: '1px solid #e0e0e0',
+                  border: '1px solid #e3e8f5',
                   borderRadius: 2,
                   ...(shouldAnimateViewMode ? cardAnimation(index) : {}),
                 }}
