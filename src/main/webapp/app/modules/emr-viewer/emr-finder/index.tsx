@@ -22,6 +22,13 @@ const Sidebar = () => {
 
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
   const isCollapsed = !drawerOpen;
+  const isTemporary = !matchUpMd && drawerOpen;
+  const drawerVariant = matchUpMd ? 'persistent' : isTemporary ? 'temporary' : 'persistent';
+  const drawerOpenState = matchUpMd ? true : isTemporary ? drawerOpen : true;
+
+  React.useEffect(() => {
+    dispatch(openDrawer(matchUpMd));
+  }, [matchUpMd, dispatch]);
 
   const handleExpand = React.useCallback(() => {
     dispatch(openDrawer(true));
@@ -41,9 +48,9 @@ const Sidebar = () => {
   return (
     <Box component="nav" sx={{ width: finderWidth, height: '100vh', mt: 0 }} aria-label="record finder">
       <Drawer
-        variant={matchUpMd ? 'persistent' : 'temporary'}
+        variant={drawerVariant}
         anchor="left"
-        open={matchUpMd ? true : drawerOpen}
+        open={drawerOpenState}
         onClose={() => dispatch(openDrawer(false))}
         sx={{
           '& .MuiDrawer-paper': {
