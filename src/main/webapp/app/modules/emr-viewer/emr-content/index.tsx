@@ -3,7 +3,7 @@ import { Box, IconButton, Tooltip, Paper, Typography, Chip, Avatar } from '@mui/
 import { IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
-import { openDrawer, setFinderWidthAction, setViewModeAction } from 'app/modules/emr-viewer/emr-layout.reducer';
+import { openDrawer } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // 환자 기록 카드 컴포넌트
@@ -157,28 +157,16 @@ const RecordViewer = () => {
   const dispatch = useAppDispatch();
 
   const { drawerOpen } = useAppSelector(state => state.emrLayout);
-  const { viewMode, finderWidth } = useAppSelector(state => state.emrLayout);
+  const { viewMode } = useAppSelector(state => state.emrLayout);
+  const finderWidth = drawerOpen ? finderWidthNarrow : finderWidthCollapsed;
 
   // 임시 데이터 (나중에 실제 데이터로 교체)
   const [records, setRecords] = React.useState<RecordCardProps['record'][]>([]);
 
-  const isCollapsed = finderWidth === finderWidthCollapsed;
+  const isCollapsed = !drawerOpen;
 
   const toggleSidebar = () => {
-    if (isCollapsed) {
-      // 접힌 상태 → 펼친 상태
-      dispatch(setFinderWidthAction(finderWidthNarrow));
-      dispatch(setViewModeAction('single'));
-    } else {
-      // 펼친 상태 → 접힌 상태
-      dispatch(setFinderWidthAction(finderWidthCollapsed));
-      dispatch(setViewModeAction('double'));
-    }
-  };
-
-  const changeViewMode = (mode: string) => {
-    dispatch(openDrawer(mode === 'single'));
-    dispatch(setViewModeAction(mode));
+    dispatch(openDrawer(isCollapsed));
   };
 
   return (

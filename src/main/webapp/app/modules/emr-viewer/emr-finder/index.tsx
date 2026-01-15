@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { Box, Drawer, useMediaQuery } from '@mui/material';
 // import { openDrawer } from 'store/slices/menu';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { openDrawer, setFinderWidthAction, setViewModeAction } from 'app/modules/emr-viewer/emr-layout.reducer';
+import { openDrawer, setViewModeAction } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/constant';
 import EmrFinder from './main';
 import CollapsedSidebar from './collapsed-sidebar';
@@ -17,13 +17,13 @@ const Sidebar = () => {
   const dispatch = useAppDispatch();
 
   const { drawerOpen } = useAppSelector(state => state.emrLayout);
-  const { finderWidth } = useAppSelector(state => state.emrLayout);
+  const finderWidth = drawerOpen ? finderWidthNarrow : finderWidthCollapsed;
 
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
-  const isCollapsed = finderWidth === finderWidthCollapsed;
+  const isCollapsed = !drawerOpen;
 
   const handleExpand = React.useCallback(() => {
-    dispatch(setFinderWidthAction(finderWidthNarrow));
+    dispatch(openDrawer(true));
     dispatch(setViewModeAction('single'));
   }, [dispatch]);
 
@@ -37,8 +37,8 @@ const Sidebar = () => {
       <Drawer
         variant={matchUpMd ? 'persistent' : 'temporary'}
         anchor="left"
-        open={true}
-        onClose={() => dispatch(openDrawer(!drawerOpen))}
+        open={matchUpMd ? true : drawerOpen}
+        onClose={() => dispatch(openDrawer(false))}
         sx={{
           '& .MuiDrawer-paper': {
             zIndex: 1,
