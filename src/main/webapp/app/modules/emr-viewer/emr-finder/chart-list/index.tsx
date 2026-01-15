@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   Box,
   ToggleButton,
@@ -53,10 +53,14 @@ export const ChartListHeader: React.FC<ChartListHeaderProps> = ({ termFilter, on
       <FormControl size="small" sx={{ minWidth: 130 }}>
         <Select
           value={termFilter}
-          onChange={e => onTermFilterChange(e.target.value as number)}
+          onChange={e => {
+            onTermFilterChange(Number(e.target.value));
+          }}
           disabled={disabled}
           displayEmpty
-          renderValue={value => getTermLabel(value as number)}
+          renderValue={value => {
+            return getTermLabel(Number(value));
+          }}
           sx={{
             height: '32px',
             fontSize: '0.75rem',

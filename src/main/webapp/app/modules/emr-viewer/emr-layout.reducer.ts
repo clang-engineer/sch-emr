@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // initial state
 const initialState = {
   drawerOpen: true,
+  viewMode: 1,
   error: null,
 };
 
@@ -15,6 +16,9 @@ const emrLayout = createSlice({
     openDrawer(state, action) {
       state.drawerOpen = action.payload;
     },
+    setViewMode(state, action) {
+      state.viewMode = action.payload;
+    },
     hasError(state, action) {
       state.error = action.payload;
     },
@@ -23,4 +27,4 @@ const emrLayout = createSlice({
 
 export default emrLayout.reducer;
 
-export const { openDrawer } = emrLayout.actions;
+export const { openDrawer, setViewMode } = emrLayout.actions;

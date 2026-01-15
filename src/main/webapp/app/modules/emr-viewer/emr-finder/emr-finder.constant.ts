@@ -1,4 +1,4 @@
-//O: 응급, I: 입원, E: 외래
+﻿// O: 응급, I: 입원, E: 외래
 interface ICategory {
   code: 'O' | 'I' | 'E';
   query: string;

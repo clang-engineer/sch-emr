@@ -1,11 +1,24 @@
-// material-ui
+﻿// material-ui
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Backdrop, Box, CircularProgress, IconButton, Toolbar, Typography, useMediaQuery } from '@mui/material';
+import {
+  AppBar,
+  Backdrop,
+  Box,
+  CircularProgress,
+  IconButton,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 
 // assets
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
-import { useAppSelector } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { setViewMode } from 'app/modules/emr-viewer/emr-layout.reducer';
 
 import axios from 'axios';
 
@@ -17,6 +30,14 @@ const Header = () => {
 
   const user = useAppSelector(state => state.userManagement.user);
   const loading = useAppSelector(state => state.userManagement.loading);
+  const viewMode = useAppSelector(state => state.emrLayout.viewMode);
+  const dispatch = useAppDispatch();
+
+  const handleViewModeChange = (_event: React.MouseEvent<HTMLElement>, value: number | null) => {
+    if (value) {
+      dispatch(setViewMode(value));
+    }
+  };
 
   const handleSignOutClick = () => {
     axios.post('api/user/singn-out').finally(() => {});
@@ -59,37 +80,56 @@ const Header = () => {
                 color: 'text.primary',
               }}
             >
-              의무기록조회
+              진료기록조회
             </Typography>
           )}
         </Box>
 
-        {user && (
-          <Box display="flex" alignItems="center" gap={2}>
-            <Backdrop sx={{ color: '#fff', zIndex: theme.zIndex.drawer + 2 }} open={loading}>
-              <CircularProgress color="inherit" />
-            </Backdrop>
-            <Typography
-              variant="body1"
-              sx={{
-                fontWeight: 500,
-                color: 'text.secondary',
-              }}
-            >
-              {user.fullName}
-            </Typography>
-            <IconButton
-              onClick={handleSignOutClick}
-              size="small"
-              sx={{
-                color: '#3f51b5',
-                '&:hover': { bgcolor: theme.palette.action.hover },
-              }}
-            >
-              <FontAwesomeIcon icon={['fas', 'right-from-bracket']} style={{ fontSize: '18px', color: '#3f51b5' }} />
-            </IconButton>
-          </Box>
-        )}
+        <Box display="flex" alignItems="center" gap={2}>
+          <ToggleButtonGroup size="small" exclusive value={viewMode} onChange={handleViewModeChange} aria-label="emr view mode">
+            <Tooltip title="1-up">
+              <ToggleButton value={1} aria-label="view 1">
+                <FontAwesomeIcon icon={['fas', 'book-open']} size="sm" />
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title="2-up">
+              <ToggleButton value={2} aria-label="view 2">
+                <FontAwesomeIcon icon={['fas', 'columns']} size="sm" />
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title="4-up">
+              <ToggleButton value={4} aria-label="view 4">
+                <FontAwesomeIcon icon={['fas', 'grid']} size="sm" />
+              </ToggleButton>
+            </Tooltip>
+          </ToggleButtonGroup>
+          {user && (
+            <Box display="flex" alignItems="center" gap={2}>
+              <Backdrop sx={{ color: '#fff', zIndex: theme.zIndex.drawer + 2 }} open={loading}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: 500,
+                  color: 'text.secondary',
+                }}
+              >
+                {user.fullName}
+              </Typography>
+              <IconButton
+                onClick={handleSignOutClick}
+                size="small"
+                sx={{
+                  color: '#3f51b5',
+                  '&:hover': { bgcolor: theme.palette.action.hover },
+                }}
+              >
+                <FontAwesomeIcon icon={['fas', 'right-from-bracket']} style={{ fontSize: '18px', color: '#3f51b5' }} />
+              </IconButton>
+            </Box>
+          )}
+        </Box>
       </Toolbar>
     </AppBar>
   );

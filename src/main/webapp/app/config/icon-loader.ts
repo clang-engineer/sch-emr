@@ -5,6 +5,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faBell } from '@fortawesome/free-solid-svg-icons/faBell';
 import { faBook } from '@fortawesome/free-solid-svg-icons/faBook';
 import { faCloud } from '@fortawesome/free-solid-svg-icons/faCloud';
+import { faColumns } from '@fortawesome/free-solid-svg-icons/faColumns';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
@@ -70,6 +71,7 @@ export const loadIcons = () => {
     faBell,
     faBook,
     faCloud,
+    faColumns,
     faCogs,
     faDatabase,
     faEye,
