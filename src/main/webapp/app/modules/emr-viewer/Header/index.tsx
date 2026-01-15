@@ -1,4 +1,4 @@
-﻿// material-ui
+// material-ui
 import { useTheme } from '@mui/material/styles';
 import {
   Backdrop,
@@ -18,8 +18,6 @@ import * as React from 'react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { setViewMode } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { VIEW_MODE_ACTIONS } from 'app/modules/emr-viewer/view-mode';
-
-import FinderToggleButton from 'app/modules/emr-viewer/emr-finder/finder-toggle-button';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -69,7 +67,6 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
             transition: 'opacity 0.2s',
             '&:hover': { opacity: 0.8 },
           }}
-          onClick={() => (window.location.href = 'https://deview.snuh.org/')}
         >
           <FontAwesomeIcon icon={['fas', 'book-medical']} size="lg" style={{ color: iconColor }} />
           {!isCompact && !matchDownMd && (
@@ -82,7 +79,7 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
                 color: '#ffffff',
               }}
             >
-              진료기록조회
+              의무기록조회
             </Typography>
           )}
         </Box>
@@ -130,7 +127,6 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
                   </Tooltip>
                 ))}
               </ToggleButtonGroup>
-              <FinderToggleButton />
             </Box>
           </Box>
         )}
