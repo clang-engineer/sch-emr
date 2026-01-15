@@ -37,6 +37,8 @@ import { faFileMedical } from '@fortawesome/free-solid-svg-icons/faFileMedical';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons/faCalendarAlt';
 import { faHospital } from '@fortawesome/free-solid-svg-icons/faHospital';
 import { faUserMd } from '@fortawesome/free-solid-svg-icons/faUserMd';
+import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -62,6 +64,8 @@ import { faBookMedical } from '@fortawesome/pro-solid-svg-icons/faBookMedical';
 import { faBookOpen } from '@fortawesome/pro-solid-svg-icons/faBookOpen';
 import { faAnglesDown } from '@fortawesome/pro-solid-svg-icons/faAnglesDown';
 import { faAnglesUp } from '@fortawesome/pro-solid-svg-icons/faAnglesUp';
+import { faTripleChevronsLeft as faTripleChevronsLeftDuotone } from '@fortawesome/pro-duotone-svg-icons/faTripleChevronsLeft';
+import { faTripleChevronsRight as faTripleChevronsRightDuotone } from '@fortawesome/pro-duotone-svg-icons/faTripleChevronsRight';
 
 export const loadIcons = () => {
   library.add(
@@ -104,6 +108,8 @@ export const loadIcons = () => {
     faCalendarAlt,
     faHospital,
     faUserMd,
+    faGripLinesVertical,
+    faChevronLeft,
     faHouseChimney as any,
     faMagnifyingGlass as any,
     faAddressCard as any,
@@ -125,6 +131,8 @@ export const loadIcons = () => {
     faBookMedical as any,
     faBookOpen as any,
     faAnglesDown as any,
-    faAnglesUp as any
+    faAnglesUp as any,
+    faTripleChevronsLeftDuotone as any,
+    faTripleChevronsRightDuotone as any
   );
 };

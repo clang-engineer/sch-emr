@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IconButton, Tooltip } from '@mui/material';
-import { IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand } from '@tabler/icons-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { openDrawer } from 'app/modules/emr-viewer/emr-layout.reducer';
 
@@ -21,11 +22,11 @@ const FinderToggleButton = () => {
         sx={{
           position: 'absolute',
           top: '35%',
-          right: -24,
+          right: -32,
           transform: 'translateY(-50%)',
-          width: 30,
-          height: 40,
-          borderRadius: '0 10px 10px 0',
+          width: 32,
+          height: 48,
+          borderRadius: '0 12px 12px 0',
           backgroundColor: '#f3f6ff',
           color: '#3f51b5',
           border: '0',
@@ -36,7 +37,10 @@ const FinderToggleButton = () => {
           },
         }}
       >
-        {isCollapsed ? <IconLayoutSidebarLeftExpand size={16} /> : <IconLayoutSidebarLeftCollapse size={16} />}
+        <FontAwesomeIcon
+          icon={(isCollapsed ? ['fad', 'triple-chevrons-right'] : ['fad', 'triple-chevrons-left']) as unknown as IconProp}
+          size={'xs'}
+        />
       </IconButton>
     </Tooltip>
   );
