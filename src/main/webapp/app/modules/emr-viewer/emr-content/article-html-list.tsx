@@ -24,14 +24,9 @@ const ArticleHtmlList: React.FC<ArticleHtmlListProps> = ({ items, emptyMessage =
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'stretch' }}>
       {items.map(item => (
-        <Paper key={item.id} elevation={0} sx={{ p: 2, border: '1px solid #e0e0e0', borderRadius: 2 }}>
-          {item.createdAt && (
-            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
-              {item.createdAt}
-            </Typography>
-          )}
+        <Paper key={item.id} elevation={0} sx={{ p: 2, border: '1px solid #e0e0e0', borderRadius: 2, flex: '1 1 360px', minWidth: 320 }}>
           <Box
             component="article"
             sx={{

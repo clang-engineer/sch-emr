@@ -27,7 +27,7 @@ const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' && prop
     borderBottomRightRadius: 0,
     padding: '0 40px',
     marginTop: '54px',
-    height: 'calc(100vh - 48px)',
+    height: 'calc(100vh - 54px)',
     overflowX: 'scroll',
     overflowY: 'scroll',
     backgroundColor: '#f5f5f5',
@@ -88,9 +88,7 @@ const EmrViewer = () => {
 
       {/* main content */}
       <Main open={drawerOpen} finderwidth={finderWidth}>
-        <Box sx={{ width: '100%', height: '100%' }}>
-          <EmrContent />
-        </Box>
+        <EmrContent />
       </Main>
     </Box>
   );

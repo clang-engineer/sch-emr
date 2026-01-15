@@ -6,6 +6,26 @@ import { finderWidthCollapsed, finderWidthNarrow } from 'app/modules/emr-viewer/
 import { openDrawer } from 'app/modules/emr-viewer/emr-layout.reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ArticleHtmlList from './article-html-list';
+import { sampleArticleHtml } from './sample-article-html';
+import FinderToggleButton from './finder-toggle-button';
+
+const sampleHtmlItems = [
+  {
+    id: 'sample-1',
+    html: sampleArticleHtml,
+    createdAt: '2024-01-12',
+  },
+  {
+    id: 'sample-2',
+    html: sampleArticleHtml,
+    createdAt: '2024-01-13',
+  },
+  {
+    id: 'sample-3',
+    html: sampleArticleHtml,
+    createdAt: '2024-01-13',
+  },
+];
 
 const EmptyState: React.FC = () => {
   return (
@@ -15,7 +35,6 @@ const EmptyState: React.FC = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '400px',
         color: '#90a4ae',
       }}
     >
@@ -30,30 +49,19 @@ const EmptyState: React.FC = () => {
   );
 };
 
-const RecordViewer = () => {
-  const dispatch = useAppDispatch();
-
-  const { drawerOpen } = useAppSelector(state => state.emrLayout);
-  const finderWidth = drawerOpen ? finderWidthNarrow : finderWidthCollapsed;
+const EmrContent = () => {
   const htmlItems = useAppSelector(state => state.emrContent.items);
+  const { drawerOpen } = useAppSelector(state => state.emrLayout);
 
-  const isCollapsed = !drawerOpen;
-
-  const toggleSidebar = () => {
-    dispatch(openDrawer(isCollapsed));
-  };
+  const displayItems = htmlItems.length ? htmlItems : sampleHtmlItems;
+  const contentMaxWidth = drawerOpen ? '800px' : 'none';
+  const contentAlign = drawerOpen ? 'center' : 'stretch';
 
   return (
     <Box display={'flex'} justifyContent={'center'}>
       <Box display={'flex'} width={'100%'} justifyContent={'space-between'}>
         {/* 사이드바 토글 버튼 */}
-        <Box position={'fixed'} top={68} left={finderWidth + 68} display={'flex'} flexDirection={'column'} sx={{ zIndex: 10 }}>
-          <Tooltip title={isCollapsed ? '기록지 목록 조회 화면을 펼칩니다.' : '기록지 목록 조회 화면을 접습니다.'} placement={'right'}>
-            <IconButton onClick={toggleSidebar}>
-              {isCollapsed ? <IconLayoutSidebarLeftExpand /> : <IconLayoutSidebarLeftCollapse />}
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <FinderToggleButton />
 
         {/* 메인 콘텐츠 영역 */}
         <Box
@@ -66,14 +74,14 @@ const RecordViewer = () => {
             flexWrap: 'wrap',
             gap: 2,
             flexDirection: 'column',
-            alignItems: 'center',
+            alignItems: contentAlign,
             maxHeight: 'calc(100vh - 68px)',
             overflowY: 'auto',
           }}
         >
-          {htmlItems.length > 0 ? (
-            <Box sx={{ width: '100%', maxWidth: '800px' }}>
-              <ArticleHtmlList items={htmlItems} emptyMessage="표시할 기사가 없습니다." />
+          {displayItems.length > 0 ? (
+            <Box sx={{ width: '100%', maxWidth: contentMaxWidth }}>
+              <ArticleHtmlList items={displayItems} emptyMessage="No articles available." />
             </Box>
           ) : (
             <EmptyState />
@@ -84,4 +92,4 @@ const RecordViewer = () => {
   );
 };
 
-export default RecordViewer;
+export default EmrContent;
