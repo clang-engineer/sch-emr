@@ -45,10 +45,10 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
   return (
     <Box
       sx={{
-        bgcolor: '#3f51b5',
+        background: 'linear-gradient(135deg, #3f51b5 0%, #4e5fd4 55%, #5c6bc0 100%)',
         color: '#ffffff',
-        borderBottom: 'none',
-        boxShadow: '0 1px 0 rgba(48, 63, 159, 0.6)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
+        boxShadow: '0 6px 16px rgba(48, 63, 159, 0.25)',
       }}
     >
       <Toolbar
@@ -77,6 +77,7 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
                 fontWeight: 700,
                 letterSpacing: '-0.5px',
                 color: '#ffffff',
+                textShadow: '0 1px 6px rgba(0, 0, 0, 0.18)',
               }}
             >
               의무기록조회

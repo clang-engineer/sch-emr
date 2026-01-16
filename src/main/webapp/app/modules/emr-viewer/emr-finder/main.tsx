@@ -69,6 +69,7 @@ const EmrFinderMainBody = () => {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
+        background: 'linear-gradient(180deg, #f9fbff 0%, #f3f6ff 100%)',
       }}
     >
       <FinderToggleButton />
