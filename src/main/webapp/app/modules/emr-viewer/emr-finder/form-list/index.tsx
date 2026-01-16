@@ -426,14 +426,14 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
           <Tooltip title="선택 해제" placement="top">
             <span>
               <IconButton size="small" onClick={handleClearSelection} disabled={selectedFormIds.length === 0}>
-                <FontAwesomeIcon icon={['fas', 'times-circle']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+                <FontAwesomeIcon icon={['fad', 'circle-xmark']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
               </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="전체 열기" placement="top">
             <span>
               <IconButton size="small" onClick={handleExpandAll} disabled={effectiveFolderIds.length === 0 || normalizedSearch.length > 0}>
-                <FontAwesomeIcon icon={['fas', 'angles-down']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+                <FontAwesomeIcon icon={['fad', 'square-caret-down']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
               </IconButton>
             </span>
           </Tooltip>
@@ -444,7 +444,7 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
                 onClick={handleCollapseAll}
                 disabled={effectiveFolderIds.length === 0 || normalizedSearch.length > 0}
               >
-                <FontAwesomeIcon icon={['fas', 'angles-up']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+                <FontAwesomeIcon icon={['fad', 'square-caret-up']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
               </IconButton>
             </span>
           </Tooltip>
