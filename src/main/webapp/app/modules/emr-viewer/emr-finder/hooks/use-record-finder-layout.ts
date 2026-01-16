@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const HEADER_HEIGHT = 48;
 const TOP_PADDING = 4;
-const BOTTOM_PADDING = 0;
+const BOTTOM_PADDING = 12;
 const RECORD_MARGIN_TOP = 12;
 const FORM_MARGIN_TOP = 4;
 const RESIZER_HEIGHT = 12;
