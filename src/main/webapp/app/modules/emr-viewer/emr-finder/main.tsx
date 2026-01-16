@@ -65,7 +65,7 @@ const EmrFinderMainBody = () => {
         flex: 1,
         pt: 0.5,
         px: 0.5,
-        pb: 0,
+        pb: 1.5,
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',

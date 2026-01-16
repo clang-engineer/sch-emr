@@ -200,7 +200,7 @@ export const ResizableSection: React.FC<ResizableSectionProps> = ({
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  bgcolor: 'rgba(255, 255, 255, 0.85)',
+                  bgcolor: 'rgba(255, 255, 255, 0.98)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -209,7 +209,7 @@ export const ResizableSection: React.FC<ResizableSectionProps> = ({
                   zIndex: 10,
                 }}
               >
-                <FontAwesomeIcon icon={['fas', 'lock']} style={{ fontSize: '2rem', color: '#90a4ae' }} />
+                <FontAwesomeIcon icon={['fas', 'ban']} style={{ fontSize: '2rem', color: '#90a4ae' }} />
                 <Typography
                   sx={{
                     fontSize: '0.875rem',

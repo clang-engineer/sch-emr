@@ -66,6 +66,7 @@ import { faAnglesDown } from '@fortawesome/pro-solid-svg-icons/faAnglesDown';
 import { faAnglesUp } from '@fortawesome/pro-solid-svg-icons/faAnglesUp';
 import { faChevronsLeft as faChevronsLeftDuotone } from '@fortawesome/pro-duotone-svg-icons/faChevronsLeft';
 import { faChevronsRight as faChevronsRightDuotone } from '@fortawesome/pro-duotone-svg-icons/faChevronsRight';
+import { faBookMedical as faBookMedicalDuotone } from '@fortawesome/pro-duotone-svg-icons/faBookMedical';
 
 export const loadIcons = () => {
   library.add(
@@ -133,6 +134,7 @@ export const loadIcons = () => {
     faAnglesDown as any,
     faAnglesUp as any,
     faChevronsLeftDuotone as any,
-    faChevronsRightDuotone as any
+    faChevronsRightDuotone as any,
+    faBookMedicalDuotone as any
   );
 };

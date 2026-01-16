@@ -30,6 +30,7 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
   const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
   const isCompact = variant === 'compact';
   const iconColor = '#ffffff';
+  const iconStyle = { '--fa-primary-color': iconColor, '--fa-secondary-color': 'rgba(255, 255, 255, 1)' } as React.CSSProperties;
 
   const user = useAppSelector(state => state.userManagement.user);
   const loading = useAppSelector(state => state.userManagement.loading);
@@ -68,7 +69,7 @@ const Header = ({ variant = 'full' }: HeaderProps) => {
             '&:hover': { opacity: 0.8 },
           }}
         >
-          <FontAwesomeIcon icon={['fas', 'book-medical']} size="lg" style={{ color: iconColor }} />
+          <FontAwesomeIcon icon={['fad', 'book-medical']} size="lg" style={iconStyle} />
           {!isCompact && !matchDownMd && (
             <Typography
               variant="h6"
