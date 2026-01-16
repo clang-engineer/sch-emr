@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  Badge,
   Box,
   Collapse,
   IconButton,
@@ -10,7 +11,6 @@ import {
   ListItemText,
   TextField,
   Tooltip,
-  Typography,
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from 'app/config/store';
@@ -426,7 +426,24 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
           <Tooltip title="선택 해제" placement="top">
             <span>
               <IconButton size="small" onClick={handleClearSelection} disabled={selectedFormIds.length === 0}>
-                <FontAwesomeIcon icon={['fad', 'circle-xmark']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+                <Badge
+                  badgeContent={selectedFormIds.length}
+                  invisible={selectedFormIds.length === 0}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      minWidth: 12,
+                      height: 12,
+                      fontSize: '0.6rem',
+                      padding: '0 3px',
+                      bgcolor: '#1976d2',
+                      color: '#fff',
+                      transform: 'scale(0.9) translate(70%, -70%)',
+                    },
+                  }}
+                >
+                  <FontAwesomeIcon icon={['fad', 'circle-xmark']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+                </Badge>
               </IconButton>
             </span>
           </Tooltip>

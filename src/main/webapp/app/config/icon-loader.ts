@@ -39,6 +39,7 @@ import { faHospital } from '@fortawesome/free-solid-svg-icons/faHospital';
 import { faUserMd } from '@fortawesome/free-solid-svg-icons/faUserMd';
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -114,6 +115,7 @@ export const loadIcons = () => {
     faUserMd,
     faGripLinesVertical,
     faChevronLeft,
+    faCheck,
     faHouseChimney as any,
     faMagnifyingGlass as any,
     faAddressCard as any,
