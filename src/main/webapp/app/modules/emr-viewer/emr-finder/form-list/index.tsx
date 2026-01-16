@@ -33,21 +33,21 @@ interface FormNode {
 interface TreeItemProps {
   node: FormNode;
   level: number;
-  selected: string;
-  onSelect: (id: string) => void;
+  selectedIds: string[];
+  onSelect: (node: FormNode) => void;
   expanded: string[];
   onToggle: (id: string) => void;
 }
 
-const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onSelect, expanded, onToggle }) => {
+const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selectedIds, onSelect, expanded, onToggle }) => {
   const isExpanded = expanded.includes(node.id);
-  const isSelected = selected === node.id;
+  const isSelected = node.type === 'form' && selectedIds.includes(node.id);
 
   const handleClick = () => {
     if (node.type === 'folder') {
       onToggle(node.id);
     } else {
-      onSelect(node.id);
+      onSelect(node);
     }
   };
 
@@ -127,7 +127,7 @@ const TreeItemComponent: React.FC<TreeItemProps> = ({ node, level, selected, onS
                 key={child.id}
                 node={child}
                 level={level + 1}
-                selected={selected}
+                selectedIds={selectedIds}
                 onSelect={onSelect}
                 expanded={expanded}
                 onToggle={onToggle}
@@ -145,10 +145,11 @@ interface FormListProps {
 }
 
 const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
-  const [selected, setSelected] = useState<string>('');
+  const [selectedForms, setSelectedForms] = useState<FormNode[]>([]);
   const [expanded, setExpanded] = useState<string[]>(['1', '2', '3', '4', '5']);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { forms, loading: loadingState } = useAppSelector(state => state.emrFinder);
+  const selectedFormIds = useMemo(() => selectedForms.map(form => form.id), [selectedForms]);
   const formLoading = loadingState.form;
 
   const formData = useMemo<FormNode[]>(() => {
@@ -239,8 +240,25 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     return roots;
   }, [forms, selectedChart]);
 
+  const formNodeMap = useMemo(() => {
+    const map = new Map<string, FormNode>();
+    const walk = (nodes: FormNode[]) => {
+      nodes.forEach(node => {
+        if (node.type === 'form') {
+          map.set(node.id, node);
+        }
+        if (node.children?.length) {
+          walk(node.children);
+        }
+      });
+    };
+    walk(formData);
+    return map;
+  }, [formData]);
+
   useEffect(() => {
     setSearchTerm('');
+    setSelectedForms([]);
   }, [selectedChart?.chartNo]);
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -299,8 +317,17 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
     return ids;
   }, [filteredFormData]);
 
-  const handleSelect = (nodeId: string) => {
-    setSelected(nodeId);
+  const handleSelect = (node: FormNode) => {
+    if (node.type !== 'form') {
+      return;
+    }
+    setSelectedForms(prev => {
+      const exists = prev.some(item => item.id === node.id);
+      if (exists) {
+        return prev.filter(item => item.id !== node.id);
+      }
+      return [...prev, formNodeMap.get(node.id) ?? node];
+    });
   };
 
   const handleToggle = (nodeId: string) => {
@@ -313,6 +340,10 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
 
   const handleCollapseAll = () => {
     setExpanded([]);
+  };
+
+  const handleClearSelection = () => {
+    setSelectedForms([]);
   };
 
   const showEmpty = !formLoading && filteredFormData.length === 0;
@@ -348,7 +379,7 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
                   key={node.id}
                   node={node}
                   level={0}
-                  selected={selected}
+                  selectedIds={selectedFormIds}
                   onSelect={handleSelect}
                   expanded={effectiveExpanded}
                   onToggle={handleToggle}
@@ -392,6 +423,13 @@ const FormList: React.FC<FormListProps> = ({ selectedChart }) => {
               },
             }}
           />
+          <Tooltip title="선택 해제" placement="top">
+            <span>
+              <IconButton size="small" onClick={handleClearSelection} disabled={selectedFormIds.length === 0}>
+                <FontAwesomeIcon icon={['fas', 'times-circle']} style={{ fontSize: '0.8rem', color: '#546e7a' }} />
+              </IconButton>
+            </span>
+          </Tooltip>
           <Tooltip title="전체 열기" placement="top">
             <span>
               <IconButton size="small" onClick={handleExpandAll} disabled={effectiveFolderIds.length === 0 || normalizedSearch.length > 0}>
